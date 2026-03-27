@@ -1,0 +1,102 @@
+<!--
+  JANTA PRINTS — SHARED NAV & FOOTER SNIPPETS
+  Copy into every page. All styling comes from base.css.
+  Update href paths based on file depth (e.g., ../index.html vs index.html).
+-->
+
+<!-- ═══ CURSOR (place right after <body>) ═══ -->
+<div id="jp-cursor"></div>
+<div id="jp-cursor-ring"></div>
+
+<!-- ═══ WHATSAPP FLOAT ═══ -->
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank" aria-label="Chat on WhatsApp">💬</a>
+
+<!-- ═══ NAV ═══ -->
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="index.html" class="jp-nav__logo">
+      <div class="jp-nav__pulse"></div>
+      JANTA <span>PRINTS</span>
+    </a>
+    <ul class="jp-nav__links">
+      <li><a href="pages/services.html">Services</a></li>
+      <li><a href="pages/jerseys.html">Jerseys</a></li>
+      <li><a href="pages/portfolio.html">Portfolio</a></li>
+      <li><a href="pages/studio.html">Studio</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/blog.html">Blog</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+    <a href="pages/quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+
+<!-- Mobile menu (insert after <nav>) -->
+<div class="jp-nav__mobile-menu" id="jp-mobile-menu">
+  <a href="pages/services.html">Services</a>
+  <a href="pages/jerseys.html">Jerseys</a>
+  <a href="pages/portfolio.html">Portfolio</a>
+  <a href="pages/studio.html">Studio</a>
+  <a href="pages/about.html">About</a>
+  <a href="pages/blog.html">Blog</a>
+  <a href="pages/contact.html">Contact</a>
+  <a href="pages/quote.html" style="color:var(--col-accent);">Get a Quote →</a>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="jp-footer">
+  <div class="jp-container">
+    <div class="jp-footer__grid">
+      <div>
+        <div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+        <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner. Quality you can see. Service you can trust.</div>
+        <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+        <div class="jp-footer__contact-item">📞 +254 700 000 000</div>
+        <div class="jp-footer__contact-item">✉️ hello@jantaprints.co.ke</div>
+      </div>
+      <div>
+        <div class="jp-footer__col-title">Services</div>
+        <a href="pages/services.html#large-format" class="jp-footer__link">Large Format</a>
+        <a href="pages/jerseys.html" class="jp-footer__link">Jerseys & Kits</a>
+        <a href="pages/services.html#apparel" class="jp-footer__link">Apparel</a>
+        <a href="pages/services.html#signage" class="jp-footer__link">Signage</a>
+        <a href="pages/services.html#merchandise" class="jp-footer__link">Merchandise</a>
+        <a href="pages/services.html#print" class="jp-footer__link">Print & Stationery</a>
+      </div>
+      <div>
+        <div class="jp-footer__col-title">Company</div>
+        <a href="pages/about.html" class="jp-footer__link">About Us</a>
+        <a href="pages/portfolio.html" class="jp-footer__link">Portfolio</a>
+        <a href="pages/blog.html" class="jp-footer__link">Blog</a>
+        <a href="pages/faq.html" class="jp-footer__link">FAQ</a>
+        <a href="pages/contact.html" class="jp-footer__link">Contact</a>
+      </div>
+      <div>
+        <div class="jp-footer__col-title">Tools</div>
+        <a href="pages/studio.html" class="jp-footer__link">Creative Studio</a>
+        <a href="pages/studio.html#bg" class="jp-footer__link">Background Remover</a>
+        <a href="pages/studio.html#mockup" class="jp-footer__link">Mockup Generator</a>
+        <a href="pages/quote.html" class="jp-footer__link">Quote Builder</a>
+        <a href="pages/account.html" class="jp-footer__link">My Account</a>
+      </div>
+    </div>
+    <div class="jp-footer__bottom">
+      <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya. All rights reserved.</div>
+      <div class="jp-footer__social">
+        <a href="#" class="jp-footer__social-link" aria-label="Instagram">📷</a>
+        <a href="#" class="jp-footer__social-link" aria-label="Facebook">𝑓</a>
+        <a href="#" class="jp-footer__social-link" aria-label="TikTok">♪</a>
+        <a href="#" class="jp-footer__social-link" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ TOAST ═══ -->
+<div id="jp-toast">
+  <div class="jp-toast-dot" id="jp-toast-dot"></div>
+  <div class="jp-toast-text" id="jp-toast-text"></div>
+</div>

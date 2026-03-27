@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Janta Prints — Kisumu, Kenya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — swap this entire block to change the theme
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* PALETTE */
+  --col-bg:        #0e0e0e;
+  --col-surface:   #161616;
+  --col-surface-2: #1f1f1f;
+  --col-border:    #2a2a2a;
+  --col-accent:    #e8622a;
+  --col-accent-2:  #2a9e8f;
+  --col-text:      #f0ece4;
+  --col-text-muted:#8a8680;
+  --col-text-dim:  #4a4744;
+  --col-white:     #ffffff;
+
+  /* TYPOGRAPHY */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-heading: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* SPACING SCALE */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+  --sp-8:  64px;
+  --sp-9:  96px;
+  --sp-10: 128px;
+
+  /* RADIUS */
+  --r-sm:  4px;
+  --r-md:  8px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+
+  /* MOTION */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    180ms;
+  --dur-mid:     320ms;
+  --dur-slow:    600ms;
+
+  /* GRAIN overlay intensity */
+  --grain-opacity: 0.035;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--col-bg);
+  color: var(--col-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CUSTOM CURSOR
+   ═══════════════════════════════════════════════════════════════ */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--col-accent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width var(--dur-fast) var(--ease-out),
+              height var(--dur-fast) var(--ease-out),
+              background var(--dur-fast);
+  mix-blend-mode: normal;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid color-mix(in srgb, var(--col-accent) 50%, transparent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width var(--dur-mid) var(--ease-out),
+              height var(--dur-mid) var(--ease-out),
+              border-color var(--dur-mid),
+              transform 80ms linear;
+}
+body:has(a:hover) #cursor,
+body:has(button:hover) #cursor { width: 6px; height: 6px; background: var(--col-white); }
+body:has(a:hover) #cursor-ring,
+body:has(button:hover) #cursor-ring { width: 52px; height: 52px; border-color: var(--col-accent); }
+
+/* ═══════════════════════════════════════════════════════════════
+   GRAIN OVERLAY
+   ═══════════════════════════════════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+  z-index: 9000;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY
+   ═══════════════════════════════════════════════════════════════ */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+.accent { color: var(--col-accent); }
+.accent-2 { color: var(--col-accent-2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   REVEAL ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left {
+  opacity: 0; transform: translateX(-32px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-scale {
+  opacity: 0; transform: scale(0.92);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* stagger children */
+.stagger > *:nth-child(1) { transition-delay: 0ms; }
+.stagger > *:nth-child(2) { transition-delay: 80ms; }
+.stagger > *:nth-child(3) { transition-delay: 160ms; }
+.stagger > *:nth-child(4) { transition-delay: 240ms; }
+.stagger > *:nth-child(5) { transition-delay: 320ms; }
+.stagger > *:nth-child(6) { transition-delay: 400ms; }
+
+/* ═══════════════════════════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: var(--sp-5) 0;
+  transition: background var(--dur-mid), backdrop-filter var(--dur-mid), padding var(--dur-mid);
+}
+nav.scrolled {
+  background: color-mix(in srgb, var(--col-bg) 85%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--col-border);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1280px; margin: 0 auto; padding: 0 var(--sp-6);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: var(--sp-2);
+}
+.nav-logo span { color: var(--col-accent); }
+.nav-logo-dot {
+  width: 8px; height: 8px;
+  background: var(--col-accent);
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.6; }
+}
+.nav-links {
+  display: flex; align-items: center; gap: var(--sp-7);
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-heading);
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--col-text-muted);
+  transition: color var(--dur-fast);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--col-accent);
+  transition: width var(--dur-mid) var(--ease-out);
+}
+.nav-links a:hover { color: var(--col-text); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--col-accent);
+  color: var(--col-white);
+  font-family: var(--font-heading);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: var(--sp-3) var(--sp-5);
+  border: none;
+  border-radius: var(--r-sm);
+  transition: transform var(--dur-fast) var(--ease-spring),
+              box-shadow var(--dur-fast);
+}
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--col-accent) 35%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: grid; place-items: center;
+  position: relative; overflow: hidden;
+  padding: var(--sp-10) 0 var(--sp-9);
+}
+
+/* animated background grid */
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--col-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--col-border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
+  opacity: 0.4;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 80px 80px; }
+}
+
+/* accent blob */
+.hero-blob {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--col-accent) 12%, transparent), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: blobFloat 8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes blobFloat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-46%, -54%) scale(1.08); }
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  max-width: 1100px; padding: 0 var(--sp-6);
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  font-family: var(--font-heading);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--col-accent);
+  margin-bottom: var(--sp-6);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+}
+.hero-eyebrow-line {
+  width: 32px; height: 1px; background: var(--col-accent);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--col-text);
+  margin-bottom: var(--sp-6);
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 0.4s forwards;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--col-accent);
+  display: block;
+}
+
+.hero-sub {
+  font-size: 18px; font-weight: 300;
+  color: var(--col-text-muted);
+  max-width: 560px; margin: 0 auto var(--sp-7);
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 0.6s forwards;
+}
+
+.hero-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-4); flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.9s var(--ease-out) 0.8s forwards;
+}
+
+.btn-primary {
+  background: var(--col-accent);
+  color: var(--col-white);
+  font-family: var(--font-heading);
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: var(--sp-4) var(--sp-7);
+  border: none; border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  transition: transform var(--dur-fast) var(--ease-spring),
+              box-shadow var(--dur-mid);
+  position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px color-mix(in srgb, var(--col-accent) 40%, transparent); }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:active { transform: translateY(-1px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--col-text-muted);
+  font-family: var(--font-heading);
+  font-size: 14px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: var(--sp-4) var(--sp-6);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  transition: border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+}
+.btn-ghost:hover { border-color: var(--col-text-muted); color: var(--col-text); transform: translateY(-2px); }
+
+.btn-arrow {
+  width: 20px; height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+/* hero scroll indicator */
+.hero-scroll {
+  position: absolute; bottom: var(--sp-7); left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out) 1.4s forwards;
+}
+.hero-scroll span {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--col-text-dim);
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--col-text-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.6); opacity: 0.4; }
+}
+
+/* hero stats ticker */
+.hero-stats {
+  position: absolute; bottom: var(--sp-7); right: var(--sp-8);
+  display: flex; flex-direction: column; gap: var(--sp-4);
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out) 1.2s forwards;
+}
+.stat-item { text-align: right; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 28px; line-height: 1;
+  color: var(--col-text);
+}
+.stat-num span { color: var(--col-accent); }
+.stat-label {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--col-text-dim);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MARQUEE STRIP
+   ═══════════════════════════════════════════════════════════════ */
+.marquee-strip {
+  border-top: 1px solid var(--col-border);
+  border-bottom: 1px solid var(--col-border);
+  overflow: hidden; padding: var(--sp-4) 0;
+  background: var(--col-surface);
+}
+.marquee-track {
+  display: flex; width: max-content;
+  animation: marquee 22s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item {
+  display: flex; align-items: center; gap: var(--sp-5);
+  padding: 0 var(--sp-6);
+  font-family: var(--font-heading);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--col-text-dim);
+  white-space: nowrap;
+  transition: color var(--dur-fast);
+}
+.marquee-item:hover { color: var(--col-accent); }
+.marquee-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--col-accent); flex-shrink: 0;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SERVICES SECTION
+   ═══════════════════════════════════════════════════════════════ */
+.section { padding: var(--sp-10) 0; }
+.section-label {
+  display: flex; align-items: center; gap: var(--sp-4);
+  font-family: var(--font-heading);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--col-accent);
+  margin-bottom: var(--sp-5);
+}
+.section-label-line { flex: 1; height: 1px; background: var(--col-border); max-width: 40px; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 0.95;
+  letter-spacing: 0.01em; text-transform: uppercase;
+  color: var(--col-text);
+  margin-bottom: var(--sp-4);
+}
+.section-sub {
+  font-size: 16px; font-weight: 300;
+  color: var(--col-text-muted);
+  max-width: 480px; line-height: 1.7;
+}
+
+.services-header {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8); align-items: end;
+  margin-bottom: var(--sp-8);
+}
+.services-header-right {
+  text-align: right;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end;
+  gap: var(--sp-4);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-3);
+}
+.service-card {
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-6);
+  position: relative; overflow: hidden;
+  transition: border-color var(--dur-mid),
+              transform var(--dur-mid) var(--ease-spring),
+              background var(--dur-mid);
+  cursor: none;
+  group: true;
+}
+.service-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--col-accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-mid) var(--ease-out);
+}
+.service-card:hover {
+  border-color: color-mix(in srgb, var(--col-accent) 30%, var(--col-border));
+  transform: translateY(-4px);
+  background: var(--col-surface-2);
+}
+.service-card:hover::before { transform: scaleX(1); }
+
+/* card featured (large) */
+.service-card.featured {
+  grid-column: span 2;
+  background: color-mix(in srgb, var(--col-accent) 6%, var(--col-surface));
+  border-color: color-mix(in srgb, var(--col-accent) 20%, var(--col-border));
+}
+
+.card-icon {
+  width: 44px; height: 44px;
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-5);
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+  font-size: 20px;
+}
+.service-card:hover .card-icon {
+  border-color: var(--col-accent);
+  background: color-mix(in srgb, var(--col-accent) 10%, transparent);
+}
+.card-num {
+  font-family: var(--font-display);
+  font-size: 11px; letter-spacing: 0.12em;
+  color: var(--col-text-dim);
+  margin-bottom: var(--sp-3);
+}
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 20px; font-weight: 700;
+  color: var(--col-text);
+  margin-bottom: var(--sp-3);
+  line-height: 1.2;
+}
+.card-desc {
+  font-size: 14px; font-weight: 300;
+  color: var(--col-text-muted);
+  line-height: 1.6;
+}
+.card-tags {
+  display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+.card-tag {
+  font-family: var(--font-heading);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px var(--sp-3);
+  border: 1px solid var(--col-border);
+  border-radius: 2px;
+  color: var(--col-text-dim);
+  transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+.service-card:hover .card-tag { border-color: color-mix(in srgb, var(--col-accent) 40%, var(--col-border)); color: var(--col-text-muted); }
+.card-arrow {
+  position: absolute; top: var(--sp-5); right: var(--sp-5);
+  width: 32px; height: 32px;
+  border: 1px solid var(--col-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: border-color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+}
+.service-card:hover .card-arrow {
+  border-color: var(--col-accent);
+  background: var(--col-accent);
+  transform: rotate(-45deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WHY SECTION (horizontal scroll feel)
+   ═══════════════════════════════════════════════════════════════ */
+.why-section {
+  background: var(--col-surface);
+  border-top: 1px solid var(--col-border);
+  border-bottom: 1px solid var(--col-border);
+  padding: var(--sp-10) 0;
+}
+.why-grid {
+  display: grid; grid-template-columns: 1fr 2fr;
+  gap: var(--sp-9); align-items: start;
+}
+.why-pillars {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+.pillar {
+  padding: var(--sp-6);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-md);
+  background: var(--col-bg);
+  transition: border-color var(--dur-mid), transform var(--dur-mid) var(--ease-spring);
+}
+.pillar:hover { border-color: var(--col-accent-2); transform: translateY(-3px); }
+.pillar-num {
+  font-family: var(--font-display);
+  font-size: 40px; line-height: 1;
+  color: var(--col-accent);
+  margin-bottom: var(--sp-3);
+}
+.pillar-num sub { font-size: 16px; color: var(--col-text-dim); }
+.pillar-title {
+  font-family: var(--font-heading);
+  font-size: 15px; font-weight: 700;
+  color: var(--col-text);
+  margin-bottom: var(--sp-2);
+}
+.pillar-text {
+  font-size: 13px; font-weight: 300;
+  color: var(--col-text-muted); line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PORTFOLIO SECTION
+   ═══════════════════════════════════════════════════════════════ */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto;
+  gap: var(--sp-3);
+}
+.portfolio-item {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  cursor: none;
+}
+.portfolio-item:nth-child(1) { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; min-height: 480px; }
+.portfolio-item:nth-child(4) { grid-column: span 2; }
+
+.portfolio-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  background: linear-gradient(135deg, var(--col-surface), var(--col-surface-2));
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.portfolio-item:hover .portfolio-placeholder { transform: scale(1.04); }
+
+.portfolio-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 30%, transparent);
+  opacity: 0;
+  transition: opacity var(--dur-mid);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: var(--sp-5);
+}
+.portfolio-item:hover .portfolio-overlay { opacity: 1; }
+.portfolio-cat {
+  font-family: var(--font-heading);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--col-accent); margin-bottom: var(--sp-2);
+}
+.portfolio-name {
+  font-family: var(--font-heading);
+  font-size: 16px; font-weight: 700;
+  color: var(--col-white);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CREATIVE STUDIO CALLOUT
+   ═══════════════════════════════════════════════════════════════ */
+.studio-callout {
+  position: relative; overflow: hidden;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--col-border);
+  background: var(--col-surface);
+  padding: var(--sp-9) var(--sp-8);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8); align-items: center;
+  margin: var(--sp-10) 0;
+}
+.studio-callout::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, color-mix(in srgb, var(--col-accent-2) 8%, transparent), transparent 70%);
+  pointer-events: none;
+}
+.studio-tools {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+.studio-tool {
+  background: var(--col-bg);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-4);
+  display: flex; align-items: center; gap: var(--sp-3);
+  transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+}
+.studio-tool:hover { border-color: var(--col-accent-2); transform: translateX(4px); }
+.tool-icon { font-size: 18px; flex-shrink: 0; }
+.tool-name {
+  font-family: var(--font-heading);
+  font-size: 12px; font-weight: 600;
+  color: var(--col-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TESTIMONIALS
+   ═══════════════════════════════════════════════════════════════ */
+.testimonials { padding: var(--sp-10) 0; }
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4); margin-top: var(--sp-8);
+}
+.testimonial-card {
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-6);
+  position: relative;
+  transition: border-color var(--dur-mid), transform var(--dur-mid) var(--ease-spring);
+}
+.testimonial-card:hover { border-color: color-mix(in srgb, var(--col-accent) 25%, var(--col-border)); transform: translateY(-4px); }
+.testimonial-quote {
+  font-family: var(--font-display);
+  font-size: 64px; line-height: 0.8;
+  color: var(--col-accent);
+  opacity: 0.3;
+  margin-bottom: var(--sp-4);
+}
+.testimonial-text {
+  font-size: 15px; font-weight: 300;
+  color: var(--col-text-muted);
+  line-height: 1.7; margin-bottom: var(--sp-5);
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex; align-items: center; gap: var(--sp-3);
+}
+.author-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--col-surface-2);
+  border: 1px solid var(--col-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.author-name {
+  font-family: var(--font-heading);
+  font-size: 13px; font-weight: 600; color: var(--col-text);
+}
+.author-co {
+  font-size: 12px; color: var(--col-text-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CTA BANNER
+   ═══════════════════════════════════════════════════════════════ */
+.cta-banner {
+  position: relative; overflow: hidden;
+  background: var(--col-accent);
+  border-radius: var(--r-lg);
+  padding: var(--sp-9) var(--sp-8);
+  text-align: center;
+  margin-bottom: var(--sp-10);
+}
+.cta-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.cta-banner-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: 0.95; text-transform: uppercase;
+  color: var(--col-white);
+  margin-bottom: var(--sp-5);
+  position: relative;
+}
+.cta-banner-sub {
+  font-size: 17px; font-weight: 300;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: var(--sp-7); position: relative;
+}
+.cta-banner-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-4); flex-wrap: wrap;
+  position: relative;
+}
+.btn-white {
+  background: var(--col-white);
+  color: var(--col-accent);
+  font-family: var(--font-heading);
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: var(--sp-4) var(--sp-7);
+  border: none; border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast);
+}
+.btn-white:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+.btn-whatsapp {
+  background: transparent;
+  color: var(--col-white);
+  font-family: var(--font-heading);
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: var(--sp-4) var(--sp-6);
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: var(--r-sm);
+  display: inline-flex; align-items: center; gap: var(--sp-3);
+  transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+}
+.btn-whatsapp:hover { border-color: var(--col-white); transform: translateY(-2px); }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════ */
+footer {
+  border-top: 1px solid var(--col-border);
+  padding: var(--sp-8) 0 var(--sp-6);
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--sp-8); margin-bottom: var(--sp-8);
+}
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-size: 32px; letter-spacing: 0.04em;
+  margin-bottom: var(--sp-4);
+}
+.footer-brand-name span { color: var(--col-accent); }
+.footer-tagline {
+  font-size: 14px; font-weight: 300;
+  color: var(--col-text-muted); line-height: 1.6;
+  max-width: 280px; margin-bottom: var(--sp-5);
+}
+.footer-contact-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-size: 13px; color: var(--col-text-muted);
+  margin-bottom: var(--sp-3);
+  transition: color var(--dur-fast);
+}
+.footer-contact-item:hover { color: var(--col-text); }
+.footer-col-title {
+  font-family: var(--font-heading);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--col-text-dim);
+  margin-bottom: var(--sp-4);
+}
+.footer-link {
+  display: block; font-size: 14px;
+  color: var(--col-text-muted);
+  margin-bottom: var(--sp-3);
+  transition: color var(--dur-fast), transform var(--dur-fast);
+}
+.footer-link:hover { color: var(--col-text); transform: translateX(4px); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--col-border);
+  flex-wrap: wrap; gap: var(--sp-4);
+}
+.footer-copy { font-size: 12px; color: var(--col-text-dim); }
+.footer-social {
+  display: flex; gap: var(--sp-4);
+}
+.social-link {
+  width: 36px; height: 36px;
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  color: var(--col-text-muted);
+  transition: border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease-spring);
+}
+.social-link:hover { border-color: var(--col-accent); color: var(--col-accent); transform: translateY(-3px); }
+
+/* ═══════════════════════════════════════════════════════════════
+   WHATSAPP FLOAT
+   ═══════════════════════════════════════════════════════════════ */
+.whatsapp-float {
+  position: fixed; bottom: var(--sp-6); right: var(--sp-6);
+  z-index: 200;
+  width: 56px; height: 56px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 4px 24px rgba(37, 211, 102, 0.4);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast);
+  animation: floatBounce 3s ease-in-out infinite;
+}
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(37, 211, 102, 0.5);
+  animation: none;
+}
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-card.featured { grid-column: span 2; }
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+  .portfolio-item:nth-child(1) { grid-column: span 2; min-height: 320px; }
+  .portfolio-item:nth-child(4) { grid-column: span 1; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
+  .hero-stats { display: none; }
+}
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  #cursor, #cursor-ring { display: none; }
+  .nav-links { display: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card.featured { grid-column: span 1; }
+  .services-header { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .why-pillars { grid-template-columns: 1fr; }
+  .studio-callout { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .portfolio-item:nth-child(1) { grid-column: span 1; min-height: 240px; }
+  .portfolio-item:nth-child(4) { grid-column: span 1; }
+}
+</style>
+</head>
+<body data-page="home">
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- WHATSAPP FLOAT -->
+<a class="whatsapp-float" href="https://wa.me/254704570799" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="pages/services.html" class="nav-logo">
+      <div class="nav-logo-dot"></div>
+      JANTA <span>PRINTS</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="pages/services.html">Services</a></li>
+      <li><a href="pages/portfolio.html">Portfolio</a></li>
+      <li><a href="pages/studio.html">Studio</a></li>
+      <li><a href="pages/about.html">About</a></li>
+      <li><a href="pages/contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="location.href='pages/quote.html'">Get a Quote →</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-blob"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      Kisumu, Kenya · Est. Janta Prints
+      <div class="hero-eyebrow-line"></div>
+    </div>
+    <h1 class="hero-title">
+      Print.<br><em>Brand.</em>Deliver.
+    </h1>
+    <p class="hero-sub">
+      From large-format billboards to custom jerseys — Janta Prints is Western Kenya's full-service print and branding partner.
+    </p>
+    <div class="hero-actions">
+      <a href="pages/quote.html" class="btn-primary">
+        Get a Free Quote
+        <span class="btn-arrow">→</span>
+      </a>
+      <a href="pages/portfolio.html" class="btn-ghost">
+        View Our Work ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">500<span>+</span></div>
+      <div class="stat-label">Clients served</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">8<span>+</span></div>
+      <div class="stat-label">Product categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24<span>h</span></div>
+      <div class="stat-label">Rush turnaround</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <!-- duplicated for seamless loop -->
+    <div class="marquee-item"><div class="marquee-dot"></div> Large Format</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Banners</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Custom Jerseys</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> T-shirts</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Business Cards</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Vehicle Branding</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Signage</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Merchandise</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Sublimation Kits</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Branded Uniforms</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Large Format</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Banners</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Custom Jerseys</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> T-shirts</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Business Cards</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Vehicle Branding</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Signage</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Merchandise</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Sublimation Kits</div>
+    <div class="marquee-item"><div class="marquee-dot"></div> Branded Uniforms</div>
+  </div>
+</div>
+
+<!-- ═══ SERVICES ═══ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-label">
+          <div class="section-label-line"></div>
+          What We Do
+        </div>
+        <h2 class="section-title">Every Print.<br>Every Brand.</h2>
+        <p class="section-sub">One partner for all your print and branding needs — from the street to the stadium.</p>
+      </div>
+      <div class="services-header-right">
+        <p style="font-size:14px;color:var(--col-text-muted);max-width:260px;text-align:right;line-height:1.7;">
+          Not sure what you need? Our team will guide you from brief to final product.
+        </p>
+        <a href="pages/quote.html" class="btn-ghost">Browse All Services →</a>
+      </div>
+    </div>
+
+    <div class="services-grid stagger">
+      <div class="service-card featured reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">🏟️</div>
+        <div class="card-num">01 / FEATURED</div>
+        <div class="card-title">Large Format & Outdoor</div>
+        <div class="card-desc">Billboards, building wraps, banners, pull-up displays, and exhibition stands printed at any scale. If it needs to be seen from a distance, we print it.</div>
+        <div class="card-tags">
+          <span class="card-tag">Billboards</span>
+          <span class="card-tag">Banners</span>
+          <span class="card-tag">Backlit</span>
+          <span class="card-tag">Window Graphics</span>
+          <span class="card-tag">Roll-ups</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">👕</div>
+        <div class="card-num">02</div>
+        <div class="card-title">Apparel & Garments</div>
+        <div class="card-desc">T-shirts, polos, hoodies, uniforms — screen-printed, DTG, or heat-transfer. Your brand, your team, dressed right.</div>
+        <div class="card-tags">
+          <span class="card-tag">T-shirts</span>
+          <span class="card-tag">Uniforms</span>
+          <span class="card-tag">Caps</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">⚽</div>
+        <div class="card-num">03</div>
+        <div class="card-title">Jerseys & Sportswear</div>
+        <div class="card-desc">Full sublimation football, rugby, and custom sports kits. Player names, squad numbers, sponsor logos — single units or full squads.</div>
+        <div class="card-tags">
+          <span class="card-tag">Football</span>
+          <span class="card-tag">Rugby</span>
+          <span class="card-tag">Corporate Kits</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">📄</div>
+        <div class="card-num">04</div>
+        <div class="card-title">Print & Stationery</div>
+        <div class="card-desc">Business cards, flyers, brochures, posters, booklets, and stickers. Offset or digital, standard or premium finish.</div>
+        <div class="card-tags">
+          <span class="card-tag">Business Cards</span>
+          <span class="card-tag">Flyers</span>
+          <span class="card-tag">Stickers</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">🎁</div>
+        <div class="card-num">05</div>
+        <div class="card-title">Branded Merchandise</div>
+        <div class="card-desc">Mugs, bags, pens, USB drives, notebooks — branded with your logo and ready for events, gifting, or retail.</div>
+        <div class="card-tags">
+          <span class="card-tag">Mugs</span>
+          <span class="card-tag">Tote Bags</span>
+          <span class="card-tag">Tech Gifts</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal-scale">
+        <div class="card-arrow">↗</div>
+        <div class="card-icon">🪧</div>
+        <div class="card-num">06</div>
+        <div class="card-title">Signage & Display</div>
+        <div class="card-desc">Acrylic signs, ACP panels, LED illuminated signs, vehicle wraps, shop fascias and fleet branding across Kenya.</div>
+        <div class="card-tags">
+          <span class="card-tag">Acrylic</span>
+          <span class="card-tag">LED Signs</span>
+          <span class="card-tag">Vehicle Wraps</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY JANTA ═══ -->
+<section class="why-section" id="about">
+  <div class="container">
+    <div class="why-grid">
+      <div class="reveal-left">
+        <div class="section-label">
+          <div class="section-label-line"></div>
+          Why Janta Prints
+        </div>
+        <h2 class="section-title">Built in<br>Kisumu.<br>Built to<br><span class="accent">Last.</span></h2>
+        <p class="section-sub" style="margin-top: var(--sp-5);">
+          We're not a Nairobi satellite. We are Western Kenya's own full-service print house — with the quality, speed, and local knowledge that matters.
+        </p>
+      </div>
+      <div class="why-pillars stagger">
+        <div class="pillar reveal-scale">
+          <div class="pillar-num">24<sub>h</sub></div>
+          <div class="pillar-title">Rush Turnaround</div>
+          <div class="pillar-text">Same-day and next-day production available on most products. Because your deadline is our deadline.</div>
+        </div>
+        <div class="pillar reveal-scale">
+          <div class="pillar-num">8<sub>+</sub></div>
+          <div class="pillar-title">Product Categories</div>
+          <div class="pillar-text">One partner, every print need. No more hunting across multiple vendors for a single campaign.</div>
+        </div>
+        <div class="pillar reveal-scale">
+          <div class="pillar-num">500<sub>+</sub></div>
+          <div class="pillar-title">Clients Served</div>
+          <div class="pillar-text">From local football clubs to NGOs, corporates, and individual creators — trusted across the region.</div>
+        </div>
+        <div class="pillar reveal-scale">
+          <div class="pillar-num accent-2">M-<sub>Pesa</sub></div>
+          <div class="pillar-title">Pay Your Way</div>
+          <div class="pillar-text">M-Pesa, bank transfer, and corporate credit accounts. Kenyan payment, Kenyan service.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PORTFOLIO ═══ -->
+<section class="section" id="portfolio">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:var(--sp-7);" class="reveal">
+      <div>
+        <div class="section-label"><div class="section-label-line"></div> Our Work</div>
+        <h2 class="section-title">Results That<br>Speak.</h2>
+      </div>
+      <a href="pages/portfolio.html" class="btn-ghost" style="flex-shrink:0">View All Work →</a>
+    </div>
+    <div class="portfolio-grid stagger">
+      <div class="portfolio-item reveal-scale">
+        <div class="portfolio-placeholder">🏟️</div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-cat">Large Format</div>
+          <div class="portfolio-name">Kisumu City FC Billboard</div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal-scale">
+        <div class="portfolio-placeholder">⚽</div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-cat">Jerseys</div>
+          <div class="portfolio-name">Sublimation Kit — Full Squad</div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal-scale">
+        <div class="portfolio-placeholder">👕</div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-cat">Apparel</div>
+          <div class="portfolio-name">Corporate Uniform Programme</div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal-scale">
+        <div class="portfolio-placeholder">🎪</div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-cat">Event Branding</div>
+          <div class="portfolio-name">Festival Full Brand Package</div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal-scale">
+        <div class="portfolio-placeholder">🪧</div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-cat">Signage</div>
+          <div class="portfolio-name">Shop Fascia & Wayfinding</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CREATIVE STUDIO CALLOUT ═══ -->
+<div class="container" id="studio">
+  <div class="studio-callout reveal-scale">
+    <div>
+      <div class="section-label"><div class="section-label-line"></div> Free Tool</div>
+      <h2 class="section-title" style="font-size:clamp(36px,5vw,64px);">Creative<br><span class="accent-2">Studio.</span></h2>
+      <p class="section-sub" style="margin-top:var(--sp-4);margin-bottom:var(--sp-6);">
+        Prepare your artwork before ordering. Remove backgrounds, apply filters, resize to print dimensions, build mockups — all free, all browser-based, powered by Python.
+      </p>
+      <a href="pages/studio.html" class="btn-primary">Open Creative Studio <span class="btn-arrow">→</span></a>
+    </div>
+    <div class="studio-tools stagger">
+      <div class="studio-tool reveal">
+        <div class="tool-icon">✂️</div>
+        <div class="tool-name">Background Remover</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">🎨</div>
+        <div class="tool-name">Photo Filters</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">⬜</div>
+        <div class="tool-name">Crop & Resize</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">🌡️</div>
+        <div class="tool-name">Colour Adjust</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">⚫</div>
+        <div class="tool-name">B&W Converter</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">🔤</div>
+        <div class="tool-name">Text & Watermark</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">🔄</div>
+        <div class="tool-name">Format Converter</div>
+      </div>
+      <div class="studio-tool reveal">
+        <div class="tool-icon">👕</div>
+        <div class="tool-name">Mockup Generator</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:var(--sp-3);">
+      <div class="section-label" style="justify-content:center;"><div class="section-label-line"></div> Clients Say <div class="section-label-line"></div></div>
+      <h2 class="section-title">Trusted Across<br><span class="accent">Western Kenya.</span></h2>
+    </div>
+    <div class="testimonials-grid stagger">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-text">Ordered full squad jerseys for our football club — from order to delivery in 4 days. Quality was outstanding, the sublimation colours were exactly as designed.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">⚽</div>
+          <div>
+            <div class="author-name">Brian Otieno</div>
+            <div class="author-co">Kisumu United FC</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-text">Janta did our entire event — banners, T-shirts, branded tents, backdrop. Everything matched perfectly. The online quote system saved us so much time.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">🎪</div>
+          <div>
+            <div class="author-name">Grace Akinyi</div>
+            <div class="author-co">Lake Events Ltd</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-text">Finally a print shop in Kisumu that understands brand consistency. They matched our exact Pantone colours on every product and delivered on time, every time.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">🏢</div>
+          <div>
+            <div class="author-name">Aisha Waweru</div>
+            <div class="author-co">Lakeview Boutique</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BANNER ═══ -->
+<div class="container" id="contact">
+  <div class="cta-banner reveal-scale">
+    <div class="cta-banner-title">Ready to Print?<br>Let's Build It.</div>
+    <div class="cta-banner-sub">Get your free quote in under 3 minutes. No account needed to start.</div>
+    <div class="cta-banner-actions">
+      <a href="pages/quote.html" class="btn-white">Get a Free Quote <span>→</span></a>
+      <a href="https://wa.me/254704570799" class="btn-whatsapp">💬 Chat on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">JANTA <span>PRINTS</span></div>
+        <div class="footer-tagline">Western Kenya's full-service print and branding partner. Quality you can see. Service you can trust.</div>
+        <div class="footer-contact-item">📍 Kisumu, Kenya</div>
+        <div class="footer-contact-item">📞 +254 704 570 799</div>
+        <div class="footer-contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="355d5059595a755f545b415445475c5b41461b565a1b5e50">[email&#160;protected]</a></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <a href="pages/services.html" class="footer-link">Large Format</a>
+        <a href="pages/services.html" class="footer-link">Jerseys & Kits</a>
+        <a href="pages/services.html" class="footer-link">Apparel</a>
+        <a href="pages/services.html" class="footer-link">Signage</a>
+        <a href="pages/services.html" class="footer-link">Merchandise</a>
+        <a href="pages/services.html" class="footer-link">Print & Stationery</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <a href="pages/services.html" class="footer-link">About Us</a>
+        <a href="pages/services.html" class="footer-link">Portfolio</a>
+        <a href="pages/services.html" class="footer-link">Blog</a>
+        <a href="pages/services.html" class="footer-link">FAQ</a>
+        <a href="pages/services.html" class="footer-link">Contact</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Tools</div>
+        <a href="pages/services.html" class="footer-link">Creative Studio</a>
+        <a href="pages/services.html" class="footer-link">Background Remover</a>
+        <a href="pages/services.html" class="footer-link">Mockup Generator</a>
+        <a href="pages/services.html" class="footer-link">Quote Builder</a>
+        <a href="pages/services.html" class="footer-link">My Account</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Janta Prints, Kisumu, Kenya. All rights reserved.</div>
+      <div class="footer-social">
+        <a href="pages/services.html" class="social-link" title="Instagram">📷</a>
+        <a href="pages/services.html" class="social-link" title="Facebook">𝑓</a>
+        <a href="pages/services.html" class="social-link" title="TikTok">♪</a>
+        <a href="#" class="social-link" title="LinkedIn">in</a>
+      </div>
+    </div>
+  </div>
+<script src="js/api.js"></script>
+</body>
+</html>
