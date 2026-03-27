@@ -1,0 +1,124 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════
+ * JANTA PRINTS — DESIGN TOKENS
+ * Single source of truth. Swap this file to change the entire theme.
+ *
+ * HOW TO RETHEME:
+ *   1. Change values in :root below
+ *   2. Every page that imports this file updates automatically
+ *   3. Font pairings: update --font-display/heading/body AND the
+ *      Google Fonts URL in tokens.css <link> (see index.html)
+ *
+ * PALETTE PRESETS (comment/uncomment to switch):
+ *   Current: Dark Ember (charcoal + orange + teal)
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+/* ── DARK EMBER (default) ─────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --col-bg:          #0e0e0e;
+  --col-surface:     #161616;
+  --col-surface-2:   #1f1f1f;
+  --col-surface-3:   #272727;
+
+  /* Borders */
+  --col-border:      #2a2a2a;
+  --col-border-2:    #3a3a3a;
+
+  /* Brand accents */
+  --col-accent:      #e8622a;   /* primary CTA, highlights */
+  --col-accent-dim:  #7a3312;   /* muted accent for backgrounds */
+  --col-accent-2:    #2a9e8f;   /* secondary accent, info, studio */
+
+  /* Text */
+  --col-text:        #f0ece4;
+  --col-text-muted:  #8a8680;
+  --col-text-dim:    #4a4744;
+  --col-white:       #ffffff;
+
+  /* Semantic */
+  --col-success:     #2e9e5b;
+  --col-error:       #c94040;
+  --col-warning:     #d97706;
+  --col-info:        #2563eb;
+
+  /* Typography */
+  --font-display:    'Bebas Neue', sans-serif;
+  --font-heading:    'Syne', sans-serif;
+  --font-body:       'DM Sans', sans-serif;
+
+  /* Spacing scale (4px base) */
+  --sp-1:  4px;   --sp-2:  8px;   --sp-3:  12px;
+  --sp-4:  16px;  --sp-5:  24px;  --sp-6:  32px;
+  --sp-7:  48px;  --sp-8:  64px;  --sp-9:  96px;
+  --sp-10: 128px;
+
+  /* Border radius */
+  --r-sm: 4px;  --r-md: 8px;
+  --r-lg: 16px; --r-xl: 24px;
+
+  /* Motion */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    180ms;
+  --dur-mid:     320ms;
+  --dur-slow:    600ms;
+
+  /* Grain */
+  --grain-opacity: 0.035;
+}
+
+/*
+ * ── LIGHT CLAY (alternative palette) ─────────────────────────────
+ * To activate: replace the :root block above with this one
+ * and change font imports to match if desired.
+ *
+:root {
+  --col-bg:          #f5f0e8;
+  --col-surface:     #ffffff;
+  --col-surface-2:   #ede8df;
+  --col-surface-3:   #e0dbd0;
+  --col-border:      #d5cfc4;
+  --col-border-2:    #bfb9ad;
+  --col-accent:      #c84b1a;
+  --col-accent-dim:  #f5d9cc;
+  --col-accent-2:    #0f766e;
+  --col-text:        #1a1715;
+  --col-text-muted:  #6b6560;
+  --col-text-dim:    #a09a93;
+  --col-white:       #ffffff;
+  --col-success:     #166534;
+  --col-error:       #991b1b;
+  --col-warning:     #92400e;
+  --col-info:        #1e40af;
+  --font-display:    'Bebas Neue', sans-serif;
+  --font-heading:    'Syne', sans-serif;
+  --font-body:       'DM Sans', sans-serif;
+  --grain-opacity:   0.02;
+}
+*/
+
+/*
+ * ── OCEAN NIGHT (alternative palette) ────────────────────────────
+:root {
+  --col-bg:          #060d18;
+  --col-surface:     #0d1929;
+  --col-surface-2:   #152237;
+  --col-surface-3:   #1d2e46;
+  --col-border:      #1e3352;
+  --col-border-2:    #2a4570;
+  --col-accent:      #38bdf8;
+  --col-accent-dim:  #0c4a6e;
+  --col-accent-2:    #f59e0b;
+  --col-text:        #e8f4fd;
+  --col-text-muted:  #7aa3c4;
+  --col-text-dim:    #3a5c7a;
+  --col-white:       #ffffff;
+  --col-success:     #22c55e;
+  --col-error:       #ef4444;
+  --col-warning:     #f59e0b;
+  --col-info:        #38bdf8;
+  --grain-opacity:   0.025;
+}
+*/

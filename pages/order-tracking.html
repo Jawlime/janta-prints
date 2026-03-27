@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.track-hero{padding:var(--sp-10) 0 var(--sp-7);border-bottom:1px solid var(--col-border);background:var(--col-surface);}
+.search-bar{display:flex;gap:12px;max-width:560px;}
+.search-bar .jp-input{flex:1;}
+
+.result-card{background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-xl);overflow:hidden;margin-top:var(--sp-7);}
+.result-header{padding:var(--sp-7);border-bottom:1px solid var(--col-border);display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;}
+.result-body{padding:var(--sp-7);}
+
+.progress-bar-wrap{background:var(--col-surface-2);border-radius:99px;height:6px;overflow:hidden;margin:var(--sp-5) 0;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--col-accent-2),var(--col-accent));border-radius:99px;transition:width 1s var(--ease-out);}
+
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-step{display:flex;gap:var(--sp-5);position:relative;}
+.tl-step:not(:last-child)::before{content:'';position:absolute;left:15px;top:34px;bottom:-4px;width:1px;background:var(--col-border);z-index:0;}
+.tl-step.done::before{background:var(--col-accent);}
+.tl-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--col-border);background:var(--col-surface);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;z-index:1;transition:border-color .3s,background .3s;}
+.tl-step.done .tl-dot{border-color:var(--col-accent);background:var(--col-accent);color:#fff;}
+.tl-step.current .tl-dot{border-color:var(--col-accent);background:var(--col-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--col-accent) 20%,transparent);}
+.tl-content{padding-bottom:var(--sp-6);}
+.tl-label{font-family:var(--font-heading);font-size:14px;font-weight:700;color:var(--col-text);margin-bottom:4px;}
+.tl-step:not(.done):not(.current) .tl-label{color:var(--col-text-dim);}
+.tl-date{font-size:12px;color:var(--col-text-dim);}
+.tl-step.done .tl-date,.tl-step.current .tl-date{color:var(--col-text-muted);}
+
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);}
+.meta-item{display:flex;flex-direction:column;gap:4px;}
+.meta-label{font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--col-text-dim);}
+.meta-val{font-size:15px;color:var(--col-text);}
+
+.result-empty{display:none;text-align:center;padding:var(--sp-9) var(--sp-6);}
+@media(max-width:600px){.search-bar{flex-direction:column;}.meta-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body data-page="order-tracking">
+<div id="jp-cursor"></div>
+<div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;min-height:100vh;">
+  <section class="track-hero">
+    <div class="jp-container jp-container--narrow">
+      <div class="jp-breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="jp-breadcrumb-sep">/</span>
+        <a href="account.html">My Account</a>
+        <span class="jp-breadcrumb-sep">/</span>
+        <span>Track Order</span>
+      </div>
+      <div class="jp-eyebrow jp-reveal" style="margin-bottom:var(--sp-4);"><div class="jp-eyebrow-line"></div> Live Status</div>
+      <h1 class="jp-display jp-display--lg jp-reveal" style="margin-bottom:var(--sp-5);">Track Your<br><span class="jp-accent">Order.</span></h1>
+      <p class="jp-body jp-reveal" style="margin-bottom:var(--sp-7);">Enter your order number (e.g. JP-2026-007) or the phone number used when ordering.</p>
+      <div class="search-bar jp-reveal">
+        <input class="jp-input" type="text" id="trackInput" placeholder="JP-2026-007 or +254 7xx xxx xxx" autocomplete="off">
+        <button class="jp-btn jp-btn--primary" onclick="trackOrder()">Track →</button>
+      </div>
+      <p class="jp-body jp-body--xs jp-reveal" style="margin-top:var(--sp-3);color:var(--col-text-dim);">
+        Order number is on your confirmation SMS and email. No account needed.
+      </p>
+    </div>
+  </section>
+
+  <section class="jp-section">
+    <div class="jp-container jp-container--narrow">
+
+      <!-- Skeleton / loading -->
+      <div id="trackLoading" style="display:none;text-align:center;padding:var(--sp-9) 0;">
+        <div style="width:40px;height:40px;border:2.5px solid var(--col-border);border-top-color:var(--col-accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto var(--sp-5);"></div>
+        <div class="jp-body jp-body--sm">Looking up your order…</div>
+      </div>
+      @keyframes spin{to{transform:rotate(360deg);}}
+
+      <!-- Not found -->
+      <div id="trackNotFound" class="result-empty">
+        <div style="font-size:48px;margin-bottom:var(--sp-4);">🔍</div>
+        <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">Order not found</div>
+        <p class="jp-body" style="margin-bottom:var(--sp-6);">We couldn't find an order matching that reference. Double-check the number or phone, or contact us directly.</p>
+        <div style="display:flex;gap:var(--sp-4);justify-content:center;flex-wrap:wrap;">
+          <a href="https://wa.me/254704570799?text=Hi,%20I%20need%20help%20tracking%20my%20order" class="jp-btn jp-btn--primary">💬 WhatsApp Us</a>
+          <a href="contact.html" class="jp-btn jp-btn--secondary">Contact Form</a>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div id="trackResult" style="display:none;">
+        <div class="result-card jp-reveal-scale">
+          <div class="result-header">
+            <div>
+              <div class="jp-label" style="margin-bottom:8px;">Order</div>
+              <div class="jp-display jp-display--md" id="resOrderId" style="margin-bottom:8px;">—</div>
+              <div class="jp-body jp-body--sm" id="resProduct" style="color:var(--col-text-muted);">—</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="jp-badge jp-badge--accent" id="resBadge" style="margin-bottom:8px;">—</div>
+              <div style="font-size:12px;color:var(--col-text-dim);">Submitted: <span id="resSubmittedAt">—</span></div>
+              <div style="font-size:12px;color:var(--col-text-muted);">Expected: <span id="resExpectedAt">—</span></div>
+            </div>
+          </div>
+          <div class="result-body">
+            <!-- Progress bar -->
+            <div class="jp-label" style="margin-bottom:var(--sp-3);">Overall progress</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="resProgress" style="width:0%;"></div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-8);margin-top:var(--sp-7);">
+              <!-- Timeline -->
+              <div>
+                <div class="jp-label" style="margin-bottom:var(--sp-5);">Order journey</div>
+                <div class="timeline" id="resTimeline"></div>
+              </div>
+              <!-- Meta -->
+              <div>
+                <div class="jp-label" style="margin-bottom:var(--sp-5);">Details</div>
+                <div class="meta-grid" id="resMeta"></div>
+                <div style="margin-top:var(--sp-7);">
+                  <div class="jp-label" style="margin-bottom:var(--sp-3);">Need help?</div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <a id="resWhatsApp" href="https://wa.me/254704570799" class="jp-btn jp-btn--primary jp-btn--sm">💬 WhatsApp about this order</a>
+                    <a href="account.html" class="jp-btn jp-btn--secondary jp-btn--sm">← My Account</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__bottom" style="padding-top:0;border-top:none;">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a></div>
+    <a href="../index.html" class="jp-btn jp-btn--secondary jp-btn--sm">← Back to Site</a>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+/* Auto-run from URL param: order-tracking.html?id=JP-2026-007 */
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+  if (id) {
+    document.getElementById('trackInput').value = id;
+    document.addEventListener('DOMContentLoaded', function() { trackOrder(); });
+  }
+})();
+
+async function trackOrder() {
+  var query = document.getElementById('trackInput').value.trim();
+  if (!query) { JP.toast('Enter an order number or phone number','error'); return; }
+
+  document.getElementById('trackLoading').style.display = 'block';
+  document.getElementById('trackResult').style.display = 'none';
+  document.getElementById('trackNotFound').style.display = 'none';
+
+  try {
+    var order = await JP.API.getOrderStatus(query);
+    if (!order || !order.id) throw new Error('not found');
+    renderResult(order);
+  } catch(e) {
+    document.getElementById('trackNotFound').style.display = 'block';
+  } finally {
+    document.getElementById('trackLoading').style.display = 'none';
+  }
+}
+
+function renderResult(o) {
+  document.getElementById('resOrderId').textContent = o.id;
+  document.getElementById('resProduct').textContent = o.product;
+  document.getElementById('resBadge').textContent = o.statusLabel;
+  document.getElementById('resSubmittedAt').textContent = o.submittedAt;
+  document.getElementById('resExpectedAt').textContent = o.expectedAt;
+
+  /* Progress bar */
+  setTimeout(function() {
+    document.getElementById('resProgress').style.width = (o.progress || 0) + '%';
+  }, 200);
+
+  /* Timeline */
+  var doneCheck = '✓';
+  var tl = document.getElementById('resTimeline');
+  var currentFound = false;
+  tl.innerHTML = o.steps.map(function(s, i) {
+    var isCurrent = !s.done && !currentFound;
+    if (isCurrent) currentFound = true;
+    var cls = s.done ? 'done' : (isCurrent ? 'current' : '');
+    return '<div class="tl-step ' + cls + '" style="gap:var(--sp-4);padding-bottom:var(--sp-5);">' +
+      '<div class="tl-dot">' + (s.done ? doneCheck : (isCurrent ? '●' : '○')) + '</div>' +
+      '<div class="tl-content">' +
+        '<div class="tl-label">' + s.label + '</div>' +
+        '<div class="tl-date">' + s.date + '</div>' +
+      '</div></div>';
+  }).join('');
+
+  /* Meta */
+  var meta = document.getElementById('resMeta');
+  meta.innerHTML = [
+    ['Status', o.statusLabel],
+    ['Progress', (o.progress||0) + '%'],
+    ['Submitted', o.submittedAt],
+    ['Expected', o.expectedAt],
+  ].map(function(m) {
+    return '<div class="meta-item"><div class="meta-label">' + m[0] + '</div><div class="meta-val">' + m[1] + '</div></div>';
+  }).join('');
+
+  /* WhatsApp with pre-filled message */
+  document.getElementById('resWhatsApp').href =
+    'https://wa.me/254704570799?text=' + encodeURIComponent('Hi, I have a question about my order ' + o.id + ' (' + o.product + ')');
+
+  document.getElementById('trackResult').style.display = 'block';
+  document.getElementById('trackResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Allow Enter key in search box */
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('trackInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') trackOrder();
+  });
+});
+</script>
+</body>
+</html>

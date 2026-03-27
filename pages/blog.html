@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);}
+@media(max-width:900px){.blog-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.blog-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body data-page="blog">
+<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;">
+  <section style="padding:var(--sp-10) 0 var(--sp-7);border-bottom:1px solid var(--col-border);background:var(--col-surface);">
+    <div class="jp-container">
+      <div class="jp-eyebrow jp-reveal"><div class="jp-eyebrow-line"></div> Insights & Guides</div>
+      <h1 class="jp-display jp-display--xl jp-reveal" style="margin:var(--sp-4) 0;">The Janta<br><span class="jp-accent">Print Blog.</span></h1>
+      <p class="jp-body jp-reveal" style="max-width:480px;">Print guides, branding tips, and news from the Kisumu studio — written by our team for business owners, creatives, and sports clubs.</p>
+    </div>
+  </section>
+  <section class="jp-section">
+    <div class="jp-container">
+      <div class="blog-grid jp-stagger"><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Artwork</span><span class="jp-tag">Mar 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">How to Prepare Print-Ready Artwork (And Why It Matters)</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">Everything your designer needs to know before sending files to a print house — file formats, bleed, colour modes, and resolution explained.</p>
+      <a href="blog-artwork-guide.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Jerseys</span><span class="jp-tag">Mar 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">Full Sublimation vs Screen Printing: Which Is Right for Your Kit?</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">A practical guide for football clubs and sports teams choosing between sublimation and screen printing for their kits.</p>
+      <a href="blog-sublimation-vs-screen.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Branding</span><span class="jp-tag">Feb 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">5 Branding Mistakes Kisumu Businesses Make (And How to Fix Them)</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">Inconsistent logos, wrong colour modes, low-resolution files — the most common branding errors and how to avoid them.</p>
+      <a href="blog-branding-mistakes.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Large Format</span><span class="jp-tag">Feb 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">Large Format Printing: A Guide to Outdoor Advertising in Kenya</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">From billboards to building wraps — everything you need to know about outdoor print media in Kenya, including specs and tips.</p>
+      <a href="blog-large-format-guide.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Merchandise</span><span class="jp-tag">Jan 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">How to Order Branded Merchandise That Actually Gets Used</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">Why most corporate gifts end up in a drawer, and how to choose items people will actually use and remember.</p>
+      <a href="blog-merchandise-guide.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article><article class="jp-card jp-reveal-scale" style="display:flex;flex-direction:column;">
+      <div style="background:var(--col-surface-2);border-radius:var(--r-sm);height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:var(--sp-5);">📝</div>
+      <div style="display:flex;gap:8px;margin-bottom:var(--sp-3);"><span class="jp-tag jp-tag--accent">Studio</span><span class="jp-tag">Jan 2026</span></div>
+      <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);line-height:1.3;">The Janta Prints Creative Studio: 8 Free Tools for Your Artwork</div>
+      <p class="jp-body jp-body--sm" style="flex:1;margin-bottom:var(--sp-5);">A walkthrough of every tool in our Creative Studio — background remover, filters, mockup generator, and more.</p>
+      <a href="blog-creative-studio-guide.html" class="jp-btn jp-btn--secondary">Read Article →</a>
+    </article></div>
+    </div>
+  </section>
+</main>
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__grid">
+    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
+    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
+    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dcb4b9b0b0b39cb6bdb2a8bdacaeb5b2a8aff2bfb3f2b7b9">[email&#160;protected]</a></div></div>
+    <div><div class="jp-footer__col-title">Services</div>
+    <a href="services.html" class="jp-footer__link">Large Format</a>
+    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+    <a href="services.html" class="jp-footer__link">Apparel</a>
+    <a href="services.html" class="jp-footer__link">Signage</a></div>
+    <div><div class="jp-footer__col-title">Company</div>
+    <a href="about.html" class="jp-footer__link">About Us</a>
+    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+    <a href="blog.html" class="jp-footer__link">Blog</a>
+    <a href="faq.html" class="jp-footer__link">FAQ</a>
+    <a href="contact.html" class="jp-footer__link">Contact</a></div>
+    <div><div class="jp-footer__col-title">Tools</div>
+    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+    <a href="account.html" class="jp-footer__link">My Account</a></div>
+  </div>
+  <div class="jp-footer__bottom">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
+    <div class="jp-footer__social">
+      <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
+      <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
+    </div>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+</body>
+</html>

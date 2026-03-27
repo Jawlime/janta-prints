@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.port-item{border-radius:12px;overflow:hidden;position:relative;aspect-ratio:1;background:var(--col-surface);border:1px solid var(--col-border);cursor:none;}
+.port-item:nth-child(1){grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:420px;}
+.port-item:nth-child(5){grid-column:span 2;}
+.port-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,var(--col-surface),var(--col-surface-2));transition:transform .5s var(--ease-out);}
+.port-item:hover .port-bg{transform:scale(1.05);}
+.port-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 30%,transparent);opacity:0;transition:opacity .25s;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;}
+.port-item:hover .port-overlay{opacity:1;}
+.port-cat{font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--col-accent);margin-bottom:6px;}
+.port-name{font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+.filter-chip{border:1px solid var(--col-border);border-radius:3px;padding:6px 14px;font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-text-muted);background:none;cursor:none;transition:border-color .18s,color .18s;}
+.filter-chip:hover{border-color:var(--col-border-2);color:var(--col-text);}
+.filter-chip.active{border-color:var(--col-accent);color:var(--col-accent);}
+@media(max-width:1024px){.port-grid{grid-template-columns:repeat(2,1fr);}.port-item:nth-child(1){grid-column:span 2;}.port-item:nth-child(5){grid-column:span 1;}}
+@media(max-width:600px){.port-grid{grid-template-columns:1fr;}.port-item:nth-child(1),.port-item:nth-child(5){grid-column:span 1;}}
+</style>
+</head>
+<body data-page="portfolio">
+<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;">
+  <section style="padding:var(--sp-10) 0 var(--sp-7);">
+    <div class="jp-container">
+      <div class="jp-eyebrow jp-reveal"><div class="jp-eyebrow-line"></div> Our Work</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;margin:var(--sp-4) 0 var(--sp-7);">
+        <h1 class="jp-display jp-display--xl jp-reveal">Results That<br><span class="jp-accent">Speak.</span></h1>
+        <p class="jp-body jp-reveal" style="max-width:360px;">Every item in our portfolio was printed and delivered from our Kisumu studio. Real clients, real results.</p>
+      </div>
+      <div class="filter-bar jp-reveal">
+        <button class="filter-chip active" data-filter="all" onclick="filterPortfolio('all',this)">All Work</button>
+        <button class="filter-chip" data-filter="large-format" onclick="filterPortfolio('large-format',this)">Large Format</button>
+        <button class="filter-chip" data-filter="jerseys" onclick="filterPortfolio('jerseys',this)">Jerseys</button>
+        <button class="filter-chip" data-filter="apparel" onclick="filterPortfolio('apparel',this)">Apparel</button>
+        <button class="filter-chip" data-filter="print" onclick="filterPortfolio('print',this)">Print</button>
+        <button class="filter-chip" data-filter="signage" onclick="filterPortfolio('signage',this)">Signage</button>
+        <button class="filter-chip" data-filter="merchandise" onclick="filterPortfolio('merchandise',this)">Merchandise</button>
+      </div>
+      <div class="port-grid" id="portGrid">
+        <div class="port-item jp-reveal-scale" data-cat="large-format"><div class="port-bg" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">🏟️</div><div class="port-overlay"><div class="port-cat">Large Format</div><div class="port-name">Kisumu City FC Billboard</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="jerseys"><div class="port-bg" style="background:linear-gradient(135deg,#0f3460,#533483);">⚽</div><div class="port-overlay"><div class="port-cat">Jerseys</div><div class="port-name">Sublimation Kit — Full Squad</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="apparel"><div class="port-bg" style="background:linear-gradient(135deg,#e8622a,#7a3312);">👕</div><div class="port-overlay"><div class="port-cat">Apparel</div><div class="port-name">Corporate Uniform Programme</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="signage"><div class="port-bg" style="background:linear-gradient(135deg,#2a9e8f,#0f4c46);">🪧</div><div class="port-overlay"><div class="port-cat">Signage</div><div class="port-name">Shop Fascia & LED Signs</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="large-format"><div class="port-bg" style="background:linear-gradient(135deg,#4a1628,#9e2a4a);">🎪</div><div class="port-overlay"><div class="port-cat">Events / Large Format</div><div class="port-name">Festival Full Brand Package</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="print"><div class="port-bg" style="background:linear-gradient(135deg,#1a3a1a,#2d6a2d);">📄</div><div class="port-overlay"><div class="port-cat">Print</div><div class="port-name">Annual Report — 96pp</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="merchandise"><div class="port-bg" style="background:linear-gradient(135deg,#2a2a5e,#4a4aaa);">🎁</div><div class="port-overlay"><div class="port-cat">Merchandise</div><div class="port-name">Corporate Gift Box Set</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="jerseys"><div class="port-bg" style="background:linear-gradient(135deg,#3a1a1a,#8b3a3a);">🏉</div><div class="port-overlay"><div class="port-cat">Jerseys</div><div class="port-name">Rugby Club Away Kit</div></div></div>
+        <div class="port-item jp-reveal-scale" data-cat="signage"><div class="port-bg" style="background:linear-gradient(135deg,#1a2a1a,#3a6a3a);">🚗</div><div class="port-overlay"><div class="port-cat">Signage</div><div class="port-name">Fleet Vehicle Wrap × 12</div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="jp-section--sm">
+    <div class="jp-container">
+      <div style="background:var(--col-accent);border-radius:var(--r-xl);padding:var(--sp-8);text-align:center;position:relative;overflow:hidden;" class="jp-reveal-scale">
+        <h2 class="jp-display jp-display--md" style="color:var(--col-white);margin-bottom:var(--sp-4);">Want results like these?</h2>
+        <p style="color:rgba(255,255,255,.85);margin-bottom:var(--sp-6);">Tell us what you need — we'll make it happen.</p>
+        <a href="quote.html" class="jp-btn jp-btn--white jp-btn--lg">Start Your Quote →</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__grid">
+    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
+    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
+    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620a070e0e0d2208030c160312100b0c16114c010d4c0907">[email&#160;protected]</a></div></div>
+    <div><div class="jp-footer__col-title">Services</div>
+    <a href="services.html" class="jp-footer__link">Large Format</a>
+    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+    <a href="services.html" class="jp-footer__link">Apparel</a>
+    <a href="services.html" class="jp-footer__link">Signage</a></div>
+    <div><div class="jp-footer__col-title">Company</div>
+    <a href="about.html" class="jp-footer__link">About Us</a>
+    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+    <a href="blog.html" class="jp-footer__link">Blog</a>
+    <a href="faq.html" class="jp-footer__link">FAQ</a>
+    <a href="contact.html" class="jp-footer__link">Contact</a></div>
+    <div><div class="jp-footer__col-title">Tools</div>
+    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+    <a href="account.html" class="jp-footer__link">My Account</a></div>
+  </div>
+  <div class="jp-footer__bottom">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
+    <div class="jp-footer__social">
+      <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
+      <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
+    </div>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+function filterPortfolio(cat, btn) {
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.port-item').forEach(item => {
+    item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

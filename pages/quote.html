@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get a Quote — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.q-step{display:none;animation:fadeIn .35s ease;}
+.q-step.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.product-card{background:var(--col-surface-2);border:1.5px solid var(--col-border);border-radius:var(--r-md);padding:var(--sp-5);cursor:none;transition:border-color .18s,background .18s;text-align:center;}
+.product-card:hover{border-color:var(--col-border-2);}
+.product-card.selected{border-color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 6%,var(--col-surface-2));}
+.product-card .icon{font-size:32px;margin-bottom:var(--sp-3);}
+.product-card .name{font-family:var(--font-heading);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--col-text);margin-bottom:4px;}
+.product-card .sub{font-size:12px;color:var(--col-text-dim);}
+.qty-row{display:flex;align-items:center;gap:12px;}
+.qty-btn{width:36px;height:36px;border:1px solid var(--col-border);border-radius:var(--r-sm);background:var(--col-surface-2);color:var(--col-text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:none;transition:border-color .15s;}
+.qty-btn:hover{border-color:var(--col-accent);}
+.qty-display{font-family:var(--font-display);font-size:28px;color:var(--col-text);min-width:64px;text-align:center;}
+@media(max-width:700px){.product-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body data-page="quote">
+<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;min-height:100vh;">
+  <section style="padding:var(--sp-8) 0;border-bottom:1px solid var(--col-border);background:var(--col-surface);">
+    <div class="jp-container">
+      <div class="jp-eyebrow" style="margin-bottom:var(--sp-5);"><div class="jp-eyebrow-line"></div> Free Quote</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;">
+        <h1 class="jp-display jp-display--lg">Build Your<br><span class="jp-accent">Quote.</span></h1>
+        <!-- Stepper -->
+        <div class="jp-stepper" id="quoteSteps">
+          <div class="jp-step active"><div class="jp-step-num">1</div><div class="jp-step-label jp-hide-mobile">Product</div></div>
+          <div class="jp-step-line"></div>
+          <div class="jp-step"><div class="jp-step-num">2</div><div class="jp-step-label jp-hide-mobile">Details</div></div>
+          <div class="jp-step-line"></div>
+          <div class="jp-step"><div class="jp-step-num">3</div><div class="jp-step-label jp-hide-mobile">Artwork</div></div>
+          <div class="jp-step-line"></div>
+          <div class="jp-step"><div class="jp-step-num">4</div><div class="jp-step-label jp-hide-mobile">Contact</div></div>
+          <div class="jp-step-line"></div>
+          <div class="jp-step"><div class="jp-step-num">5</div><div class="jp-step-label jp-hide-mobile">Summary</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="jp-section">
+    <div class="jp-container jp-container--narrow">
+
+      <!-- Step 1: Product -->
+      <div class="q-step active" id="step1">
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">What do you need?</h2>
+        <p class="jp-body" style="margin-bottom:var(--sp-6);">Select a product category to get started.</p>
+        <div class="product-grid" id="productGrid">
+          <div class="product-card" onclick="selectProduct('large-format','Large Format',this)"><div class="icon">🏟️</div><div class="name">Large Format</div><div class="sub">Banners, billboards, displays</div></div>
+          <div class="product-card" onclick="selectProduct('jerseys','Jerseys & Kits',this)"><div class="icon">⚽</div><div class="name">Jerseys & Kits</div><div class="sub">Football, rugby, custom</div></div>
+          <div class="product-card" onclick="selectProduct('apparel','Apparel',this)"><div class="icon">👕</div><div class="name">Apparel</div><div class="sub">T-shirts, polos, hoodies</div></div>
+          <div class="product-card" onclick="selectProduct('print','Print & Stationery',this)"><div class="icon">📄</div><div class="name">Print & Stationery</div><div class="sub">Cards, flyers, brochures</div></div>
+          <div class="product-card" onclick="selectProduct('signage','Signage',this)"><div class="icon">🪧</div><div class="name">Signage</div><div class="sub">Acrylic, ACP, LED, vehicle</div></div>
+          <div class="product-card" onclick="selectProduct('merchandise','Merchandise',this)"><div class="icon">🎁</div><div class="name">Merchandise</div><div class="sub">Mugs, bags, tech gifts</div></div>
+        </div>
+        <div style="margin-top:var(--sp-7);text-align:right;">
+          <button class="jp-btn jp-btn--primary jp-btn--lg" id="step1Next" onclick="goStep(2)" disabled>Continue <span class="jp-btn-arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- Step 2: Details -->
+      <div class="q-step" id="step2">
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Product Details</h2>
+        <div class="jp-field" style="margin-bottom:var(--sp-5);">
+          <label class="jp-label-text">Specific product / item</label>
+          <input class="jp-input" type="text" id="productSpec" placeholder="e.g. Roll-up banner 85×200cm, Football jersey, A5 flyers…">
+        </div>
+        <div style="margin-bottom:var(--sp-5);">
+          <label class="jp-label-text" style="display:block;margin-bottom:var(--sp-3);">Quantity</label>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <div class="qty-display" id="qtyDisplay">1</div>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <input type="number" class="jp-input" id="qtyInput" value="1" min="1" max="10000" style="max-width:100px;" oninput="syncQty()">
+          </div>
+        </div>
+        <div class="jp-field" style="margin-bottom:var(--sp-5);">
+          <label class="jp-label-text">Size / Dimensions</label>
+          <input class="jp-input" type="text" id="sizeSpec" placeholder="e.g. 85×200cm, A5, XL, custom…">
+        </div>
+        <div class="jp-field" style="margin-bottom:var(--sp-5);">
+          <label class="jp-label-text">Material / Finish (if known)</label>
+          <input class="jp-input" type="text" id="materialSpec" placeholder="e.g. Gloss, Matte, Vinyl, Sublimation, leave blank if unsure…">
+        </div>
+        <div class="jp-field" style="margin-bottom:var(--sp-5);">
+          <label class="jp-label-text">Turnaround needed</label>
+          <select class="jp-select" id="turnaround">
+            <option>No rush — standard delivery</option>
+            <option>Within 5 working days</option>
+            <option>Within 3 working days</option>
+            <option>Next day (rush fee applies)</option>
+            <option>Same day (rush fee applies, subject to availability)</option>
+          </select>
+        </div>
+        <div class="jp-field" style="margin-bottom:var(--sp-6);">
+          <label class="jp-label-text">Additional requirements</label>
+          <textarea class="jp-textarea" id="additionalNotes" placeholder="Player names, squad numbers, colours, design preferences, delivery address, special instructions…" rows="4"></textarea>
+        </div>
+        <div style="display:flex;gap:var(--sp-4);">
+          <button class="jp-btn jp-btn--secondary" onclick="goStep(1)">← Back</button>
+          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(3)" style="flex:1;">Continue <span class="jp-btn-arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- Step 3: Artwork -->
+      <div class="q-step" id="step3">
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">Artwork & Design</h2>
+        <p class="jp-body" style="margin-bottom:var(--sp-6);">Upload your artwork or let us know if you need design help.</p>
+        <div style="border:1.5px dashed var(--col-border-2);border-radius:var(--r-lg);padding:var(--sp-8);text-align:center;margin-bottom:var(--sp-5);cursor:none;position:relative;transition:border-color .2s;" id="artDrop" ondragover="artDrop.style.borderColor='var(--col-accent)'" ondragleave="artDrop.style.borderColor=''" >
+          <input type="file" id="artFile" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg,.svg" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="onArtFile(event)">
+          <div style="font-size:36px;margin-bottom:var(--sp-4);">📁</div>
+          <div class="jp-heading jp-heading--md" style="margin-bottom:var(--sp-2);">Drop artwork here or click to browse</div>
+          <div style="font-size:12px;color:var(--col-text-dim);">PDF, AI, EPS, PNG, JPG, SVG · Max 50MB</div>
+          <div id="artFileName" style="margin-top:var(--sp-4);font-size:13px;color:var(--col-accent);display:none;"></div>
+        </div>
+        <div style="margin-bottom:var(--sp-5);">
+          <div class="jp-label" style="margin-bottom:var(--sp-3);">Or choose an option:</div>
+          <div style="display:flex;flex-direction:column;gap:var(--sp-3);">
+            <label class="jp-checkbox"><input type="radio" name="artOption" value="upload" checked> I'm uploading artwork above</label>
+            <label class="jp-checkbox"><input type="radio" name="artOption" value="later"> I'll send artwork later (via WhatsApp or email)</label>
+            <label class="jp-checkbox"><input type="radio" name="artOption" value="design"> I need Janta Prints to design from scratch (design fee applies)</label>
+            <label class="jp-checkbox"><input type="radio" name="artOption" value="template"> I want to use your mockup tool first — <a href="studio.html#mockup" style="color:var(--col-accent);">Open Studio →</a></label>
+          </div>
+        </div>
+        <div style="background:color-mix(in srgb,var(--col-accent-2) 8%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-accent-2) 25%,transparent);border-radius:var(--r-md);padding:var(--sp-4);font-size:13px;color:var(--col-text-muted);margin-bottom:var(--sp-6);">
+          <strong style="color:var(--col-accent-2);">Artwork tip:</strong> Use our free <a href="studio.html" style="color:var(--col-accent-2);">Creative Studio</a> to remove backgrounds, resize to print dimensions, and check your file before uploading.
+        </div>
+        <div style="display:flex;gap:var(--sp-4);">
+          <button class="jp-btn jp-btn--secondary" onclick="goStep(2)">← Back</button>
+          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(4)" style="flex:1;">Continue <span class="jp-btn-arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- Step 4: Contact -->
+      <div class="q-step" id="step4">
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Your Contact Details</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
+          <div class="jp-field"><label class="jp-label-text">First name</label><input class="jp-input" type="text" id="qFname" required placeholder="Grace"></div>
+          <div class="jp-field"><label class="jp-label-text">Last name</label><input class="jp-input" type="text" id="qLname" placeholder="Akinyi"></div>
+        </div>
+        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Email</label><input class="jp-input" type="email" id="qEmail" placeholder="grace@company.co.ke"></div>
+        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Phone / WhatsApp *</label><input class="jp-input" type="tel" id="qPhone" required placeholder="+254 7xx xxx xxx"></div>
+        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Company (optional)</label><input class="jp-input" type="text" id="qCompany" placeholder="Your organisation name"></div>
+        <div class="jp-field" style="margin-bottom:var(--sp-6);">
+          <label class="jp-label-text">Preferred contact method</label>
+          <select class="jp-select" id="qContact">
+            <option>WhatsApp (fastest)</option>
+            <option>Phone call</option>
+            <option>Email</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:var(--sp-4);">
+          <button class="jp-btn jp-btn--secondary" onclick="goStep(3)">← Back</button>
+          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(5)" style="flex:1;">Review Quote <span class="jp-btn-arrow">→</span></button>
+        </div>
+      </div>
+
+      <!-- Step 5: Summary -->
+      <div class="q-step" id="step5">
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Quote Summary</h2>
+        <div style="background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-lg);padding:var(--sp-6);margin-bottom:var(--sp-6);" id="quoteSummary"></div>
+        <div style="background:color-mix(in srgb,var(--col-accent) 6%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-accent) 20%,transparent);border-radius:var(--r-md);padding:var(--sp-5);margin-bottom:var(--sp-6);font-size:14px;color:var(--col-text-muted);">
+          Our team will review your requirements and send a detailed price within <strong style="color:var(--col-text);">2 hours</strong> on business days. You'll receive a PDF quote via email and WhatsApp.
+        </div>
+        <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;">
+          <button class="jp-btn jp-btn--secondary" onclick="goStep(4)">← Edit</button>
+          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="submitQuote()" style="flex:1;">Submit Quote Request →</button>
+        </div>
+        <div id="quoteSuccess" style="display:none;margin-top:var(--sp-6);padding:var(--sp-6);background:color-mix(in srgb,var(--col-success) 10%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-success) 30%,transparent);border-radius:var(--r-lg);text-align:center;">
+          <div style="font-size:40px;margin-bottom:var(--sp-4);">✅</div>
+          <div class="jp-heading jp-heading--lg" style="color:var(--col-success);margin-bottom:var(--sp-3);">Quote submitted!</div>
+          <p class="jp-body" style="margin-bottom:var(--sp-5);">We'll send your detailed quote within 2 hours. Check your WhatsApp and email.</p>
+          <a href="index.html" class="jp-btn jp-btn--secondary">← Back to Home</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__grid">
+    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
+    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
+    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f272a2323200f252e213b2e3f3d26213b3c612c2061242a">[email&#160;protected]</a></div></div>
+    <div><div class="jp-footer__col-title">Services</div>
+    <a href="services.html" class="jp-footer__link">Large Format</a>
+    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+    <a href="services.html" class="jp-footer__link">Apparel</a>
+    <a href="services.html" class="jp-footer__link">Signage</a></div>
+    <div><div class="jp-footer__col-title">Company</div>
+    <a href="about.html" class="jp-footer__link">About Us</a>
+    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+    <a href="blog.html" class="jp-footer__link">Blog</a>
+    <a href="faq.html" class="jp-footer__link">FAQ</a>
+    <a href="contact.html" class="jp-footer__link">Contact</a></div>
+    <div><div class="jp-footer__col-title">Tools</div>
+    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+    <a href="account.html" class="jp-footer__link">My Account</a></div>
+  </div>
+  <div class="jp-footer__bottom">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
+    <div class="jp-footer__social">
+      <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
+      <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
+    </div>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+var qData={product:'',productLabel:'',qty:1};
+var currentStep=1;
+function goStep(n){
+  document.getElementById('step'+currentStep).classList.remove('active');
+  document.getElementById('step'+n).classList.add('active');
+  JP.setStep(document.getElementById('quoteSteps'),n-1);
+  if(n===5)buildSummary();
+  currentStep=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function selectProduct(id,label,el){
+  qData.product=id;qData.productLabel=label;
+  document.querySelectorAll('.product-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('step1Next').disabled=false;
+}
+function changeQty(d){
+  qData.qty=Math.max(1,Math.min(10000,qData.qty+d));
+  document.getElementById('qtyDisplay').textContent=qData.qty;
+  document.getElementById('qtyInput').value=qData.qty;
+}
+function syncQty(){
+  qData.qty=Math.max(1,Math.min(10000,+document.getElementById('qtyInput').value||1));
+  document.getElementById('qtyDisplay').textContent=qData.qty;
+}
+function onArtFile(e){
+  var f=e.target.files[0];
+  if(f){var el=document.getElementById('artFileName');el.textContent='✓ '+f.name;el.style.display='block';}
+}
+function buildSummary(){
+  var rows=[
+    ['Product',qData.productLabel||'Not selected'],
+    ['Item',document.getElementById('productSpec').value||'—'],
+    ['Quantity',qData.qty],
+    ['Size',document.getElementById('sizeSpec').value||'—'],
+    ['Material',document.getElementById('materialSpec').value||'—'],
+    ['Turnaround',document.getElementById('turnaround').value],
+    ['Notes',document.getElementById('additionalNotes').value||'—'],
+    ['Name',(document.getElementById('qFname').value+' '+document.getElementById('qLname').value).trim()||'—'],
+    ['Phone',document.getElementById('qPhone').value||'—'],
+    ['Email',document.getElementById('qEmail').value||'—'],
+    ['Company',document.getElementById('qCompany').value||'—'],
+    ['Contact via',document.getElementById('qContact').value],
+  ];
+  document.getElementById('quoteSummary').innerHTML='<div style="display:flex;flex-direction:column;gap:12px;">'
+    +rows.map(r=>'<div style="display:flex;gap:16px;font-size:14px;"><span style="min-width:120px;color:var(--col-text-dim);font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding-top:2px;">'+r[0]+'</span><span style="color:var(--col-text);flex:1;">'+r[1]+'</span></div>').join('<hr style="border:none;border-top:1px solid var(--col-border);">')
+    +'</div>';
+}
+async function submitQuote(){
+  var btn=document.querySelector('#step5 .jp-btn--primary');
+  btn.disabled=true;btn.textContent='Submitting…';
+  var payload={
+    product:qData.product,productLabel:qData.productLabel,qty:qData.qty,
+    productSpec:document.getElementById('productSpec').value,
+    sizeSpec:document.getElementById('sizeSpec').value,
+    materialSpec:document.getElementById('materialSpec').value,
+    turnaround:document.getElementById('turnaround').value,
+    notes:document.getElementById('additionalNotes').value,
+    artOption:document.querySelector('input[name="artOption"]:checked')?.value||'later',
+    fname:document.getElementById('qFname').value,
+    lname:document.getElementById('qLname').value,
+    email:document.getElementById('qEmail').value,
+    phone:document.getElementById('qPhone').value,
+    company:document.getElementById('qCompany').value,
+    contactVia:document.getElementById('qContact').value,
+    submittedAt:new Date().toISOString(),source:'website-quote-builder',
+  };
+  try{
+    var result=await JP.API.submitQuote(payload);
+    if(result.error)throw new Error(result.error);
+    btn.style.display='none';
+    document.querySelector('#step5 .jp-btn--secondary').style.display='none';
+    document.getElementById('quoteSuccess').style.display='block';
+    JP.toast("Quote submitted! We'll be in touch within 2 hours.",'success');
+  }catch(err){
+    btn.disabled=false;btn.textContent='Try Again';
+    JP.toast('Submission failed — please try WhatsApp instead.','error');
+  }
+}
+</script>
+</body>
+</html>

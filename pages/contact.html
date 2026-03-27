@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+
+</head>
+<body data-page="contact">
+<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;">
+  <section style="padding:var(--sp-10) 0 var(--sp-7);border-bottom:1px solid var(--col-border);background:var(--col-surface);">
+    <div class="jp-container">
+      <div class="jp-eyebrow jp-reveal"><div class="jp-eyebrow-line"></div> Get in Touch</div>
+      <h1 class="jp-display jp-display--xl jp-reveal" style="margin:var(--sp-4) 0;">Let's Talk<br><span class="jp-accent">Print.</span></h1>
+    </div>
+  </section>
+  <section class="jp-section">
+    <div class="jp-container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-9);">
+        <!-- Contact form -->
+        <div class="jp-reveal-left">
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Send a Message</div>
+          <form id="contactForm" onsubmit="submitContact(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
+              <div class="jp-field"><label class="jp-label-text">First name</label><input class="jp-input" type="text" name="fname" required placeholder="Grace"></div>
+              <div class="jp-field"><label class="jp-label-text">Last name</label><input class="jp-input" type="text" name="lname" required placeholder="Akinyi"></div>
+            </div>
+            <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Email</label><input class="jp-input" type="email" name="email" required placeholder="grace@company.co.ke"></div>
+            <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Phone / WhatsApp</label><input class="jp-input" type="tel" name="phone" placeholder="+254 7xx xxx xxx"></div>
+            <div class="jp-field" style="margin-bottom:var(--sp-4);">
+              <label class="jp-label-text">What do you need?</label>
+              <select class="jp-select" name="subject">
+                <option value="">Select a subject…</option>
+                <option>Large Format / Banners</option>
+                <option>Jerseys & Sports Kits</option>
+                <option>Apparel & Garments</option>
+                <option>Print & Stationery</option>
+                <option>Signage & Display</option>
+                <option>Branded Merchandise</option>
+                <option>General Enquiry</option>
+              </select>
+            </div>
+            <div class="jp-field" style="margin-bottom:var(--sp-6);"><label class="jp-label-text">Message</label><textarea class="jp-textarea" name="message" placeholder="Tell us about your project — what you need, quantities, and your deadline…" rows="5"></textarea></div>
+            <button type="submit" class="jp-btn jp-btn--primary jp-btn--full jp-btn--lg" id="contactSubmit">Send Message <span class="jp-btn-arrow">→</span></button>
+          </form>
+          <div id="contactSuccess" style="display:none;margin-top:var(--sp-5);padding:var(--sp-5);background:color-mix(in srgb,var(--col-success) 10%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-success) 30%,transparent);border-radius:var(--r-md);">
+            <div class="jp-heading jp-heading--md" style="color:var(--col-success);margin-bottom:8px;">✓ Message received!</div>
+            <p class="jp-body jp-body--sm">We'll get back to you within 2 hours on business days. You can also reach us on WhatsApp for a faster response.</p>
+          </div>
+        </div>
+        <!-- Contact info -->
+        <div class="jp-reveal">
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Direct Contact</div>
+          <div style="display:flex;flex-direction:column;gap:var(--sp-4);margin-bottom:var(--sp-7);">
+            <a href="https://wa.me/254704570799" class="jp-card" style="display:flex;align-items:center;gap:var(--sp-5);text-decoration:none;border-color:color-mix(in srgb,#25D366 30%,var(--col-border));">
+              <div style="width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">💬</div>
+              <div><div class="jp-heading jp-heading--md" style="margin-bottom:4px;">WhatsApp</div><p class="jp-body jp-body--sm">+254 704 570 799 · Fastest response</p></div>
+            </a>
+            <a href="tel:+254704570799" class="jp-card" style="display:flex;align-items:center;gap:var(--sp-5);">
+              <div style="width:48px;height:48px;background:var(--col-surface-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--col-border);">📞</div>
+              <div><div class="jp-heading jp-heading--md" style="margin-bottom:4px;">Phone</div><p class="jp-body jp-body--sm">+254 704 570 799 · Mon–Sat 8am–6pm</p></div>
+            </a>
+            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a323f3636351a303b342e3b2a2833342e2974393574313f">[email&#160;protected]</a>
+          </div>
+          <div class="jp-card" style="padding:var(--sp-6);">
+            <div class="jp-label" style="margin-bottom:var(--sp-4);">Studio Address</div>
+            <p class="jp-body" style="margin-bottom:var(--sp-5);">Janta Prints Studio<br>Kisumu, Kenya</p>
+            <div class="jp-label" style="margin-bottom:var(--sp-3);">Business Hours</div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px;color:var(--col-text-muted);">
+              <span>Mon – Fri</span><span>8:00 am – 6:00 pm</span>
+              <span>Saturday</span><span>9:00 am – 4:00 pm</span>
+              <span style="color:var(--col-text-dim);">Sunday</span><span style="color:var(--col-text-dim);">Closed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__grid">
+    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
+    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
+    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c54595050537c565d52485d4c4e5552484f125f53125759">[email&#160;protected]</a></div></div>
+    <div><div class="jp-footer__col-title">Services</div>
+    <a href="services.html" class="jp-footer__link">Large Format</a>
+    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+    <a href="services.html" class="jp-footer__link">Apparel</a>
+    <a href="services.html" class="jp-footer__link">Signage</a></div>
+    <div><div class="jp-footer__col-title">Company</div>
+    <a href="about.html" class="jp-footer__link">About Us</a>
+    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+    <a href="blog.html" class="jp-footer__link">Blog</a>
+    <a href="faq.html" class="jp-footer__link">FAQ</a>
+    <a href="contact.html" class="jp-footer__link">Contact</a></div>
+    <div><div class="jp-footer__col-title">Tools</div>
+    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+    <a href="account.html" class="jp-footer__link">My Account</a></div>
+  </div>
+  <div class="jp-footer__bottom">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
+    <div class="jp-footer__social">
+      <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
+      <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
+    </div>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+async function submitContact(e){
+  e.preventDefault();
+  var btn=document.getElementById('contactSubmit');
+  btn.disabled=true; btn.textContent='Sending…';
+  var payload={
+    fname:document.querySelector('[name="fname"]').value,
+    lname:document.querySelector('[name="lname"]').value,
+    email:document.querySelector('[name="email"]').value,
+    phone:document.querySelector('[name="phone"]').value,
+    subject:document.querySelector('[name="subject"]').value,
+    message:document.querySelector('[name="message"]').value,
+    sentAt:new Date().toISOString(),source:'website-contact-form',
+  };
+  try{
+    var result=await JP.API.submitContact(payload);
+    if(!result.ok)throw new Error(result.error);
+    document.getElementById('contactForm').style.display='none';
+    document.getElementById('contactSuccess').style.display='block';
+    JP.toast("Message sent! We'll reply within 2 hours.",'success');
+  }catch(err){
+    btn.disabled=false;btn.textContent='Try Again';
+    JP.toast('Send failed — please try WhatsApp or call us directly.','error');
+  }
+}
+</script>
+</body>
+</html>

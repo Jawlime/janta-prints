@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.auth-wrap{min-height:calc(100vh - 80px);display:grid;place-items:center;padding:var(--sp-7) var(--sp-5);}
+.auth-card{background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-xl);padding:var(--sp-9) var(--sp-8);width:100%;max-width:480px;}
+.auth-logo{font-family:var(--font-display);font-size:28px;letter-spacing:.04em;margin-bottom:var(--sp-7);text-align:center;}
+.auth-logo span{color:var(--col-accent);}
+.auth-title{font-family:var(--font-display);font-size:40px;text-transform:uppercase;margin-bottom:var(--sp-3);text-align:center;}
+.auth-sub{font-size:14px;color:var(--col-text-muted);text-align:center;margin-bottom:var(--sp-7);}
+.auth-divider{display:flex;align-items:center;gap:var(--sp-4);margin:var(--sp-6) 0;font-size:12px;color:var(--col-text-dim);}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--col-border);}
+.strength-bar{height:3px;border-radius:99px;background:var(--col-border);overflow:hidden;margin-top:6px;}
+.strength-fill{height:100%;border-radius:99px;width:0;transition:width .3s,background .3s;}
+.field-error{font-size:12px;color:var(--col-error);margin-top:4px;display:none;}
+</style>
+</head>
+<body data-page="register" style="background:var(--col-bg);">
+<div id="jp-cursor"></div>
+<div id="jp-cursor-ring"></div>
+
+<nav class="jp-nav scrolled" style="position:relative;">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <div style="flex:1;"></div>
+    <a href="account.html" class="jp-btn jp-btn--secondary jp-btn--sm">Already have an account? Sign in →</a>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card jp-reveal-scale">
+    <div class="auth-logo">JANTA <span>PRINTS</span></div>
+    <div class="auth-title">Create<br><span class="jp-accent">Account.</span></div>
+    <div class="auth-sub">Track orders, save artwork, get faster quotes.</div>
+
+    <form id="registerForm" onsubmit="doRegister(event)" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
+        <div class="jp-field">
+          <label class="jp-label-text">First name *</label>
+          <input class="jp-input" type="text" id="regFname" required placeholder="Grace" autocomplete="given-name">
+          <div class="field-error" id="err-fname">Please enter your first name</div>
+        </div>
+        <div class="jp-field">
+          <label class="jp-label-text">Last name</label>
+          <input class="jp-input" type="text" id="regLname" placeholder="Akinyi" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="jp-field" style="margin-bottom:var(--sp-4);">
+        <label class="jp-label-text">Email address *</label>
+        <input class="jp-input" type="email" id="regEmail" required placeholder="grace@company.co.ke" autocomplete="email">
+        <div class="field-error" id="err-email">Please enter a valid email</div>
+      </div>
+
+      <div class="jp-field" style="margin-bottom:var(--sp-4);">
+        <label class="jp-label-text">Phone / WhatsApp *</label>
+        <input class="jp-input" type="tel" id="regPhone" required placeholder="+254 7xx xxx xxx" autocomplete="tel">
+        <div class="field-error" id="err-phone">Please enter your phone number</div>
+      </div>
+
+      <div class="jp-field" style="margin-bottom:var(--sp-4);">
+        <label class="jp-label-text">Company / Organisation (optional)</label>
+        <input class="jp-input" type="text" id="regCompany" placeholder="Lake Events Ltd" autocomplete="organization">
+      </div>
+
+      <div class="jp-field" style="margin-bottom:var(--sp-4);">
+        <label class="jp-label-text">Password *</label>
+        <input class="jp-input" type="password" id="regPass" required placeholder="Min. 8 characters"
+          autocomplete="new-password" oninput="checkStrength(this.value)">
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div id="strengthLabel" style="font-size:11px;color:var(--col-text-dim);margin-top:4px;height:16px;"></div>
+        <div class="field-error" id="err-pass">Password must be at least 8 characters</div>
+      </div>
+
+      <div class="jp-field" style="margin-bottom:var(--sp-6);">
+        <label class="jp-label-text">Confirm password *</label>
+        <input class="jp-input" type="password" id="regPassConfirm" required placeholder="Repeat your password" autocomplete="new-password">
+        <div class="field-error" id="err-confirm">Passwords don't match</div>
+      </div>
+
+      <label class="jp-checkbox" style="margin-bottom:var(--sp-6);">
+        <input type="checkbox" id="regTerms" required>
+        I agree to the <a href="terms.html" style="color:var(--col-accent);">Terms of Service</a> and
+        <a href="privacy.html" style="color:var(--col-accent);">Privacy Policy</a>
+      </label>
+
+      <button type="submit" class="jp-btn jp-btn--primary jp-btn--full jp-btn--lg" id="regSubmit">
+        Create Account →
+      </button>
+    </form>
+
+    <div id="regSuccess" style="display:none;text-align:center;padding:var(--sp-6) 0;">
+      <div style="font-size:48px;margin-bottom:var(--sp-4);">✅</div>
+      <div class="jp-heading jp-heading--lg" style="color:var(--col-success);margin-bottom:var(--sp-3);">Account created!</div>
+      <p class="jp-body" style="margin-bottom:var(--sp-6);">Check your email for a confirmation link, then sign in to start tracking orders.</p>
+      <a href="account.html" class="jp-btn jp-btn--primary">Sign In →</a>
+    </div>
+
+    <div class="auth-divider">or</div>
+    <div style="text-align:center;font-size:14px;color:var(--col-text-muted);">
+      Already have an account?
+      <a href="account.html" style="color:var(--col-accent);font-weight:600;">Sign in →</a>
+    </div>
+    <div style="margin-top:var(--sp-5);text-align:center;">
+      <a href="https://wa.me/254704570799?text=Hi,%20I%20want%20to%20place%20an%20order%20without%20creating%20an%20account"
+        style="font-size:13px;color:var(--col-text-dim);">💬 Order via WhatsApp instead</a>
+    </div>
+  </div>
+</div>
+
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+function checkStrength(pw) {
+  var fill  = document.getElementById('strengthFill');
+  var label = document.getElementById('strengthLabel');
+  if (!pw) { fill.style.width='0'; label.textContent=''; return; }
+  var score = 0;
+  if (pw.length >= 8)  score++;
+  if (pw.length >= 12) score++;
+  if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  var levels = [
+    { w:'20%', bg:'var(--col-error)',   t:'Very weak' },
+    { w:'40%', bg:'var(--col-warning)', t:'Weak' },
+    { w:'60%', bg:'var(--col-warning)', t:'Fair' },
+    { w:'80%', bg:'var(--col-accent-2)',t:'Strong' },
+    { w:'100%',bg:'var(--col-success)', t:'Very strong' },
+  ];
+  var l = levels[Math.min(score, 4)];
+  fill.style.width = l.w;
+  fill.style.background = l.bg;
+  label.textContent = l.t;
+  label.style.color = l.bg;
+}
+
+function showError(id, show) {
+  document.getElementById('err-' + id).style.display = show ? 'block' : 'none';
+  var inp = document.getElementById('reg' + id.charAt(0).toUpperCase() + id.slice(1));
+  if (inp) inp.classList.toggle('error', show);
+}
+
+async function doRegister(e) {
+  e.preventDefault();
+  var fname   = document.getElementById('regFname').value.trim();
+  var lname   = document.getElementById('regLname').value.trim();
+  var email   = document.getElementById('regEmail').value.trim();
+  var phone   = document.getElementById('regPhone').value.trim();
+  var company = document.getElementById('regCompany').value.trim();
+  var pass    = document.getElementById('regPass').value;
+  var confirm = document.getElementById('regPassConfirm').value;
+  var terms   = document.getElementById('regTerms').checked;
+
+  var valid = true;
+  if (!fname) { showError('fname', true); valid = false; } else showError('fname', false);
+  if (!email || !email.includes('@')) { showError('email', true); valid = false; } else showError('email', false);
+  if (!phone) { showError('phone', true); valid = false; } else showError('phone', false);
+  if (pass.length < 8) { showError('pass', true); valid = false; } else showError('pass', false);
+  if (pass !== confirm) { showError('confirm', true); valid = false; } else showError('confirm', false);
+  if (!terms) { JP.toast('Please accept the Terms of Service','error'); valid = false; }
+  if (!valid) return;
+
+  var btn = document.getElementById('regSubmit');
+  btn.disabled = true; btn.textContent = 'Creating account…';
+
+  try {
+    var result = await JP.Auth.register(email, pass, {
+      name: (fname + ' ' + lname).trim(), phone: phone, company: company
+    });
+    if (result.error) throw new Error(result.error);
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('regSuccess').style.display = 'block';
+    JP.toast('Account created! Check your email.','success');
+  } catch(err) {
+    btn.disabled = false; btn.textContent = 'Create Account →';
+    JP.toast('Registration failed — ' + (err.message || 'please try again'),'error');
+  }
+}
+</script>
+</body>
+</html>

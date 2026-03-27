@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — Janta Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+.acct-layout{display:grid;grid-template-columns:220px 1fr;gap:0;min-height:calc(100vh - 160px);}
+.acct-sidebar{border-right:1px solid var(--col-border);padding:var(--sp-6);display:flex;flex-direction:column;gap:4px;}
+.acct-nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);font-family:var(--font-heading);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--col-text-muted);transition:background .15s,color .15s;cursor:none;}
+.acct-nav-link:hover{background:var(--col-surface-2);color:var(--col-text);}
+.acct-nav-link.active{background:color-mix(in srgb,var(--col-accent) 12%,transparent);color:var(--col-accent);}
+.acct-main{padding:var(--sp-7);}
+.stat-card{background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-md);padding:var(--sp-5);text-align:center;}
+.stat-card .num{font-family:var(--font-display);font-size:40px;color:var(--col-accent);}
+.order-row{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-4) 0;border-bottom:1px solid var(--col-border);flex-wrap:wrap;}
+.order-status{font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:3px;}
+.status-production{background:color-mix(in srgb,var(--col-warning) 15%,transparent);color:var(--col-warning);border:1px solid color-mix(in srgb,var(--col-warning) 30%,transparent);}
+.status-delivered{background:color-mix(in srgb,var(--col-success) 15%,transparent);color:var(--col-success);border:1px solid color-mix(in srgb,var(--col-success) 30%,transparent);}
+.status-review{background:color-mix(in srgb,var(--col-info) 15%,transparent);color:var(--col-info);border:1px solid color-mix(in srgb,var(--col-info) 30%,transparent);}
+.acct-panel{display:none;}.acct-panel.active{display:block;}
+@media(max-width:768px){.acct-layout{grid-template-columns:1fr;}.acct-sidebar{border-right:none;border-bottom:1px solid var(--col-border);flex-direction:row;overflow-x:auto;padding:var(--sp-3) var(--sp-4);}.acct-nav-link{white-space:nowrap;}.acct-main{padding:var(--sp-5);}}
+</style>
+</head>
+<body data-page="account">
+<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
+<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
+<nav class="jp-nav" id="jp-nav">
+  <div class="jp-nav__inner">
+    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
+    <ul class="jp-nav__links">
+      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
+      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
+    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
+  </div>
+</nav>
+<div class="jp-nav__mobile-menu">
+  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
+  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
+  <a href="about.html">About</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
+</div>
+
+<main style="padding-top:80px;background:var(--col-bg);">
+  <!-- Login wall (shown if not logged in) -->
+  <div id="loginWall" style="min-height:calc(100vh - 80px);display:flex;align-items:center;justify-content:center;padding:var(--sp-6);">
+    <div style="background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-xl);padding:var(--sp-9);max-width:420px;width:100%;text-align:center;">
+      <div class="jp-display jp-display--md" style="margin-bottom:var(--sp-3);">My <span class="jp-accent">Account</span></div>
+      <p class="jp-body" style="margin-bottom:var(--sp-7);">Sign in to track orders, manage artwork, and view invoices.</p>
+      <div class="jp-field" style="margin-bottom:var(--sp-4);text-align:left;"><label class="jp-label-text">Email</label><input class="jp-input" type="email" id="loginEmail" placeholder="you@company.co.ke"></div>
+      <div class="jp-field" style="margin-bottom:var(--sp-6);text-align:left;"><label class="jp-label-text">Password</label><input class="jp-input" type="password" id="loginPass" placeholder="••••••••"></div>
+      <button class="jp-btn jp-btn--primary jp-btn--full jp-btn--lg" onclick="doLogin()">Sign In →</button>
+      <div style="margin-top:var(--sp-5);font-size:13px;color:var(--col-text-muted);">No account? <a href="register.html" style="color:var(--col-accent);">Create one free →</a></div>
+      <div style="margin-top:var(--sp-3);font-size:12px;"><a href="forgot.html" style="color:var(--col-text-dim);">Forgot password?</a></div>
+    </div>
+  </div>
+
+  <!-- Dashboard (shown after login) -->
+  <div id="dashboard" style="display:none;">
+    <div style="background:var(--col-surface);border-bottom:1px solid var(--col-border);padding:var(--sp-5) 0;">
+      <div class="jp-container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-4);">
+        <div><div class="jp-label" style="margin-bottom:4px;">Welcome back</div><div class="jp-heading jp-heading--lg">Grace Akinyi</div></div>
+        <div style="display:flex;gap:var(--sp-3);">
+          <a href="quote.html" class="jp-btn jp-btn--primary">+ New Quote</a>
+          <button class="jp-btn jp-btn--secondary" onclick="doLogout()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+    <div class="acct-layout">
+      <div class="acct-sidebar">
+        <a class="acct-nav-link active" onclick="showPanel('orders',this)">📦 Orders</a>
+        <a class="acct-nav-link" onclick="showPanel('quotes',this)">💬 Quotes</a>
+        <a class="acct-nav-link" onclick="showPanel('artwork',this)">🖼️ Artwork</a>
+        <a class="acct-nav-link" onclick="showPanel('invoices',this)">🧾 Invoices</a>
+        <a class="acct-nav-link" onclick="showPanel('profile',this)">👤 Profile</a>
+      </div>
+      <div class="acct-main">
+        <!-- Orders panel -->
+        <div class="acct-panel active" id="panel-orders">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:var(--sp-7);" class="jp-stagger">
+            <div class="stat-card jp-reveal-scale"><div class="num">7</div><div class="jp-label">Total Orders</div></div>
+            <div class="stat-card jp-reveal-scale"><div class="num">1</div><div class="jp-label">In Production</div></div>
+            <div class="stat-card jp-reveal-scale"><div class="num">6</div><div class="jp-label">Delivered</div></div>
+          </div>
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-5);">Recent Orders</div>
+          <div id="orderList">
+            <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">#JP-2024-007 · Pull-up Banner × 2</div><div style="font-size:12px;color:var(--col-text-dim);">Submitted 20 Mar 2026</div></div><div class="order-status status-production">In Production</div><button class="jp-btn jp-btn--secondary jp-btn--sm">Track →</button></div>
+            <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">#JP-2024-006 · Football Jersey × 22</div><div style="font-size:12px;color:var(--col-text-dim);">Submitted 14 Mar 2026</div></div><div class="order-status status-review">Artwork Review</div><button class="jp-btn jp-btn--secondary jp-btn--sm">Respond →</button></div>
+            <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">#JP-2024-005 · Business Cards × 500</div><div style="font-size:12px;color:var(--col-text-dim);">Delivered 8 Mar 2026</div></div><div class="order-status status-delivered">Delivered</div><button class="jp-btn jp-btn--secondary jp-btn--sm">Reorder</button></div>
+            <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">#JP-2024-004 · A5 Flyers × 1000</div><div style="font-size:12px;color:var(--col-text-dim);">Delivered 28 Feb 2026</div></div><div class="order-status status-delivered">Delivered</div><button class="jp-btn jp-btn--secondary jp-btn--sm">Reorder</button></div>
+          </div>
+        </div>
+        <!-- Quotes panel -->
+        <div class="acct-panel" id="panel-quotes">
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-5);">Active Quotes</div>
+          <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">QT-2024-003 · Branded Hoodies × 50</div><div style="font-size:12px;color:var(--col-text-dim);">Expires 3 Apr 2026 · KES 62,500</div></div><span class="jp-badge jp-badge--accent2">Active</span><button class="jp-btn jp-btn--primary jp-btn--sm">Convert to Order</button></div>
+          <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">QT-2024-002 · Vehicle Wrap × 1</div><div style="font-size:12px;color:var(--col-text-dim);">Pending review</div></div><span class="jp-badge jp-badge--error">Pending</span><button class="jp-btn jp-btn--secondary jp-btn--sm">View →</button></div>
+          <div style="margin-top:var(--sp-7);">
+            <a href="quote.html" class="jp-btn jp-btn--primary">+ New Quote →</a>
+          </div>
+        </div>
+        <!-- Artwork panel -->
+        <div class="acct-panel" id="panel-artwork">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3);">
+            <div class="jp-heading jp-heading--lg">Artwork Library</div>
+            <button class="jp-btn jp-btn--secondary jp-btn--sm">+ Upload File</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div style="aspect-ratio:1;background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;"><span style="font-size:28px;">🛡️</span><span style="font-size:11px;color:var(--col-text-dim);">club-badge.svg</span></div>
+            <div style="aspect-ratio:1;background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;"><span style="font-size:28px;">🖼️</span><span style="font-size:11px;color:var(--col-text-dim);">letterhead.pdf</span></div>
+            <div style="aspect-ratio:1;background:var(--col-surface);border:1px dashed var(--col-border);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--col-text-dim);">+</div>
+          </div>
+          <p class="jp-body jp-body--sm" style="margin-top:var(--sp-5);">Saved artwork is reusable across all future orders — no need to re-upload logos or design files.</p>
+        </div>
+        <!-- Invoices panel -->
+        <div class="acct-panel" id="panel-invoices">
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-5);">Invoices</div>
+          <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">INV-007 · Business Cards</div><div style="font-size:12px;color:var(--col-text-dim);">8 Mar 2026 · KES 4,500</div></div><span class="jp-badge jp-badge--success">Paid</span><button class="jp-btn jp-btn--secondary jp-btn--sm">↓ PDF</button></div>
+          <div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">INV-006 · A5 Flyers × 1000</div><div style="font-size:12px;color:var(--col-text-dim);">28 Feb 2026 · KES 18,000</div></div><span class="jp-badge jp-badge--success">Paid</span><button class="jp-btn jp-btn--secondary jp-btn--sm">↓ PDF</button></div>
+        </div>
+        <!-- Profile panel -->
+        <div class="acct-panel" id="panel-profile">
+          <div class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Profile Settings</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
+            <div class="jp-field"><label class="jp-label-text">First name</label><input class="jp-input" value="Grace"></div>
+            <div class="jp-field"><label class="jp-label-text">Last name</label><input class="jp-input" value="Akinyi"></div>
+          </div>
+          <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Email</label><input class="jp-input" type="email" value="grace@lakelake.co.ke"></div>
+          <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Phone / WhatsApp</label><input class="jp-input" type="tel" value="+254 7xx xxx xxx"></div>
+          <div class="jp-field" style="margin-bottom:var(--sp-6);"><label class="jp-label-text">Company</label><input class="jp-input" value="Lake Events Ltd"></div>
+          <div style="display:flex;gap:var(--sp-4);">
+            <button class="jp-btn jp-btn--primary" onclick="JP.toast('Profile saved!','success')">Save Changes</button>
+            <button class="jp-btn jp-btn--secondary">Change Password</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="jp-footer"><div class="jp-container">
+  <div class="jp-footer__grid">
+    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
+    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
+    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
+    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
+    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="630b060f0f0c2309020d170213110a0d17104d000c4d0806">[email&#160;protected]</a></div></div>
+    <div><div class="jp-footer__col-title">Services</div>
+    <a href="services.html" class="jp-footer__link">Large Format</a>
+    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+    <a href="services.html" class="jp-footer__link">Apparel</a>
+    <a href="services.html" class="jp-footer__link">Signage</a></div>
+    <div><div class="jp-footer__col-title">Company</div>
+    <a href="about.html" class="jp-footer__link">About Us</a>
+    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+    <a href="blog.html" class="jp-footer__link">Blog</a>
+    <a href="faq.html" class="jp-footer__link">FAQ</a>
+    <a href="contact.html" class="jp-footer__link">Contact</a></div>
+    <div><div class="jp-footer__col-title">Tools</div>
+    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+    <a href="account.html" class="jp-footer__link">My Account</a></div>
+  </div>
+  <div class="jp-footer__bottom">
+    <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
+    <div class="jp-footer__social">
+      <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
+      <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
+    </div>
+  </div>
+</div></footer>
+<div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script>
+async function doLogin(){
+  var btn=document.querySelector('#loginWall .jp-btn--primary');
+  var email=document.getElementById('loginEmail').value;
+  var pass=document.getElementById('loginPass').value;
+  if(!email||!pass){JP.toast('Please enter email and password','error');return;}
+  btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    var result=await JP.Auth.signIn(email,pass);
+    if(result.error)throw new Error(result.error);
+    document.querySelector('#dashboard .jp-heading--lg').textContent=result.user.name||result.user.email;
+    document.getElementById('loginWall').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    JP.toast('Welcome back, '+(result.user.name||'there')+'!','success');
+    loadOrders();
+  }catch(err){btn.disabled=false;btn.textContent='Sign In →';JP.toast('Sign in failed — check your details','error');}
+}
+async function doLogout(){
+  await JP.Auth.signOut();
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('loginWall').style.display='flex';
+  JP.toast('Signed out','info');
+}
+async function loadOrders(){
+  try{
+    var orders=await JP.API.getMyOrders();
+    var list=document.getElementById('orderList');
+    if(!list)return;
+    var sc={production:'status-production',review:'status-review',delivered:'status-delivered'};
+    list.innerHTML=orders.map(o=>'<div class="order-row"><div style="flex:1;"><div class="jp-heading jp-heading--sm" style="margin-bottom:4px;">'+o.id+' · '+o.product+'</div><div style="font-size:12px;color:var(--col-text-dim);">'+o.date+' · '+o.amount+'</div></div><div class="order-status '+(sc[o.status]||'')+'">'+o.statusLabel+'</div><a href="order-tracking.html?id='+encodeURIComponent(o.id)+'" class="jp-btn jp-btn--secondary jp-btn--sm">Track →</a></div>').join('');
+    var nums=document.querySelectorAll('.stat-card .num');
+    if(nums[0])nums[0].textContent=orders.length;
+    if(nums[1])nums[1].textContent=orders.filter(o=>o.status==='production'||o.status==='review').length;
+    if(nums[2])nums[2].textContent=orders.filter(o=>o.status==='delivered').length;
+  }catch(err){console.error('[loadOrders]',err);}
+}
+function showPanel(id,link){
+  document.querySelectorAll('.acct-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.acct-nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  link.classList.add('active');
+}
+</script>
+</body>
+</html>
