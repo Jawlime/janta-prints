@@ -1,132 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Janta Prints</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/tokens.css">
-<link rel="stylesheet" href="../css/base.css">
-<style>
-.port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.port-item{border-radius:12px;overflow:hidden;position:relative;aspect-ratio:1;background:var(--col-surface);border:1px solid var(--col-border);cursor:none;}
-.port-item:nth-child(1){grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:420px;}
-.port-item:nth-child(5){grid-column:span 2;}
-.port-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,var(--col-surface),var(--col-surface-2));transition:transform .5s var(--ease-out);}
-.port-item:hover .port-bg{transform:scale(1.05);}
-.port-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 30%,transparent);opacity:0;transition:opacity .25s;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;}
-.port-item:hover .port-overlay{opacity:1;}
-.port-cat{font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--col-accent);margin-bottom:6px;}
-.port-name{font-family:var(--font-heading);font-size:16px;font-weight:700;color:#fff;}
-.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
-.filter-chip{border:1px solid var(--col-border);border-radius:3px;padding:6px 14px;font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-text-muted);background:none;cursor:none;transition:border-color .18s,color .18s;}
-.filter-chip:hover{border-color:var(--col-border-2);color:var(--col-text);}
-.filter-chip.active{border-color:var(--col-accent);color:var(--col-accent);}
-@media(max-width:1024px){.port-grid{grid-template-columns:repeat(2,1fr);}.port-item:nth-child(1){grid-column:span 2;}.port-item:nth-child(5){grid-column:span 1;}}
-@media(max-width:600px){.port-grid{grid-template-columns:1fr;}.port-item:nth-child(1),.port-item:nth-child(5){grid-column:span 1;}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Janta Prints</title>
+  <meta name="description" content="Real work from Janta Prints in Kisumu, Kenya. Custom jerseys, branded apparel, signage, school badges, merchandise and more.">
+  <link rel="canonical" href="https://janta-prints.vercel.app/pages/portfolio.html">
+  <meta property="og:title" content="Portfolio — Janta Prints">
+  <meta property="og:description" content="Real print and branding work produced by Janta Prints in Kisumu, Kenya.">
+  <meta property="og:image" content="https://janta-prints.vercel.app/images/portfolio/jersey-custom-federation-red-white.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <style>
+    .port-hero { padding: var(--sp-10) 0 var(--sp-6); text-align:center; }
+    .filter-bar { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:var(--sp-8); }
+    .filter-chip { padding:8px 20px; border-radius:100px; font-size:13px; font-weight:600; font-family:var(--font-heading); letter-spacing:.05em; border:1px solid var(--col-border); background:transparent; color:var(--col-text-dim); cursor:pointer; transition:all .2s; }
+    .filter-chip:hover, .filter-chip.active { background:var(--col-accent); color:#fff; border-color:var(--col-accent); }
+    .port-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; }
+    @media(max-width:768px){ .port-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:480px){ .port-grid { grid-template-columns:1fr; } }
+    .port-item { position:relative; aspect-ratio:1/1; overflow:hidden; cursor:pointer; background:var(--col-surface); }
+    .port-item img { width:100%; height:100%; object-fit:cover; transition:transform .4s cubic-bezier(.25,.46,.45,.94); display:block; }
+    .port-item:hover img { transform:scale(1.06); }
+    .port-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 50%); opacity:0; transition:opacity .3s; display:flex; align-items:flex-end; padding:16px; }
+    .port-item:hover .port-overlay { opacity:1; }
+    .port-label { font-family:var(--font-heading); font-size:13px; font-weight:700; letter-spacing:.06em; color:#fff; text-transform:uppercase; line-height:1.3; }
+    .port-cat-badge { font-size:10px; color:var(--col-accent); margin-bottom:4px; text-transform:uppercase; letter-spacing:.1em; }
+    /* Lightbox */
+    .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+    .lightbox.open { display:flex; }
+    .lightbox img { max-width:90vw; max-height:88vh; object-fit:contain; border-radius:4px; }
+    .lb-close { position:absolute; top:20px; right:24px; font-size:32px; color:#fff; cursor:pointer; line-height:1; opacity:.7; }
+    .lb-close:hover { opacity:1; }
+    .lb-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:36px; color:#fff; cursor:pointer; opacity:.6; padding:20px; }
+    .lb-nav:hover { opacity:1; }
+    .lb-prev { left:10px; }
+    .lb-next { right:10px; }
+    .lb-caption { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); text-align:center; color:#fff; font-family:var(--font-heading); font-size:14px; letter-spacing:.06em; text-transform:uppercase; opacity:.8; }
+    .port-section-label { padding:var(--sp-6) 0 var(--sp-2); }
+  </style>
 </head>
-<body data-page="portfolio">
-<div id="jp-cursor"></div><div id="jp-cursor-ring"></div>
-<a class="jp-wa-float" href="https://wa.me/254704570799" target="_blank">💬</a>
-<nav class="jp-nav" id="jp-nav">
-  <div class="jp-nav__inner">
-    <a href="../index.html" class="jp-nav__logo"><div class="jp-nav__pulse"></div>JANTA <span>PRINTS</span></a>
-    <ul class="jp-nav__links">
-      <li><a href="services.html">Services</a></li><li><a href="jerseys.html">Jerseys</a></li>
-      <li><a href="portfolio.html">Portfolio</a></li><li><a href="studio.html">Studio</a></li>
-      <li><a href="about.html">About</a></li><li><a href="blog.html">Blog</a></li>
+<body>
+<nav class="jp-nav" id="nav">
+  <div class="jp-nav-inner">
+    <a href="../index.html" class="jp-nav-logo">Janta<span>Prints</span></a>
+    <button class="jp-nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="jp-nav-links" id="navLinks">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="jerseys.html">Jerseys</a></li>
+      <li><a href="portfolio.html" class="active">Portfolio</a></li>
+      <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm">Get Quote</a></li>
     </ul>
-    <div class="jp-nav__mobile-toggle"><span></span><span></span><span></span></div>
-    <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--sm jp-hide-mobile">Get a Quote →</a>
   </div>
 </nav>
-<div class="jp-nav__mobile-menu">
-  <a href="services.html">Services</a><a href="jerseys.html">Jerseys</a>
-  <a href="portfolio.html">Portfolio</a><a href="studio.html">Studio</a>
-  <a href="about.html">About</a><a href="blog.html">Blog</a>
-  <a href="contact.html">Contact</a>
-  <a href="quote.html" style="color:var(--col-accent)">Get a Quote →</a>
-</div>
 
-<main style="padding-top:80px;">
-  <section style="padding:var(--sp-10) 0 var(--sp-7);">
-    <div class="jp-container">
-      <div class="jp-eyebrow jp-reveal"><div class="jp-eyebrow-line"></div> Our Work</div>
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;margin:var(--sp-4) 0 var(--sp-7);">
-        <h1 class="jp-display jp-display--xl jp-reveal">Results That<br><span class="jp-accent">Speak.</span></h1>
-        <p class="jp-body jp-reveal" style="max-width:360px;">Every item in our portfolio was printed and delivered from our Kisumu studio. Real clients, real results.</p>
-      </div>
-      <div class="filter-bar jp-reveal">
-        <button class="filter-chip active" data-filter="all" onclick="filterPortfolio('all',this)">All Work</button>
-        <button class="filter-chip" data-filter="large-format" onclick="filterPortfolio('large-format',this)">Large Format</button>
-        <button class="filter-chip" data-filter="jerseys" onclick="filterPortfolio('jerseys',this)">Jerseys</button>
-        <button class="filter-chip" data-filter="apparel" onclick="filterPortfolio('apparel',this)">Apparel</button>
-        <button class="filter-chip" data-filter="print" onclick="filterPortfolio('print',this)">Print</button>
-        <button class="filter-chip" data-filter="signage" onclick="filterPortfolio('signage',this)">Signage</button>
-        <button class="filter-chip" data-filter="merchandise" onclick="filterPortfolio('merchandise',this)">Merchandise</button>
-      </div>
-      <div class="port-grid" id="portGrid">
-        <div class="port-item jp-reveal-scale" data-cat="large-format"><div class="port-bg" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">🏟️</div><div class="port-overlay"><div class="port-cat">Large Format</div><div class="port-name">Kisumu City FC Billboard</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="jerseys"><div class="port-bg" style="background:linear-gradient(135deg,#0f3460,#533483);">⚽</div><div class="port-overlay"><div class="port-cat">Jerseys</div><div class="port-name">Sublimation Kit — Full Squad</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="apparel"><div class="port-bg" style="background:linear-gradient(135deg,#e8622a,#7a3312);">👕</div><div class="port-overlay"><div class="port-cat">Apparel</div><div class="port-name">Corporate Uniform Programme</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="signage"><div class="port-bg" style="background:linear-gradient(135deg,#2a9e8f,#0f4c46);">🪧</div><div class="port-overlay"><div class="port-cat">Signage</div><div class="port-name">Shop Fascia & LED Signs</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="large-format"><div class="port-bg" style="background:linear-gradient(135deg,#4a1628,#9e2a4a);">🎪</div><div class="port-overlay"><div class="port-cat">Events / Large Format</div><div class="port-name">Festival Full Brand Package</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="print"><div class="port-bg" style="background:linear-gradient(135deg,#1a3a1a,#2d6a2d);">📄</div><div class="port-overlay"><div class="port-cat">Print</div><div class="port-name">Annual Report — 96pp</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="merchandise"><div class="port-bg" style="background:linear-gradient(135deg,#2a2a5e,#4a4aaa);">🎁</div><div class="port-overlay"><div class="port-cat">Merchandise</div><div class="port-name">Corporate Gift Box Set</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="jerseys"><div class="port-bg" style="background:linear-gradient(135deg,#3a1a1a,#8b3a3a);">🏉</div><div class="port-overlay"><div class="port-cat">Jerseys</div><div class="port-name">Rugby Club Away Kit</div></div></div>
-        <div class="port-item jp-reveal-scale" data-cat="signage"><div class="port-bg" style="background:linear-gradient(135deg,#1a2a1a,#3a6a3a);">🚗</div><div class="port-overlay"><div class="port-cat">Signage</div><div class="port-name">Fleet Vehicle Wrap × 12</div></div></div>
-      </div>
-    </div>
+<main>
+  <section class="port-hero jp-container">
+    <div class="jp-eyebrow jp-reveal"><div class="jp-eyebrow-line"></div> Our Work</div>
+    <h1 class="jp-display jp-display--xl jp-reveal">Real Work.<br><span style="color:var(--col-accent)">Real Clients.</span></h1>
+    <p class="jp-body jp-reveal" style="max-width:520px;margin:var(--sp-4) auto 0;color:var(--col-text-dim);">Every piece below was printed, branded or produced by Janta Prints in Kisumu. From football kits to school badges to custom merchandise.</p>
   </section>
-  <section class="jp-section--sm">
+
+  <div class="jp-container" style="padding-bottom:var(--sp-4);">
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-chip active" data-filter="all" onclick="filterPortfolio('all',this)">All Work</button>
+      <button class="filter-chip" data-filter="jerseys" onclick="filterPortfolio('jerseys',this)">Jerseys</button>
+      <button class="filter-chip" data-filter="apparel" onclick="filterPortfolio('apparel',this)">Apparel</button>
+      <button class="filter-chip" data-filter="signage" onclick="filterPortfolio('signage',this)">Signage</button>
+      <button class="filter-chip" data-filter="merchandise" onclick="filterPortfolio('merchandise',this)">Merchandise</button>
+      <button class="filter-chip" data-filter="print" onclick="filterPortfolio('print',this)">Print & Branding</button>
+    </div>
+  </div>
+
+  <div class="port-grid" id="portGrid">
+
+    <!-- JERSEYS -->
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(0)">
+      <img src="../images/portfolio/jersey-custom-federation-red-white.jpg" alt="Custom football jerseys red and white with federation badge" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Custom Federation Kit</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(1)">
+      <img src="../images/portfolio/jersey-custom-name-steve-6.jpg" alt="Jersey with custom name STEVE number 6 printed" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Name & Number Printing</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(2)">
+      <img src="../images/portfolio/jersey-sleeve-detail.jpg" alt="Jersey sleeve detail showing print quality" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Sleeve Detail — Print Quality</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(3)">
+      <img src="../images/portfolio/jersey-real-madrid-orange.jpg" alt="Real Madrid orange away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Real Madrid — Orange Away</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(4)">
+      <img src="../images/portfolio/jersey-arsenal-black.jpg" alt="Arsenal black away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Arsenal — Black Away</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(5)">
+      <img src="../images/portfolio/jersey-arsenal-teal.jpg" alt="Arsenal teal purple away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Arsenal — Teal Third Kit</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(6)">
+      <img src="../images/portfolio/jersey-arsenal-red.jpg" alt="Arsenal red home jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Arsenal — Red Home</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(7)">
+      <img src="../images/portfolio/jersey-man-utd-white.jpg" alt="Manchester United white away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Man United — White Away</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(8)">
+      <img src="../images/portfolio/jersey-man-utd-navy.jpg" alt="Manchester United navy third jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Man United — Navy Third</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(9)">
+      <img src="../images/portfolio/jersey-man-utd-red.jpg" alt="Manchester United red home jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Man United — Red Home</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(10)">
+      <img src="../images/portfolio/jersey-barcelona-black.jpg" alt="Barcelona black away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Barcelona — Black Away</div></div></div>
+    </div>
+    <div class="port-item" data-cat="jerseys" onclick="openLightbox(11)">
+      <img src="../images/portfolio/jersey-bayern-cream.jpg" alt="Bayern Munich cream away jersey on mannequin" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Jerseys</div><div class="port-label">Bayern Munich — Cream Away</div></div></div>
+    </div>
+
+    <!-- SIGNAGE -->
+    <div class="port-item" data-cat="signage" onclick="openLightbox(12)">
+      <img src="../images/portfolio/signage-kibz-kuku-front.jpg" alt="Kibz Kuku Shop branded kiosk wrap full front view" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Signage</div><div class="port-label">Kibz Kuku Shop — Kiosk Wrap</div></div></div>
+    </div>
+    <div class="port-item" data-cat="signage" onclick="openLightbox(13)">
+      <img src="../images/portfolio/signage-kibz-kuku-side.jpg" alt="Kibz Kuku Shop kiosk wrap side panel" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Signage</div><div class="port-label">Kibz Kuku — Side Panel</div></div></div>
+    </div>
+    <div class="port-item" data-cat="signage" onclick="openLightbox(14)">
+      <img src="../images/portfolio/signage-kibz-kuku-angle.jpg" alt="Kibz Kuku Shop kiosk wrap angle view installed" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Signage</div><div class="port-label">Kibz Kuku — Installed View</div></div></div>
+    </div>
+    <div class="port-item" data-cat="signage" onclick="openLightbox(15)">
+      <img src="../images/portfolio/signage-culture-closet-mural.jpg" alt="Culture Closet branded wall mural installed in boutique" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Signage</div><div class="port-label">Culture Closet — Wall Mural</div></div></div>
+    </div>
+
+    <!-- APPAREL -->
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(16)">
+      <img src="../images/portfolio/apparel-daktari-plus-tshirt.jpg" alt="Daktari Plus branded white t-shirt with blue circle logo" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Daktari Plus — Branded T-Shirt</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(17)">
+      <img src="../images/portfolio/apparel-daktari-plus-hoodie-hanging.jpg" alt="Daktari Plus branded white hoodie hanging" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Daktari Plus — Hoodie</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(18)">
+      <img src="../images/portfolio/apparel-daktari-plus-longsleeve.jpg" alt="Daktari Plus branded long sleeve shirt back print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Daktari Plus — Long Sleeve</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(19)">
+      <img src="../images/portfolio/apparel-daktari-plus-cap.jpg" alt="Daktari Plus embroidered white cap" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Daktari Plus — Embroidered Cap</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(20)">
+      <img src="../images/portfolio/apparel-polo-shirts-spread.jpg" alt="Polo shirts in 20 different colours laid out for branding" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Polo Shirts — 20 Colours</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(21)">
+      <img src="../images/portfolio/apparel-savage-beiby-tshirt.jpg" alt="It's Savage Beiby custom printed t-shirt hot press" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Custom Graphic Tee — Hot Press</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(22)">
+      <img src="../images/portfolio/apparel-never-look-back-tshirt.jpg" alt="Never Look Back graphic t-shirt back print mint green" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Never Look Back — Graphic Tee</div></div></div>
+    </div>
+    <div class="port-item" data-cat="apparel" onclick="openLightbox(23)">
+      <img src="../images/portfolio/apparel-not-today-tshirt.jpg" alt="Not Today colourful graphic t-shirt print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Apparel</div><div class="port-label">Not Today — Graphic Tee</div></div></div>
+    </div>
+
+    <!-- MERCHANDISE -->
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(24)">
+      <img src="../images/portfolio/merch-bongoman-hoodie-white.jpg" alt="White hoodie with Bongoman cartoon character print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — White Hoodie</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(25)">
+      <img src="../images/portfolio/merch-bongoman-hoodie-black-thud.jpg" alt="Black hoodie with Bongoman THUD cartoon print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Black THUD Hoodie</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(26)">
+      <img src="../images/portfolio/merch-bongoman-mug-black.jpg" alt="Black mug with Bongoman cartoon character" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Black Mug</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(27)">
+      <img src="../images/portfolio/merch-bongoman-phone-cases.jpg" alt="Custom phone cases with Bongoman cartoon designs" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Phone Cases</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(28)">
+      <img src="../images/portfolio/merch-bongoman-water-bottle.jpg" alt="White water bottle with Bongoman THUD print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Water Bottle</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(29)">
+      <img src="../images/portfolio/merch-bongoman-tshirt-tote-green.jpg" alt="Green t-shirt and tote bag set with Bongoman THUD print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — T-Shirt + Tote Set</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(30)">
+      <img src="../images/portfolio/merch-bongoman-tshirt-tote-navy.jpg" alt="Navy t-shirt and tote bag set with Bongoman THUD print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Navy T-Shirt + Tote</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(31)">
+      <img src="../images/portfolio/merch-bongoman-drawstring-bags.jpg" alt="White drawstring bags with Bongoman cartoon prints" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Drawstring Bags</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(32)">
+      <img src="../images/portfolio/merch-bongoman-wristbands.jpg" alt="Bongoman branded wristbands yellow and purple" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Wristbands</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(33)">
+      <img src="../images/portfolio/merch-bongoman-sticker-green.jpg" alt="Round sticker with Bongoman cartoon on green background" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Round Stickers</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(34)">
+      <img src="../images/portfolio/merch-bongoman-cosmetic-pouch.jpg" alt="White cosmetic pouch with Bongoman cartoon print" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Cosmetic Pouch</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(35)">
+      <img src="../images/portfolio/merch-bongoman-phone-case-black.jpg" alt="Black phone case with Bongoman cartoon character" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — Black Phone Case</div></div></div>
+    </div>
+    <div class="port-item" data-cat="merchandise" onclick="openLightbox(36)">
+      <img src="../images/portfolio/merch-bongoman-mug-white-thud.jpg" alt="White mug with Bongoman THUD print real photo" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Merchandise</div><div class="port-label">Bongoman — THUD Mug (real)</div></div></div>
+    </div>
+
+    <!-- PRINT & BRANDING -->
+    <div class="port-item" data-cat="print" onclick="openLightbox(37)">
+      <img src="../images/portfolio/print-business-card-black.jpg" alt="Janta Prints black premium business card design" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Business Card — Black Premium</div></div></div>
+    </div>
+    <div class="port-item" data-cat="print" onclick="openLightbox(38)">
+      <img src="../images/portfolio/print-business-card-white.jpg" alt="Janta Prints white minimal business card design" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Business Card — White Minimal</div></div></div>
+    </div>
+    <div class="port-item" data-cat="print" onclick="openLightbox(39)">
+      <img src="../images/portfolio/print-kalya-junior-school-badge.jpg" alt="Kalya Junior Secondary School badge logo design" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Kalya Junior Sec. — School Badge</div></div></div>
+    </div>
+    <div class="port-item" data-cat="print" onclick="openLightbox(40)">
+      <img src="../images/portfolio/print-migingo-sec-school-badge.jpg" alt="Migingo Secondary School badge logo design" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Migingo Sec. School — Badge</div></div></div>
+    </div>
+    <div class="port-item" data-cat="print" onclick="openLightbox(41)">
+      <img src="../images/portfolio/print-nyamware-junior-school-badge.jpg" alt="Nyamware Junior School badge logo design green and gold" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Nyamware Junior School — Badge</div></div></div>
+    </div>
+    <div class="port-item" data-cat="print" onclick="openLightbox(42)">
+      <img src="../images/portfolio/merch-culture-closet-flyer.jpg" alt="Culture Closet social media flyer design" loading="lazy">
+      <div class="port-overlay"><div><div class="port-cat-badge">Print & Branding</div><div class="port-label">Culture Closet — Social Flyer</div></div></div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <section class="jp-section" style="text-align:center;background:var(--col-surface);border-top:1px solid var(--col-border);margin-top:var(--sp-10);">
     <div class="jp-container">
-      <div style="background:var(--col-accent);border-radius:var(--r-xl);padding:var(--sp-8);text-align:center;position:relative;overflow:hidden;" class="jp-reveal-scale">
-        <h2 class="jp-display jp-display--md" style="color:var(--col-white);margin-bottom:var(--sp-4);">Want results like these?</h2>
-        <p style="color:rgba(255,255,255,.85);margin-bottom:var(--sp-6);">Tell us what you need — we'll make it happen.</p>
-        <a href="quote.html" class="jp-btn jp-btn--white jp-btn--lg">Start Your Quote →</a>
+      <h2 class="jp-display jp-display--lg jp-reveal" style="margin-bottom:var(--sp-4);">Like What You See?</h2>
+      <p class="jp-body jp-reveal" style="color:var(--col-text-dim);margin-bottom:var(--sp-6);max-width:480px;margin-left:auto;margin-right:auto;">Get a free quote for your print or branding project. We'll reply within 2 hours.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="jp-reveal">
+        <a href="quote.html" class="jp-btn jp-btn--primary jp-btn--lg">Get a Free Quote →</a>
+        <a href="https://wa.me/254704570799" class="jp-btn jp-btn--secondary jp-btn--lg">💬 WhatsApp Us</a>
       </div>
     </div>
   </section>
 </main>
-<footer class="jp-footer"><div class="jp-container">
-  <div class="jp-footer__grid">
-    <div><div class="jp-footer__logo">JANTA <span>PRINTS</span></div>
-    <div class="jp-footer__tagline">Western Kenya's full-service print and branding partner.</div>
-    <div class="jp-footer__contact-item">📍 Kisumu, Kenya</div>
-    <div class="jp-footer__contact-item">📞 +254 704 570 799</div>
-    <div class="jp-footer__contact-item">✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620a070e0e0d2208030c160312100b0c16114c010d4c0907">[email&#160;protected]</a></div></div>
-    <div><div class="jp-footer__col-title">Services</div>
-    <a href="services.html" class="jp-footer__link">Large Format</a>
-    <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
-    <a href="services.html" class="jp-footer__link">Apparel</a>
-    <a href="services.html" class="jp-footer__link">Signage</a></div>
-    <div><div class="jp-footer__col-title">Company</div>
-    <a href="about.html" class="jp-footer__link">About Us</a>
-    <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
-    <a href="blog.html" class="jp-footer__link">Blog</a>
-    <a href="faq.html" class="jp-footer__link">FAQ</a>
-    <a href="contact.html" class="jp-footer__link">Contact</a></div>
-    <div><div class="jp-footer__col-title">Tools</div>
-    <a href="studio.html" class="jp-footer__link">Creative Studio</a>
-    <a href="quote.html" class="jp-footer__link">Quote Builder</a>
-    <a href="account.html" class="jp-footer__link">My Account</a></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lb-close" onclick="closeLightbox()">&times;</span>
+  <span class="lb-nav lb-prev" onclick="lbNav(-1,event)">&#8249;</span>
+  <img id="lbImg" src="" alt="">
+  <span class="lb-nav lb-next" onclick="lbNav(1,event)">&#8250;</span>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+
+<footer class="jp-footer">
+  <div class="jp-footer-inner jp-container">
+    <div class="jp-footer__brand">
+      <div class="jp-footer__logo">Janta<span>Prints</span></div>
+      <p class="jp-footer__tagline">Western Kenya's print & branding studio.</p>
+      <a href="https://wa.me/254704570799" class="jp-footer__wa">💬 +254 704 570 799</a>
+    </div>
+    <div class="jp-footer__cols">
+      <div><div class="jp-footer__col-title">Services</div>
+        <a href="services.html#large-format" class="jp-footer__link">Large Format</a>
+        <a href="services.html#apparel" class="jp-footer__link">Apparel</a>
+        <a href="jerseys.html" class="jp-footer__link">Jerseys</a>
+        <a href="services.html#merchandise" class="jp-footer__link">Merchandise</a></div>
+      <div><div class="jp-footer__col-title">Company</div>
+        <a href="about.html" class="jp-footer__link">About</a>
+        <a href="portfolio.html" class="jp-footer__link">Portfolio</a>
+        <a href="blog.html" class="jp-footer__link">Blog</a>
+        <a href="faq.html" class="jp-footer__link">FAQ</a>
+        <a href="contact.html" class="jp-footer__link">Contact</a></div>
+      <div><div class="jp-footer__col-title">Tools</div>
+        <a href="studio.html" class="jp-footer__link">Creative Studio</a>
+        <a href="quote.html" class="jp-footer__link">Quote Builder</a>
+        <a href="account.html" class="jp-footer__link">My Account</a></div>
+    </div>
   </div>
-  <div class="jp-footer__bottom">
+  <div class="jp-footer__bottom jp-container">
     <div class="jp-footer__copy">© 2026 Janta Prints, Kisumu, Kenya · <a href="privacy.html" style="color:inherit">Privacy</a> · <a href="terms.html" style="color:inherit">Terms</a></div>
     <div class="jp-footer__social">
       <a href="#" class="jp-footer__social-link">📷</a><a href="#" class="jp-footer__social-link">𝑓</a>
       <a href="#" class="jp-footer__social-link">♪</a><a href="#" class="jp-footer__social-link">in</a>
     </div>
   </div>
-</div></footer>
+</footer>
+
 <div id="jp-toast"><div class="jp-toast-dot" id="jp-toast-dot"></div><div class="jp-toast-text" id="jp-toast-text"></div></div>
+
 <script src="../js/main.js"></script>
 <script src="../js/api.js"></script>
 <script>
+// Filter
 function filterPortfolio(cat, btn) {
   document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -134,6 +334,52 @@ function filterPortfolio(cat, btn) {
     item.style.display = (cat === 'all' || item.dataset.cat === cat) ? '' : 'none';
   });
 }
+
+// Lightbox
+var lbItems = [];
+var lbIndex = 0;
+
+function buildLbItems() {
+  lbItems = [...document.querySelectorAll('.port-item')].map(el => ({
+    src: el.querySelector('img').src,
+    alt: el.querySelector('img').alt,
+    label: el.querySelector('.port-label')?.textContent || '',
+  }));
+}
+
+function openLightbox(i) {
+  if (!lbItems.length) buildLbItems();
+  lbIndex = i;
+  showLb();
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function showLb() {
+  var item = lbItems[lbIndex];
+  document.getElementById('lbImg').src = item.src;
+  document.getElementById('lbImg').alt = item.alt;
+  document.getElementById('lbCaption').textContent = item.label;
+}
+
+function closeLightbox(e) {
+  if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lb-close')) {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+}
+
+function lbNav(dir, e) {
+  if (e) e.stopPropagation();
+  lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
+  showLb();
+}
+
+document.addEventListener('keydown', function(e) {
+  var lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'Escape') lb.classList.remove('open');
+});
 </script>
 </body>
 </html>

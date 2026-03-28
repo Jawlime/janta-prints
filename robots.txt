@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /pages/account.html
+Disallow: /pages/register.html
+
+Sitemap: https://janta-prints.vercel.app/sitemap.xml

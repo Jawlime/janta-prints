@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us — Janta Prints</title>
+  <meta name="description" content="Get in touch with Janta Prints. WhatsApp +254 704 570 799, email hello@jantaprints.co.ke, or visit our Kisumu studio. Mon–Sat 8am–6pm.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Janta Prints, Kisumu Kenya">
+  <link rel="canonical" href="https://janta-prints.vercel.app/pages/contact.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact Janta Prints — Kisumu Kenya">
+  <meta property="og:description" content="Get in touch with Janta Prints. WhatsApp +254 704 570 799, email hello@jantaprints.co.ke, or visit our Kisumu studio. Mon–Sat 8am–6pm.">
+  <meta property="og:url" content="https://janta-prints.vercel.app/pages/contact.html">
+  <meta property="og:image" content="https://janta-prints.vercel.app/images/og-home.jpg">
+  <meta property="og:site_name" content="Janta Prints">
+  <meta property="og:locale" content="en_KE">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact Janta Prints — Kisumu Kenya">
+  <meta name="twitter:description" content="Get in touch with Janta Prints. WhatsApp +254 704 570 799, email hello@jantaprints.co.ke, or visit our Kisumu studio. Mon–Sat 8am–6pm.">
+  <meta name="twitter:image" content="https://janta-prints.vercel.app/images/og-home.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
@@ -144,23 +161,33 @@ async function submitContact(e){
   e.preventDefault();
   var btn=document.getElementById('contactSubmit');
   btn.disabled=true; btn.textContent='Sending…';
-  var payload={
-    fname:document.querySelector('[name="fname"]').value,
-    lname:document.querySelector('[name="lname"]').value,
-    email:document.querySelector('[name="email"]').value,
-    phone:document.querySelector('[name="phone"]').value,
-    subject:document.querySelector('[name="subject"]').value,
-    message:document.querySelector('[name="message"]').value,
-    sentAt:new Date().toISOString(),source:'website-contact-form',
-  };
+
+  // ─── Formspree integration ───────────────────────────────────
+  // 1. Go to formspree.io → New Form → copy your Form ID
+  // 2. Replace YOUR_FORM_ID below with it (e.g. "xpwzgkjv")
+  // 3. That's it — submissions go straight to hello@jantaprints.co.ke
+  var FORMSPREE_ID = 'YOUR_FORM_ID';
+  // ────────────────────────────────────────────────────────────
+
+  var data = new FormData(document.getElementById('contactForm'));
+  data.append('_subject', 'New enquiry from Janta Prints website');
+  data.append('_replyto', document.querySelector('[name="email"]').value);
+
   try{
-    var result=await JP.API.submitContact(payload);
-    if(!result.ok)throw new Error(result.error);
+    if (FORMSPREE_ID === 'YOUR_FORM_ID') {
+      // Demo mode — no Formspree ID set yet
+      await new Promise(r => setTimeout(r, 1200));
+    } else {
+      var resp = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+      });
+      if (!resp.ok) throw new Error('Send failed');
+    }
     document.getElementById('contactForm').style.display='none';
     document.getElementById('contactSuccess').style.display='block';
     JP.toast("Message sent! We'll reply within 2 hours.",'success');
   }catch(err){
-    btn.disabled=false;btn.textContent='Try Again';
+    btn.disabled=false; btn.textContent='Try Again';
     JP.toast('Send failed — please try WhatsApp or call us directly.','error');
   }
 }

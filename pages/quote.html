@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Get a Quote — Janta Prints</title>
+  <meta name="description" content="Get a free quote for any print or branding job in under 3 minutes. Jerseys, banners, business cards, signage and more. Based in Kisumu, Kenya.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Janta Prints, Kisumu Kenya">
+  <link rel="canonical" href="https://janta-prints.vercel.app/pages/quote.html">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Get a Free Print Quote — Janta Prints">
+  <meta property="og:description" content="Get a free quote for any print or branding job in under 3 minutes. Jerseys, banners, business cards, signage and more. Based in Kisumu, Kenya.">
+  <meta property="og:url" content="https://janta-prints.vercel.app/pages/quote.html">
+  <meta property="og:image" content="https://janta-prints.vercel.app/images/og-home.jpg">
+  <meta property="og:site_name" content="Janta Prints">
+  <meta property="og:locale" content="en_KE">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Get a Free Print Quote — Janta Prints">
+  <meta name="twitter:description" content="Get a free quote for any print or branding job in under 3 minutes. Jerseys, banners, business cards, signage and more. Based in Kisumu, Kenya.">
+  <meta name="twitter:image" content="https://janta-prints.vercel.app/images/og-home.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
@@ -314,7 +331,18 @@ async function submitQuote(){
     submittedAt:new Date().toISOString(),source:'website-quote-builder',
   };
   try{
-    var result=await JP.API.submitQuote(payload);
+    // ─── Formspree: replace YOUR_FORM_ID with your quote form ID ───
+    var FORMSPREE_QUOTE_ID = 'YOUR_FORM_ID';
+    var result;
+    if (FORMSPREE_QUOTE_ID === 'YOUR_FORM_ID') {
+      result = await JP.API.submitQuote(payload); // demo mode
+    } else {
+      var resp = await fetch('https://formspree.io/f/' + FORMSPREE_QUOTE_ID, {
+        method: 'POST', body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+      });
+      result = { quoteId: 'QT-' + Date.now().toString(36).toUpperCase(), error: resp.ok ? null : 'Send failed' };
+    }
     if(result.error)throw new Error(result.error);
     btn.style.display='none';
     document.querySelector('#step5 .jp-btn--secondary').style.display='none';
