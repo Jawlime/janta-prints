@@ -655,6 +655,27 @@ input[type=color] {
 }
 .upload-label-btn:first-child { border-color: var(--col-accent); color: var(--col-accent); }
 .upload-label-btn:hover { border-color: var(--col-border-2); }
+
+/* Mockup tool styles */
+#mockupArea { background: var(--col-surface-2); border-radius: var(--r-md); padding: var(--sp-4); }
+#mockupStage { background: #f0f0f0; border-radius: 8px; overflow: hidden; }
+#mockupProductImg { display: block; width: 100%; height: auto; }
+.mockup-upload-btn {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  font-size: 13px; padding: 9px 12px;
+  border-radius: 8px; transition: border-color .2s;
+}
+.mockup-upload-btn:not(.secondary) { border: 1px dashed var(--col-accent); color: var(--col-accent); }
+.mockup-upload-btn.secondary { border: 1px dashed var(--col-border); color: var(--col-text-dim); }
+.mockup-upload-btn:hover { border-color: var(--col-accent); color: var(--col-accent); }
+.sample-logo-btn {
+  padding: 8px 12px; border: 1px solid var(--col-border);
+  border-radius: 6px; background: var(--col-surface-2);
+  color: var(--col-text); font-size: 12px; cursor: pointer;
+  text-align: left; transition: border-color .18s, background .18s; width: 100%;
+}
+.sample-logo-btn:hover { border-color: var(--col-border-2); }
+.sample-logo-btn.active { border-color: var(--col-accent); background: color-mix(in srgb, var(--col-accent) 8%, var(--col-surface-2)); color: var(--col-accent); }
 </style>
 </head>
 <body>
@@ -783,6 +804,24 @@ input[type=color] {
         <div style="flex:1;"></div>
         <button class="btn-secondary" style="width:auto;padding:7px 14px;font-size:11px;" onclick="resetImage()">↩ New Image</button>
         <button class="btn-secondary" style="width:auto;padding:7px 14px;font-size:11px;" onclick="downloadResult()">↓ Download</button>
+      </div>
+    </div>
+
+    <!-- Mockup display area (separate from other tools) -->
+    <div id="mockupArea" style="display:none; flex-direction:column; gap:16px;">
+      <div id="mockupStage" style="position:relative; width:100%; max-width:500px; margin:0 auto; user-select:none;">
+        <!-- Product base image -->
+        <img id="mockupProductImg" src="../images/mockup/tshirt.svg"
+          style="width:100%; display:block; border-radius:8px;"
+          crossorigin="anonymous">
+        <!-- Design canvas overlay — positioned by JS to match print zone -->
+        <canvas id="mockupCanvas"
+          style="position:absolute; top:0; left:0; pointer-events:none; opacity:0.92;"></canvas>
+      </div>
+      <!-- Download row -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button class="btn-secondary" style="width:auto;padding:7px 14px;font-size:11px;" onclick="downloadMockup()">↓ Download PNG</button>
+        <span id="mockupStatusText" style="font-size:12px;color:var(--col-text-dim);"></span>
       </div>
     </div>
 
@@ -1132,87 +1171,7 @@ convert: () => `
   <button class="btn-primary" id="convertRunBtn" onclick="runTool()" disabled>🔄 Convert</button>
   <button class="btn-accent2" onclick="batchConvert()">⬇ Batch Convert & Zip</button>`,
 
-mockup: () => {
-  const isJersey = state.mockupTemplate === 'jersey';
-  const cur = state.mockupTemplate || 'tshirt';
-  const curColor = state.mockupColor || '#ffffff';
-
-  // Colour options — jerseys get 4 only, others get full palette
-  const jerseyColors = [
-    ['#ffffff','White'], ['#cc0000','Red'],
-    ['#0033cc','Blue'],  ['#111111','Black'],
-  ];
-  const allColors = [
-    ['#ffffff','White'],  ['#111111','Black'],
-    ['#1a2a5e','Navy'],   ['#cc0000','Red'],
-    ['#2e7d32','Green'],  ['#2196f3','Sky Blue'],
-    ['#f39c12','Yellow'], ['#7d3c98','Purple'],
-    ['#e8622a','Orange'], ['#808080','Grey'],
-  ];
-  const colors = isJersey ? jerseyColors : allColors;
-
-  const products = [
-    ['tshirt',  'T-Shirt'],
-    ['hoodie',  'Hoodie'],
-    ['jersey',  'Football Jersey'],
-    ['polo',    'Polo Shirt'],
-    ['cap',     'Cap / Hat'],
-    ['tote',    'Tote Bag'],
-    ['mug',     'Mug'],
-    ['banner',  'Pull-up Banner'],
-    ['flyer',   'A4 Flyer'],
-    ['phone',   'Phone Case'],
-  ];
-
-  let html = `
-  <div class="p-section">
-    <div class="panel-section-title">Product</div>
-    <select class="studio-select" onchange="setMockupProduct(this.value)">`;
-  products.forEach(([k, lbl]) => {
-    html += `<option value="${k}"${k===cur?' selected':''}>${lbl}</option>`;
-  });
-  html += `</select>
-  </div>
-  <div class="divider"></div>
-  <div class="p-section">
-    <div class="panel-section-title">Colour${isJersey ? ' <span style="font-size:10px;opacity:.6;">(4 options for jerseys)</span>' : ''}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">`;
-  colors.forEach(([hex, name]) => {
-    const active = hex === curColor ? 'outline:2px solid var(--col-accent);outline-offset:2px;' : '';
-    html += `<div onclick="setMockupColor('${hex}','${name}')"
-      title="${name}"
-      style="width:28px;height:28px;border-radius:50%;background:${hex};cursor:pointer;border:1.5px solid rgba(0,0,0,0.15);${active}"></div>`;
-  });
-  html += `</div>
-  </div>
-  <div class="divider"></div>
-  <div class="p-section">
-    <div class="panel-section-title">Sample Designs</div>
-    <p style="font-size:11px;color:var(--col-text-dim);margin:0 0 8px;">Click to preview on product</p>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <button class="sample-btn${state.mockupSample===0?' active':''}" onclick="applySample(0)">🔤 Bold Text Logo</button>
-      <button class="sample-btn${state.mockupSample===1?' active':''}" onclick="applySample(1)">🔵 Circle Badge</button>
-      <button class="sample-btn${state.mockupSample===2?' active':''}" onclick="applySample(2)">🛡 Shield Logo</button>
-    </div>
-  </div>
-  <div class="divider"></div>
-  <div class="p-section">
-    <div class="panel-section-title">Upload Your Own</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
-      <label class="upload-label-btn">
-        <input type="file" accept="image/*" style="display:none;" onchange="uploadMockupDesign(event)">
-        🎨 Upload design / logo
-      </label>
-      <label class="upload-label-btn" style="opacity:.75;">
-        <input type="file" accept="image/*" style="display:none;" onchange="uploadMockupProduct(event)">
-        📦 Upload product photo
-      </label>
-    </div>
-    <div id="mockupUploadStatus" style="font-size:11px;color:var(--col-text-dim);margin-top:6px;"></div>
-  </div>`;
-  return html;
-},
-};
+mockup: function(){ return mpBuildPanel(); },};
 
 /* ---
    TOOL SWITCHING
@@ -1223,9 +1182,15 @@ function switchTool(tool, btn) {
   btn.classList.add('active');
   document.getElementById('sidePanel').innerHTML = panels[tool]();
   if (tool === 'mockup') {
-    showMockupArea();
+    // Show canvas, build panel, render immediately
+    var canvas = document.getElementById('outputCanvas');
+    var wrap = document.getElementById('standardWrap');
+    var zone = document.getElementById('uploadZone');
+    if (wrap) wrap.style.display = 'block';
+    if (zone) zone.style.display = 'none';
+    document.getElementById('sidePanel').innerHTML = mpBuildPanel();
+    mpRender();
   } else {
-    hideMockupArea();
     updateCanvasForTool();
   }
 }
@@ -1595,376 +1560,385 @@ function drawTextOverlay(ctx, w, h) {
    fractions of canvas size. The design image is placed inside printZone.
    --- */
 
-// ── SET COLOUR (called from panel swatches) ───────────────────────
-function setMockupColor(hex, name) {
-  state.mockupColor = hex;
-  document.getElementById('sidePanel').innerHTML = panels['mockup']();
-  renderMockup();
-}
+// -- SET COLOUR (called from panel swatches) -----------------------
 
-/* ================================================================
-   MOCKUP ENGINE — CSS layering approach
-   Product SVG as base image, canvas overlaid at print zone
-   ================================================================ */
-
-// ── PRINT ZONES (% of image dimensions) ──────────────────────────
-var PRINT_ZONES = {
-  tshirt:  { top: 0.24, left: 0.30, width: 0.40, height: 0.36 },
-  hoodie:  { top: 0.34, left: 0.30, width: 0.38, height: 0.32 },
-  jersey:  { top: 0.20, left: 0.27, width: 0.46, height: 0.40 },
-  polo:    { top: 0.24, left: 0.32, width: 0.36, height: 0.28 },
-  cap:     { top: 0.28, left: 0.28, width: 0.44, height: 0.36 },
-  tote:    { top: 0.33, left: 0.28, width: 0.44, height: 0.40 },
-  mug:     { top: 0.22, left: 0.18, width: 0.52, height: 0.50 },
-  banner:  { top: 0.08, left: 0.12, width: 0.76, height: 0.80 },
-  flyer:   { top: 0.06, left: 0.08, width: 0.84, height: 0.88 },
-  phone:   { top: 0.30, left: 0.18, width: 0.64, height: 0.60 },
-};
-
-// ── JERSEY COLOURS (4 only) ───────────────────────────────────────
-var JERSEY_COLORS = ['#ffffff','#cc0000','#0033cc','#111111'];
-
-// ── STATE ────────────────────────────────────────────────────────
-state.mockupTemplate = state.mockupTemplate || 'tshirt';
-state.mockupColor    = state.mockupColor    || '#ffffff';
-state.mockupSample   = state.mockupSample   || null;
-state.mockupDesign   = null;  // ImageBitmap of uploaded/sample design
-state.mockupCustomProduct = null;  // ImageBitmap of uploaded product photo
-
-// ── 3 SAMPLE LOGOS (drawn via canvas, no external files) ─────────
-var SAMPLES = [
-  function(c, w, h) {  // Bold Text Logo
-    var ctx = c.getContext('2d');
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle = '#e8622a';
-    ctx.fillRect(0,0,w,h);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold ' + Math.round(w*0.22) + 'px Impact, Arial Black, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('BRAND', w/2, h*0.42);
-    ctx.font = Math.round(w*0.10) + 'px Arial, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.letterSpacing = '4px';
-    ctx.fillText('YOUR NAME', w/2, h*0.72);
-  },
-  function(c, w, h) {  // Circle Badge
-    var ctx = c.getContext('2d');
-    ctx.clearRect(0,0,w,h);
-    var cx = w/2, cy = h/2, r = Math.min(w,h)*0.45;
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
-    ctx.fillStyle = '#1a2a5e'; ctx.fill();
-    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = r*0.07; ctx.stroke();
-    ctx.beginPath(); ctx.arc(cx,cy,r*0.78,0,Math.PI*2);
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = r*0.02; ctx.stroke();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold ' + Math.round(w*0.18) + 'px Impact, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('TEAM', cx, cy - h*0.10);
-    ctx.fillStyle = '#e8622a';
-    ctx.font = 'bold ' + Math.round(w*0.14) + 'px Impact, sans-serif';
-    ctx.fillText('KISUMU', cx, cy + h*0.10);
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = Math.round(w*0.07) + 'px Arial, sans-serif';
-    ctx.fillText('EST. 2024', cx, cy + h*0.27);
-  },
-  function(c, w, h) {  // Shield Logo
-    var ctx = c.getContext('2d');
-    ctx.clearRect(0,0,w,h);
-    ctx.beginPath();
-    ctx.moveTo(w*0.50, h*0.05);
-    ctx.lineTo(w*0.92, h*0.22);
-    ctx.lineTo(w*0.92, h*0.58);
-    ctx.quadraticCurveTo(w*0.92, h*0.95, w*0.50, h*0.97);
-    ctx.quadraticCurveTo(w*0.08, h*0.95, w*0.08, h*0.58);
-    ctx.lineTo(w*0.08, h*0.22);
-    ctx.closePath();
-    ctx.fillStyle = '#2e7d32'; ctx.fill();
-    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = w*0.03; ctx.stroke();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold ' + Math.round(w*0.22) + 'px Impact, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('JP', w/2, h*0.42);
-    ctx.font = Math.round(w*0.09) + 'px Arial, sans-serif';
-    ctx.fillText('JANTA', w/2, h*0.65);
-    ctx.fillText('PRINTS', w/2, h*0.76);
-  },
-];
-
-// ── SHOW / HIDE MOCKUP AREA ───────────────────────────────────────
-function showMockupArea() {
-  document.getElementById('uploadZone').style.display = 'none';
-  document.getElementById('outputArea').style.display = 'none';
-  document.getElementById('filterPreviewArea').style.display = 'none';
-  var ma = document.getElementById('mockupArea');
-  ma.style.display = 'flex';
-  renderMockup();
-}
-
-function hideMockupArea() {
-  var ma = document.getElementById('mockupArea');
-  if (ma) ma.style.display = 'none';
-}
-
-// ── POSITION CANVAS OVER PRINT ZONE ──────────────────────────────
-function positionMockupCanvas() {
-  var img = document.getElementById('mockupProductImg');
-  var canvas = document.getElementById('mockupCanvas');
-  var wrapper = document.getElementById('mockupWrapper');
-  if (!img || !canvas || !wrapper) return;
-
-  var product = state.mockupTemplate || 'tshirt';
-  var zone = PRINT_ZONES[product] || PRINT_ZONES['tshirt'];
-
-  var iw = img.offsetWidth;
-  var ih = img.offsetHeight;
-  if (iw === 0 || ih === 0) return;  // Not laid out yet
-
-  canvas.style.position = 'absolute';
-  canvas.style.left   = Math.round(iw * zone.left)  + 'px';
-  canvas.style.top    = Math.round(ih * zone.top)   + 'px';
-  canvas.style.width  = Math.round(iw * zone.width) + 'px';
-  canvas.style.height = Math.round(ih * zone.height) + 'px';
-  canvas.width  = Math.round(iw * zone.width)  * 2;  // 2x for retina
-  canvas.height = Math.round(ih * zone.height) * 2;
-}
-
-// ── APPLY SVG COLOUR TINT ─────────────────────────────────────────
-function applyProductColor(color) {
-  var img = document.getElementById('mockupProductImg');
-  if (!img) return;
-  var product = state.mockupTemplate || 'tshirt';
-
-  // If client uploaded their own product photo, don't tint it
-  if (state.mockupCustomProduct) return;
-
-  // For jersey only allow the 4 colors
-  if (product === 'jersey' && !JERSEY_COLORS.includes(color)) {
-    color = '#ffffff';
-  }
-
-  // We tint by re-fetching SVG and injecting fill
-  var src = img.src;
-  fetch(src)
-    .then(function(r) { return r.text(); })
-    .then(function(svg) {
-      // Replace fill on product-fill elements
-      var tinted = svg.replace(/class="product-fill"[^>]*fill="[^"]*"/g, function(m) {
-        return m.replace(/fill="[^"]*"/, 'fill="' + color + '"');
-      });
-      // Also handle elements without explicit fill after class
-      tinted = tinted.replace(/class="product-fill"([^>]*?)>/g, function(m, attrs) {
-        if (attrs.indexOf('fill=') === -1) {
-          return 'class="product-fill"' + attrs + ' fill="' + color + '">';
-        }
-        return m;
-      });
-      var blob = new Blob([tinted], {type:'image/svg+xml'});
-      var url = URL.createObjectURL(blob);
-      img.onload = function() {
-        URL.revokeObjectURL(url);
-        positionMockupCanvas();
-        drawDesignOnCanvas();
-      };
-      img.src = url;
-    })
-    .catch(function() {
-      // Fallback: CSS filter approximation
-      applyColorFilter(img, color);
-    });
-}
-
-function applyColorFilter(img, hex) {
-  // Hue-rotate fallback when fetch fails (e.g. file:// protocol)
-  img.style.filter = '';
-  if (hex === '#cc0000') img.style.filter = 'hue-rotate(0deg) saturate(3) brightness(0.7)';
-  else if (hex === '#0033cc') img.style.filter = 'hue-rotate(200deg) saturate(3) brightness(0.7)';
-  else if (hex === '#111111') img.style.filter = 'brightness(0.15)';
-  else img.style.filter = '';
-}
-
-// ── DRAW DESIGN INTO PRINT ZONE CANVAS ───────────────────────────
-function drawDesignOnCanvas() {
-  var canvas = document.getElementById('mockupCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  var design = state.mockupDesign;
-  if (!design) return;
-
-  // Fit design into canvas maintaining aspect ratio
-  var cw = canvas.width, ch = canvas.height;
-  var dw = design.width  || design.naturalWidth  || cw;
-  var dh = design.height || design.naturalHeight || ch;
-  var scale = Math.min(cw / dw, ch / dh) * 0.9;
-  var dx = (cw - dw * scale) / 2;
-  var dy = (ch - dh * scale) / 2;
-
-  ctx.globalAlpha = 0.92;
-  ctx.drawImage(design, dx, dy, dw * scale, dh * scale);
-  ctx.globalAlpha = 1;
-}
-
-// ── RENDER FULL MOCKUP ────────────────────────────────────────────
-function renderMockup() {
-  var product = state.mockupTemplate || 'tshirt';
-  var color   = state.mockupColor    || '#ffffff';
-  var img     = document.getElementById('mockupProductImg');
-  if (!img) return;
-
-  if (state.mockupCustomProduct) {
-    // Client uploaded their own product photo
-    img.src = state.mockupCustomProductSrc;
-    img.style.filter = '';
-  } else {
-    // Use SVG illustration
-    img.src = '../images/mockup/' + product + '.svg';
-    img.style.filter = '';
-  }
-
-  // Once image loads, position canvas and draw design
-  img.onload = function() {
-    positionMockupCanvas();
-    drawDesignOnCanvas();
-  };
-
-  // If already loaded (cached), trigger manually
-  if (img.complete && img.naturalWidth > 0) {
-    positionMockupCanvas();
-    drawDesignOnCanvas();
-  }
-
-  // Apply colour tint (re-fetches SVG with colour injected)
-  if (!state.mockupCustomProduct) {
-    applyProductColor(color);
-  }
-}
-
-// ── SET PRODUCT ───────────────────────────────────────────────────
-function setMockupProduct(product) {
-  state.mockupTemplate = product;
-  // If jersey selected, enforce jersey-only colors
-  if (product === 'jersey' && !JERSEY_COLORS.includes(state.mockupColor)) {
-    state.mockupColor = '#ffffff';
-  }
-  state.mockupCustomProduct = null;
-  state.mockupCustomProductSrc = null;
-  // Refresh panel (to update colour swatches for jersey)
-  document.getElementById('sidePanel').innerHTML = panels['mockup']();
-  renderMockup();
-}
-
-// ── SET COLOUR ────────────────────────────────────────────────────
-
-
-// ── APPLY SAMPLE LOGO ─────────────────────────────────────────────
-function applySample(index) {
-  state.mockupSample = index;
-  var canvas = document.createElement('canvas');
-  canvas.width = 400; canvas.height = 400;
-  SAMPLES[index](canvas, 400, 400);
-  state.mockupDesign = canvas;
-  document.getElementById('sidePanel').innerHTML = panels['mockup']();
-  drawDesignOnCanvas();
-}
-
-// ── UPLOAD DESIGN ─────────────────────────────────────────────────
-function uploadMockupDesign(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    var img = new Image();
-    img.onload = function() {
-      state.mockupDesign = img;
-      state.mockupSample = null;
-      var status = document.getElementById('mockupUploadStatus');
-      if (status) status.textContent = 'Design: ' + file.name;
-      document.getElementById('sidePanel').innerHTML = panels['mockup']();
-      drawDesignOnCanvas();
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// ── UPLOAD PRODUCT PHOTO ──────────────────────────────────────────
-function uploadMockupProduct(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    state.mockupCustomProduct = true;
-    state.mockupCustomProductSrc = ev.target.result;
-    var img = document.getElementById('mockupProductImg');
-    img.style.filter = '';
-    img.src = ev.target.result;
-    img.onload = function() {
-      positionMockupCanvas();
-      drawDesignOnCanvas();
-    };
-    var status = document.getElementById('mockupUploadStatus');
-    if (status) status.textContent = 'Product: ' + file.name;
-  };
-  reader.readAsDataURL(file);
-}
-
-// ── RESET DESIGN ─────────────────────────────────────────────────
-function resetMockupDesign() {
-  state.mockupDesign = null;
-  state.mockupSample = null;
-  var canvas = document.getElementById('mockupCanvas');
-  if (canvas) canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
-  document.getElementById('sidePanel').innerHTML = panels['mockup']();
-}
-
-// ── DOWNLOAD MERGED PNG ───────────────────────────────────────────
-function downloadMockup() {
-  var productImg = document.getElementById('mockupProductImg');
-  var printCanvas = document.getElementById('mockupCanvas');
-  var wrapper = document.getElementById('mockupWrapper');
-  if (!productImg || !wrapper) return;
-
-  // Create offscreen canvas at full wrapper size
-  var w = wrapper.offsetWidth;
-  var h = wrapper.offsetHeight;
-  var out = document.createElement('canvas');
-  out.width = w * 2; out.height = h * 2;  // 2x retina
-  var ctx = out.getContext('2d');
-  ctx.scale(2, 2);
-
-  // Draw product image
-  ctx.drawImage(productImg, 0, 0, w, h);
-
-  // Draw design canvas on top at its position
-  if (printCanvas) {
-    var zone = PRINT_ZONES[state.mockupTemplate] || PRINT_ZONES['tshirt'];
-    var px = w * zone.left;
-    var py = h * zone.top;
-    var pw = w * zone.width;
-    var ph = h * zone.height;
-    ctx.drawImage(printCanvas, px, py, pw, ph);
-  }
-
-  // Trigger download
-  var link = document.createElement('a');
-  link.download = 'janta-prints-mockup.png';
-  link.href = out.toDataURL('image/png');
-  link.click();
-}
-
-// ── RE-POSITION ON RESIZE ─────────────────────────────────────────
-window.addEventListener('resize', function() {
-  if (state.tool === 'mockup') {
-    positionMockupCanvas();
-    drawDesignOnCanvas();
-  }
-});
 
 </script>
 
 <a href="https://wa.me/254704570799?text=Hi%20Janta%20Prints%2C%20I%27d%20like%20a%20quote" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬</a>
+<script>
+/* ================================================================
+   MOCKUP ENGINE v3
+   CSS layering: SVG product + 500x500 canvas print zone
+   Product-specific sample designs (logos for apparel,
+   full layouts for banners/flyers/print products)
+   ================================================================ */
+
+/* --- PRODUCT DEFINITIONS --------------------------------------- */
+var MP = {
+  tshirt: { svg:'tshirt.svg', label:'T-Shirt',        ar:1.20, zone:{x:0.30,y:0.26,w:0.40,h:0.36}, type:'apparel',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b','#2e7d32','#2196f3','#f5e6c8','#808080'] },
+  hoodie: { svg:'hoodie.svg', label:'Hoodie',          ar:1.20, zone:{x:0.30,y:0.35,w:0.40,h:0.30}, type:'apparel',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b','#2e7d32','#808080'] },
+  jersey: { svg:'jersey.svg', label:'Football Jersey', ar:1.20, zone:{x:0.27,y:0.22,w:0.46,h:0.42}, type:'jersey',
+    colors:['#ffffff','#c0392b','#1a2a5e','#111111'] },
+  polo:   { svg:'polo.svg',   label:'Polo Shirt',      ar:1.20, zone:{x:0.32,y:0.25,w:0.36,h:0.28}, type:'apparel',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b','#2e7d32','#808080'] },
+  cap:    { svg:'cap.svg',    label:'Cap / Hat',        ar:0.80, zone:{x:0.30,y:0.24,w:0.40,h:0.30}, type:'apparel',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b','#2e7d32','#808080'] },
+  tote:   { svg:'tote.svg',   label:'Tote Bag',         ar:1.15, zone:{x:0.28,y:0.36,w:0.44,h:0.38}, type:'apparel',
+    colors:['#ffffff','#f5e6c8','#111111','#1a2a5e'] },
+  mug:    { svg:'mug.svg',    label:'Mug',              ar:0.95, zone:{x:0.22,y:0.26,w:0.46,h:0.44}, type:'apparel',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b','#2e7d32','#808080'] },
+  banner: { svg:'banner.svg', label:'Pull-up Banner',   ar:1.80, zone:{x:0.22,y:0.05,w:0.56,h:0.84}, type:'print',
+    colors:['#ffffff','#111111','#1a2a5e','#c0392b'] },
+  flyer:  { svg:'flyer.svg',  label:'A4 Flyer',         ar:1.42, zone:{x:0.18,y:0.05,w:0.60,h:0.88}, type:'print',
+    colors:['#ffffff','#f5e6c8','#1a2a5e'] },
+};
+
+var MP_COLOR_NAMES = {
+  '#ffffff':'White','#111111':'Black','#1a2a5e':'Navy',
+  '#c0392b':'Red','#2e7d32':'Forest Green','#2196f3':'Sky Blue',
+  '#f5e6c8':'Cream','#808080':'Grey'
+};
+
+/* --- PRODUCT-SPECIFIC SAMPLES ---------------------------------- */
+/* Apparel: logo/badge designs
+   Print (banner/flyer): full layout compositions with
+   headline, tagline, body copy, contact — because that is
+   what clients actually put on those products              */
+
+var MP_SAMPLES = {
+  apparel: [
+    {
+      label: 'Bold Text Logo',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="#e8622a" rx="10"/><text x="200" y="118" font-family="Impact,Arial Black,sans-serif" font-size="80" fill="white" text-anchor="middle" letter-spacing="3">BRAND</text><text x="200" y="160" font-family="Arial,sans-serif" font-size="22" fill="rgba(255,255,255,0.75)" text-anchor="middle" letter-spacing="8">YOUR NAME</text></svg>'
+    },
+    {
+      label: 'Circle Badge',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><circle cx="150" cy="150" r="142" fill="#1a2a5e" stroke="white" stroke-width="8"/><circle cx="150" cy="150" r="115" fill="none" stroke="white" stroke-width="2"/><text x="150" y="140" font-family="Impact,Arial Black,sans-serif" font-size="48" fill="white" text-anchor="middle">TEAM</text><text x="150" y="185" font-family="Impact,Arial Black,sans-serif" font-size="30" fill="#e8622a" text-anchor="middle">KISUMU</text><text x="150" y="215" font-family="Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.65)" text-anchor="middle" letter-spacing="5">EST. 2024</text></svg>'
+    },
+    {
+      label: 'Shield Logo',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="280" height="320"><path d="M140 8L268 58 268 182Q268 278 140 312Q12 278 12 182L12 58Z" fill="#2e7d32" stroke="white" stroke-width="6"/><path d="M140 28L248 70 248 182Q248 262 140 292Q32 262 32 182L32 70Z" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/><text x="140" y="160" font-family="Impact,Arial Black,sans-serif" font-size="56" fill="white" text-anchor="middle">JP</text><text x="140" y="210" font-family="Arial,sans-serif" font-size="15" fill="rgba(255,255,255,0.85)" text-anchor="middle" letter-spacing="3">JANTA PRINTS</text></svg>'
+    }
+  ],
+  jersey: [
+    {
+      label: 'Home Kit — White',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><circle cx="150" cy="90" r="70" fill="#1a2a5e" stroke="white" stroke-width="5"/><text x="150" y="100" font-family="Impact,Arial Black,sans-serif" font-size="52" fill="white" text-anchor="middle">FC</text><text x="150" y="195" font-family="Impact,Arial Black,sans-serif" font-size="38" fill="#1a2a5e" text-anchor="middle">10</text><text x="150" y="240" font-family="Arial,sans-serif" font-size="22" fill="#333" text-anchor="middle" letter-spacing="4">OMONDI</text></svg>'
+    },
+    {
+      label: 'Number + Name',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="280"><text x="150" y="180" font-family="Impact,Arial Black,sans-serif" font-size="140" fill="#c0392b" text-anchor="middle" opacity="0.15">7</text><text x="150" y="185" font-family="Impact,Arial Black,sans-serif" font-size="130" fill="#c0392b" text-anchor="middle">7</text><text x="150" y="255" font-family="Arial,sans-serif" font-size="24" fill="#111" text-anchor="middle" letter-spacing="6">WANJIRU</text></svg>'
+    },
+    {
+      label: 'Club Crest Area',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="220"><path d="M100 5L192 42 192 130Q192 200 100 218Q8 200 8 130L8 42Z" fill="#1a2a5e" stroke="white" stroke-width="5"/><text x="100" y="120" font-family="Impact,Arial Black,sans-serif" font-size="44" fill="white" text-anchor="middle">LOGO</text><text x="100" y="162" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="3">YOUR CLUB</text></svg>'
+    }
+  ],
+  print: [
+    {
+      label: 'Event / Promo Layout',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600"><rect width="400" height="600" fill="#1a2a5e"/><rect width="400" height="8" fill="#e8622a"/><rect y="592" width="400" height="8" fill="#e8622a"/><rect x="30" y="30" width="340" height="2" fill="rgba(255,255,255,0.2)"/><rect x="30" y="568" width="340" height="2" fill="rgba(255,255,255,0.2)"/><rect x="160" y="50" width="80" height="80" rx="8" fill="#e8622a"/><text x="200" y="108" font-family="Impact,Arial Black,sans-serif" font-size="32" fill="white" text-anchor="middle">JP</text><text x="200" y="175" font-family="Impact,Arial Black,sans-serif" font-size="44" fill="white" text-anchor="middle">YOUR EVENT</text><text x="200" y="220" font-family="Impact,Arial Black,sans-serif" font-size="30" fill="#e8622a" text-anchor="middle">NAME HERE</text><line x1="60" y1="245" x2="340" y2="245" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><text x="200" y="285" font-family="Arial,sans-serif" font-size="16" fill="rgba(255,255,255,0.8)" text-anchor="middle">Saturday 15 March 2025</text><text x="200" y="315" font-family="Arial,sans-serif" font-size="15" fill="rgba(255,255,255,0.7)" text-anchor="middle">Venue Name, Kisumu</text><rect x="60" y="345" width="280" height="120" rx="6" fill="rgba(255,255,255,0.06)"/><text x="200" y="380" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">SHORT DESCRIPTION OF YOUR</text><text x="200" y="400" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">EVENT OR PROMOTION GOES HERE.</text><text x="200" y="420" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">ADD YOUR KEY MESSAGE IN</text><text x="200" y="440" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.6)" text-anchor="middle">TWO OR THREE LINES.</text><line x1="60" y1="490" x2="340" y2="490" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><text x="200" y="518" font-family="Arial,sans-serif" font-size="14" fill="#e8622a" text-anchor="middle">+254 700 000 000</text><text x="200" y="542" font-family="Arial,sans-serif" font-size="13" fill="rgba(255,255,255,0.55)" text-anchor="middle">www.yourwebsite.co.ke</text></svg>'
+    },
+    {
+      label: 'Business / Brand Layout',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600"><rect width="400" height="600" fill="#ffffff"/><rect width="400" height="140" fill="#111111"/><rect width="400" height="6" y="140" fill="#e8622a"/><rect x="150" y="25" width="100" height="90" rx="6" fill="#e8622a"/><text x="200" y="86" font-family="Impact,Arial Black,sans-serif" font-size="36" fill="white" text-anchor="middle">LOGO</text><text x="200" y="195" font-family="Impact,Arial Black,sans-serif" font-size="36" fill="#111" text-anchor="middle">BUSINESS NAME</text><text x="200" y="230" font-family="Arial,sans-serif" font-size="15" fill="#e8622a" text-anchor="middle" letter-spacing="4">TAGLINE GOES HERE</text><line x1="60" y1="255" x2="340" y2="255" stroke="#eee" stroke-width="1.5"/><text x="200" y="295" font-family="Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle">We offer professional quality printing</text><text x="200" y="318" font-family="Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle">and branding services for businesses,</text><text x="200" y="341" font-family="Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle">teams and events across the region.</text><rect x="60" y="375" width="120" height="36" rx="4" fill="#111"/><text x="120" y="399" font-family="Arial,sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="bold">CALL US</text><rect x="220" y="375" width="120" height="36" rx="4" fill="#e8622a"/><text x="280" y="399" font-family="Arial,sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="bold">WHATSAPP</text><line x1="60" y1="436" x2="340" y2="436" stroke="#eee" stroke-width="1"/><text x="200" y="466" font-family="Arial,sans-serif" font-size="13" fill="#888" text-anchor="middle">+254 700 000 000  |  Kisumu, Kenya</text><text x="200" y="490" font-family="Arial,sans-serif" font-size="13" fill="#888" text-anchor="middle">www.yourwebsite.co.ke</text></svg>'
+    },
+    {
+      label: 'Bold Announcement',
+      svg: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600"><rect width="400" height="600" fill="#e8622a"/><rect width="400" height="600" fill="url(#noise)" opacity="0.03"/><text x="200" y="80" font-family="Impact,Arial Black,sans-serif" font-size="22" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="10">ANNOUNCING</text><text x="200" y="200" font-family="Impact,Arial Black,sans-serif" font-size="74" fill="white" text-anchor="middle">BIG</text><text x="200" y="280" font-family="Impact,Arial Black,sans-serif" font-size="74" fill="white" text-anchor="middle">SALE</text><text x="200" y="340" font-family="Impact,Arial Black,sans-serif" font-size="74" fill="#111" text-anchor="middle">50%</text><text x="200" y="390" font-family="Arial,sans-serif" font-size="22" fill="rgba(255,255,255,0.85)" text-anchor="middle">OFF EVERYTHING</text><rect x="80" y="420" width="240" height="2" fill="rgba(255,255,255,0.4)"/><text x="200" y="460" font-family="Arial,sans-serif" font-size="16" fill="rgba(255,255,255,0.9)" text-anchor="middle">Valid until 31 December 2025</text><text x="200" y="490" font-family="Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.7)" text-anchor="middle">Terms and conditions apply</text><rect x="100" y="520" width="200" height="44" rx="22" fill="white"/><text x="200" y="549" font-family="Arial,sans-serif" font-size="14" fill="#e8622a" text-anchor="middle" font-weight="bold">SHOP NOW — 0700 000 000</text></svg>'
+    }
+  ]
+};
+
+/* Helper: get samples for current product */
+function mpGetSamples() {
+  var type = (MP[mpState.product] || MP.tshirt).type;
+  return MP_SAMPLES[type] || MP_SAMPLES.apparel;
+}
+
+/* --- MOCKUP STATE ---------------------------------------------- */
+var mpState = {
+  product: 'tshirt',
+  color: '#ffffff',
+  designCanvas: null,
+  customProduct: null,
+  activeSample: -1,
+};
+
+/* --- CORE RENDER ----------------------------------------------- */
+function mpRender() {
+  var canvas = document.getElementById('outputCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var SIZE = 500;
+  canvas.width = SIZE; canvas.height = SIZE;
+
+  var prod = MP[mpState.product];
+  if (!prod) return;
+
+  // Set correct aspect ratio on the canvas element for visual display
+  canvas.style.aspectRatio = '1 / ' + prod.ar;
+
+  ctx.fillStyle = '#f2f2f2';
+  ctx.fillRect(0, 0, SIZE, SIZE);
+
+  if (mpState.customProduct) {
+    var cp = mpState.customProduct;
+    var r = Math.min(SIZE / cp.width, SIZE / cp.height) * 0.94;
+    var dw = cp.width * r, dh = cp.height * r;
+    ctx.drawImage(cp, (SIZE - dw) / 2, (SIZE - dh) / 2, dw, dh);
+    mpDrawDesign(ctx, SIZE, prod.zone);
+    mpShowDlBtn();
+  } else {
+    var svgPath = '../images/mockup/' + prod.svg;
+    fetch(svgPath)
+      .then(function(r) { return r.text(); })
+      .then(function(svgText) {
+        var colored = mpColourSVG(svgText, mpState.color);
+        var blob = new Blob([colored], { type: 'image/svg+xml' });
+        var url = URL.createObjectURL(blob);
+        var img = new Image();
+        img.onload = function() {
+          URL.revokeObjectURL(url);
+          ctx.clearRect(0, 0, SIZE, SIZE);
+          ctx.fillStyle = '#f2f2f2';
+          ctx.fillRect(0, 0, SIZE, SIZE);
+          ctx.drawImage(img, 0, 0, SIZE, SIZE);
+          mpDrawDesign(ctx, SIZE, prod.zone);
+          mpShowDlBtn();
+        };
+        img.onerror = function() { console.error('SVG load error:', svgPath); };
+        img.src = url;
+      })
+      .catch(function(e) { console.error('Fetch error:', e); });
+  }
+}
+
+function mpDrawDesign(ctx, SIZE, zone) {
+  if (!mpState.designCanvas) return;
+  var zx = zone.x * SIZE, zy = zone.y * SIZE, zw = zone.w * SIZE, zh = zone.h * SIZE;
+  var dc = mpState.designCanvas;
+  var ratio = Math.min(zw / dc.width, zh / dc.height) * 0.92;
+  var dw = dc.width * ratio, dh = dc.height * ratio;
+  var dx = zx + (zw - dw) / 2, dy = zy + (zh - dh) / 2;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(zx, zy, zw, zh); ctx.clip();
+  ctx.globalAlpha = 0.93;
+  ctx.drawImage(dc, dx, dy, dw, dh);
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+function mpColourSVG(svgText, hex) {
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(svgText, 'image/svg+xml');
+  var primaryIds = ['product-body', 'product-sleeve-l', 'product-sleeve-r', 'product-hood'];
+  var accentIds  = ['product-collar', 'product-brim'];
+  primaryIds.forEach(function(id) {
+    var el = doc.getElementById(id);
+    if (el) { el.setAttribute('fill', hex); el.setAttribute('stroke', mpDarken(hex, 0.18)); }
+  });
+  accentIds.forEach(function(id) {
+    var el = doc.getElementById(id);
+    if (el) el.setAttribute('fill', mpDarken(hex, 0.10));
+  });
+  return new XMLSerializer().serializeToString(doc.documentElement);
+}
+
+function mpDarken(hex, amt) {
+  if (!hex || hex.length < 7) return hex;
+  if (hex === '#111111') return '#060606';
+  var r = parseInt(hex.slice(1, 3), 16);
+  var g = parseInt(hex.slice(3, 5), 16);
+  var b = parseInt(hex.slice(5, 7), 16);
+  return '#' + [r, g, b].map(function(v) {
+    return Math.max(0, Math.round(v * (1 - amt))).toString(16).padStart(2, '0');
+  }).join('');
+}
+
+function mpShowDlBtn() {
+  var btn = document.getElementById('mockupDlBtn');
+  if (btn) btn.style.display = '';
+}
+
+/* --- PANEL BUILDER --------------------------------------------- */
+function mpBuildPanel() {
+  var prod = MP[mpState.product] || MP.tshirt;
+  var samples = mpGetSamples();
+
+  var colorHtml = prod.colors.map(function(hex) {
+    var isActive = hex === mpState.color;
+    var style = 'width:28px;height:28px;border-radius:50%;cursor:pointer;display:inline-block;';
+    style += 'background:' + hex + ';';
+    style += hex === '#ffffff' ? 'border:2px solid #aaa;' : 'border:2px solid transparent;';
+    if (isActive) { style += 'outline:3px solid #e8622a;outline-offset:2px;'; }
+    var safeHex = hex.replace('#', '%23');
+    var name = MP_COLOR_NAMES[hex] || hex;
+    return '<div style="' + style + '" title="' + name + '" data-color="' + hex + '" onclick="mpSetColor(this.getAttribute(\'data-color\'),this)"></div>';
+  }).join('');
+
+  var sampHtml = samples.map(function(s, i) {
+    var active = i === mpState.activeSample ? ' active' : '';
+    return '<button class="sample-logo-btn' + active + '" onclick="mpApplySample(' + i + ')">' + s.label + '</button>';
+  }).join('');
+
+  var jerseyNote = prod.type === 'jersey'
+    ? '<p style="font-size:10px;color:var(--col-text-dim);margin:4px 0 0;">Jersey colours: White, Red, Blue, Black only</p>' : '';
+
+  return '<div class="p-section">'
+    + '<div class="panel-section-title">Product</div>'
+    + '<select class="studio-select" onchange="mpSetProduct(this.value)">'
+    + Object.keys(MP).map(function(k) {
+        return '<option value="' + k + '"' + (k === mpState.product ? ' selected' : '') + '>' + MP[k].label + '</option>';
+      }).join('')
+    + '</select></div>'
+    + '<div class="divider"></div>'
+    + '<div class="p-section"><div class="panel-section-title">Colour</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:5px;">' + colorHtml + '</div>'
+    + jerseyNote + '</div>'
+    + '<div class="divider"></div>'
+    + '<div class="p-section"><div class="panel-section-title">Sample Designs</div>'
+    + '<p style="font-size:11px;color:var(--col-text-dim);margin:0 0 8px;">Click to preview on the product</p>'
+    + '<div style="display:flex;flex-direction:column;gap:5px;">' + sampHtml + '</div></div>'
+    + '<div class="divider"></div>'
+    + '<div class="p-section"><div class="panel-section-title">Upload Your Own</div>'
+    + '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;padding:9px 12px;border:1px dashed var(--col-accent);border-radius:8px;color:var(--col-accent);">'
+    + '<input type="file" accept="image/*" style="display:none;" onchange="mpUploadDesign(event)"> '
+    + '+ Upload your design / logo</label>'
+    + '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;padding:9px 12px;border:1px dashed var(--col-border);border-radius:8px;color:var(--col-text-dim);margin-top:6px;">'
+    + '<input type="file" accept="image/*" style="display:none;" onchange="mpUploadProduct(event)"> '
+    + '+ Upload your product photo</label>'
+    + '<div id="mpStatus" style="font-size:11px;color:var(--col-text-dim);margin-top:5px;"></div>'
+    + '</div>'
+    + '<div class="divider"></div>'
+    + '<button class="btn-secondary" onclick="mpDownload()" id="mockupDlBtn" style="display:none;">&#8595; Download PNG</button>'
+    + '<div class="tip-box" style="margin-top:8px;font-size:11px;">'
+    + 'Pick product &amp; colour — renders instantly. Click a sample to preview it, or upload your own artwork.'
+    + '</div>';
+}
+
+/* --- CONTROLS -------------------------------------------------- */
+function mpSetProduct(key) {
+  mpState.product = key;
+  mpState.color = MP[key].colors[0];
+  mpState.customProduct = null;
+  mpState.activeSample = -1;
+  document.getElementById('sidePanel').innerHTML = mpBuildPanel();
+  mpRender();
+}
+
+function mpSetColor(hex, el) {
+  mpState.color = hex;
+  document.getElementById('sidePanel').innerHTML = mpBuildPanel();
+  mpRender();
+}
+
+function mpApplySample(i) {
+  mpState.activeSample = i;
+  var samples = mpGetSamples();
+  var sample = samples[i];
+  if (!sample) return;
+  document.getElementById('sidePanel').innerHTML = mpBuildPanel();
+  mpSvgToCanvas(sample.svg, function(c) {
+    mpState.designCanvas = c;
+    mpRender();
+  });
+}
+
+function mpSvgToCanvas(svgStr, cb) {
+  var blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  var url = URL.createObjectURL(blob);
+  var img = new Image();
+  img.onload = function() {
+    var c = document.createElement('canvas');
+    c.width = img.naturalWidth || 400;
+    c.height = img.naturalHeight || 400;
+    c.getContext('2d').drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    cb(c);
+  };
+  img.onerror = function() { console.error('Sample SVG error'); URL.revokeObjectURL(url); };
+  img.src = url;
+}
+
+function mpUploadDesign(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var img = new Image();
+    img.onload = function() {
+      var c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      c.getContext('2d').drawImage(img, 0, 0);
+      mpState.designCanvas = c;
+      mpState.activeSample = -1;
+      var s = document.getElementById('mpStatus');
+      if (s) s.textContent = 'Design: ' + file.name;
+      mpRender();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function mpUploadProduct(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var img = new Image();
+    img.onload = function() {
+      var c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      c.getContext('2d').drawImage(img, 0, 0);
+      mpState.customProduct = c;
+      var s = document.getElementById('mpStatus');
+      if (s) s.textContent = 'Product: ' + file.name;
+      mpRender();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function mpDownload() {
+  var canvas = document.getElementById('outputCanvas');
+  if (!canvas) return;
+  var link = document.createElement('a');
+  link.download = 'janta-prints-mockup.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* --- WIRE INTO STUDIO PANEL SYSTEM ----------------------------- */
+(function() {
+  if (typeof panels !== 'undefined') {
+    panels.mockup = mpBuildPanel;
+  }
+  // Auto-render when mockup tab is clicked
+  var origSwitch = window.switchTool;
+  if (typeof origSwitch === 'function') {
+    window.switchTool = function(tool, btn) {
+      origSwitch(tool, btn);
+      if (tool === 'mockup') {
+        // Show canvas, hide upload zone
+        var uz = document.getElementById('uploadZone');
+        var oa = document.getElementById('outputArea');
+        if (uz) uz.style.display = 'none';
+        if (oa) { oa.style.display = 'flex'; }
+        setTimeout(function() {
+          var wb = document.getElementById('canvasBadge');
+          if (wb) wb.textContent = 'Mockup Preview';
+          mpRender();
+        }, 60);
+      }
+    };
+  }
+})();
+</script>
+
 <script src="../js/main.js"></script>
 <script src="../js/api.js"></script>
 </body>

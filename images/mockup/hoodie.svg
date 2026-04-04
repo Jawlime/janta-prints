@@ -1,49 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480">
   <defs>
-    <filter id="hd-shadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18"/>
-    </filter>
+    <filter id="sh"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#000" flood-opacity="0.15"/></filter>
   </defs>
-  <g filter="url(#hd-shadow)">
-    <!-- Body -->
-    <path class="product-fill" d="
-      M 140 95
-      L 80 40
-      L 20 105
-      L 60 125
-      L 60 430
-      L 340 430
-      L 340 125
-      L 380 105
-      L 320 40
-      L 260 95
-      C 245 108 230 115 200 115
-      C 170 115 155 108 140 95 Z
-    " fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-    <!-- Hood -->
-    <path class="product-fill" d="
-      M 140 95
-      C 130 75 125 50 135 30
-      C 150 10 175 5 200 5
-      C 225 5 250 10 265 30
-      C 275 50 270 75 260 95
-      C 245 108 230 115 200 115
-      C 170 115 155 108 140 95 Z
-    " fill="#f0f0f0" stroke="#d8d8d8" stroke-width="1.5"/>
-    <!-- Hood opening -->
-    <ellipse cx="200" cy="80" rx="32" ry="42" fill="#1a1a1a" opacity="0.85"/>
-    <!-- Pocket -->
-    <rect x="130" y="310" width="140" height="70" rx="4"
-      fill="rgba(0,0,0,0.06)" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-    <line x1="200" y1="310" x2="200" y2="380" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-    <!-- Sleeve L -->
-    <path class="product-fill" d="M 80 40 L 20 105 L 60 125 L 105 70 Z"
-      fill="#f2f2f2" stroke="#e0e0e0" stroke-width="1"/>
-    <!-- Sleeve R -->
-    <path class="product-fill" d="M 320 40 L 380 105 L 340 125 L 295 70 Z"
-      fill="#f2f2f2" stroke="#e0e0e0" stroke-width="1"/>
-    <!-- Drawstring -->
-    <line x1="185" y1="60" x2="178" y2="115" stroke="rgba(0,0,0,0.2)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="215" y1="60" x2="222" y2="115" stroke="rgba(0,0,0,0.2)" stroke-width="2" stroke-linecap="round"/>
+  <g filter="url(#sh)">
+    <path id="product-sleeve-l" d="M80 42 L18 108 L58 128 L108 72 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
+    <path id="product-sleeve-r" d="M320 42 L382 108 L342 128 L292 72 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
+    <path id="product-body" d="M142 94 L80 42 L18 108 L58 128 L58 432 L342 432 L342 128 L382 108 L320 42 L258 94 C240 112 222 118 200 118 C178 118 160 112 142 94 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+    <path id="product-hood" d="M142 94 C132 72 128 46 138 26 C154 8 176 4 200 4 C224 4 246 8 262 26 C272 46 268 72 258 94 C240 112 222 118 200 118 C178 118 160 112 142 94 Z" fill="#f2f2f2" stroke="#d8d8d8" stroke-width="1.5"/>
+    <ellipse cx="200" cy="76" rx="30" ry="40" fill="#111" opacity="0.82"/>
+    <line x1="187" y1="56" x2="180" y2="118" stroke="rgba(0,0,0,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="213" y1="56" x2="220" y2="118" stroke="rgba(0,0,0,0.18)" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="132" y="316" width="136" height="68" rx="5" fill="rgba(0,0,0,0.055)" stroke="rgba(0,0,0,0.07)" stroke-width="1"/>
+    <line x1="200" y1="316" x2="200" y2="384" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
   </g>
 </svg>

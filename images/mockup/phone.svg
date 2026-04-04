@@ -1,31 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 480" width="260" height="480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 480">
   <defs>
-    <filter id="phone-shadow">
-      <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#000" flood-opacity="0.20"/>
-    </filter>
+    <filter id="sh"><feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#000" flood-opacity="0.18"/></filter>
   </defs>
-  <g filter="url(#phone-shadow)">
-    <!-- Case body -->
-    <rect class="product-fill" x="20" y="20" width="220" height="440" rx="32"
-      fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
-    <!-- Camera bump -->
-    <rect x="140" y="35" width="80" height="75" rx="16" fill="#e8e8e8" stroke="#d8d8d8" stroke-width="1"/>
-    <!-- Camera lenses -->
-    <circle cx="165" cy="60" r="18" fill="#2a2a2a"/>
-    <circle cx="165" cy="60" r="12" fill="#1a1a1a"/>
-    <circle cx="165" cy="60" r="5" fill="#3a3a3a"/>
-    <circle cx="200" cy="60" r="18" fill="#2a2a2a"/>
-    <circle cx="200" cy="60" r="12" fill="#1a1a1a"/>
-    <circle cx="200" cy="60" r="5" fill="#3a3a3a"/>
-    <circle cx="165" cy="95" r="12" fill="#2a2a2a"/>
-    <circle cx="165" cy="95" r="7" fill="#1a1a1a"/>
-    <!-- Flash -->
-    <circle cx="200" cy="92" r="8" fill="#d4a800" opacity="0.8"/>
-    <!-- Screen area -->
-    <rect x="30" y="130" width="200" height="300" rx="20" fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
-    <!-- Side buttons -->
-    <rect x="16" y="140" width="6" height="40" rx="3" fill="#d0d0d0"/>
-    <rect x="16" y="195" width="6" height="30" rx="3" fill="#d0d0d0"/>
-    <rect x="238" y="160" width="6" height="50" rx="3" fill="#d0d0d0"/>
+  <g filter="url(#sh)">
+    <rect id="product-body" x="18" y="18" width="224" height="444" rx="34" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <rect x="138" y="32" width="84" height="78" rx="18" fill="#e8e8e8" stroke="#d8d8d8" stroke-width="1"/>
+    <circle cx="163" cy="58" r="20" fill="#242424"/><circle cx="163" cy="58" r="13" fill="#141414"/><circle cx="163" cy="58" r="5" fill="#363636"/>
+    <circle cx="198" cy="58" r="20" fill="#242424"/><circle cx="198" cy="58" r="13" fill="#141414"/><circle cx="198" cy="58" r="5" fill="#363636"/>
+    <circle cx="163" cy="94" r="13" fill="#242424"/><circle cx="163" cy="94" r="7.5" fill="#141414"/>
+    <circle cx="198" cy="91" r="9" fill="#c8a000" opacity="0.85"/>
+    <rect x="28" y="128" width="204" height="302" rx="22" fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
+    <rect x="14" y="138" width="6" height="44" rx="3" fill="#d0d0d0"/>
+    <rect x="14" y="194" width="6" height="32" rx="3" fill="#d0d0d0"/>
+    <rect x="240" y="158" width="6" height="52" rx="3" fill="#d0d0d0"/>
   </g>
 </svg>

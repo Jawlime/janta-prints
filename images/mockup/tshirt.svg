@@ -1,36 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480">
   <defs>
-    <filter id="ts-shadow" x="-5%" y="-5%" width="110%" height="115%">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18"/>
-    </filter>
+    <filter id="sh"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#000" flood-opacity="0.15"/></filter>
   </defs>
-  <g filter="url(#ts-shadow)">
-    <!-- Body -->
-    <path class="product-fill" d="
-      M 130 60
-      C 130 60 150 80 200 82 C 250 80 270 60 270 60
-      L 320 40
-      L 380 100
-      L 340 120
-      L 340 430
-      L 60 430
-      L 60 120
-      L 20 100
-      L 80 40
-      Z
-    " fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-    <!-- Collar -->
-    <path class="product-fill" d="
-      M 130 60 C 150 85 250 85 270 60
-      C 255 50 245 44 200 44 C 155 44 145 50 130 60 Z
-    " fill="#f0f0f0" stroke="#d0d0d0" stroke-width="1"/>
-    <!-- Sleeve left -->
-    <path class="product-fill" d="M 80 40 L 20 100 L 60 120 L 100 75 Z"
-      fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1"/>
-    <!-- Sleeve right -->
-    <path class="product-fill" d="M 320 40 L 380 100 L 340 120 L 300 75 Z"
-      fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1"/>
-    <!-- Subtle fold lines -->
-    <line x1="200" y1="100" x2="195" y2="430" stroke="rgba(0,0,0,0.04)" stroke-width="2"/>
+  <g filter="url(#sh)">
+    <path id="product-sleeve-l" d="M80 42 L18 104 L58 124 L100 76 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
+    <path id="product-sleeve-r" d="M320 42 L382 104 L342 124 L300 76 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
+    <path id="product-body" d="M128 58 C148 80 252 80 272 58 L322 40 L382 104 L342 124 L342 432 L58 432 L58 124 L18 104 L78 40 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+    <path id="product-collar" d="M128 58 C155 88 245 88 272 58 C255 46 238 40 200 40 C162 40 145 46 128 58 Z" fill="#ececec" stroke="#d4d4d4" stroke-width="1"/>
+    <line x1="200" y1="90" x2="198" y2="432" stroke="rgba(0,0,0,0.035)" stroke-width="2"/>
+    <line x1="58" y1="124" x2="80" y2="432" stroke="rgba(0,0,0,0.025)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="342" y1="124" x2="320" y2="432" stroke="rgba(0,0,0,0.025)" stroke-width="8" stroke-linecap="round"/>
   </g>
 </svg>
