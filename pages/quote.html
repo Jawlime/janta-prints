@@ -30,20 +30,8 @@
 .q-step{display:none;animation:fadeIn .35s ease;}
 .q-step.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
-.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.filter-chip{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;font-family:var(--font-heading);letter-spacing:.05em;border:1px solid var(--col-border);background:transparent;color:var(--col-text-dim);cursor:pointer;transition:all .18s;}
-.filter-chip:hover,.filter-chip.active{background:var(--col-accent);color:#fff;border-color:var(--col-accent);}
-.product-card{background:var(--col-surface-2);border:1.5px solid var(--col-border);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-3);cursor:pointer;transition:border-color .18s,background .18s;text-align:center;}
-.product-card:hover{border-color:var(--col-border-2);}
-.product-card.selected{border-color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 6%,var(--col-surface-2));}
-.product-card .icon{font-size:32px;margin-bottom:var(--sp-3);}
-.product-card .name{font-family:var(--font-heading);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--col-text);margin-bottom:4px;}
-.product-card .sub{font-size:12px;color:var(--col-text-dim);}
-.qty-row{display:flex;align-items:center;gap:12px;}
-.qty-btn{width:36px;height:36px;border:1px solid var(--col-border);border-radius:var(--r-sm);background:var(--col-surface-2);color:var(--col-text);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:none;transition:border-color .15s;}
-.qty-btn:hover{border-color:var(--col-accent);}
-.qty-display{font-family:var(--font-display);font-size:28px;color:var(--col-text);min-width:64px;text-align:center;}
-@media(max-width:700px){.product-grid{grid-template-columns:repeat(2,1fr);}}
+.product-form{animation:fadeIn .25s ease;}
+.jp-field-hint{font-size:12px;color:var(--col-text-dim);margin-top:4px;}
 </style>
 </head>
 <body data-page="quote">
@@ -77,8 +65,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;">
         <h1 class="jp-display jp-display--lg">Build Your<br><span class="jp-accent">Quote.</span></h1>
         <!-- Stepper -->
-        <div class="jp-stepper" id="quoteSteps">
-          <div class="jp-step active"><div class="jp-step-num">1</div><div class="jp-step-label jp-hide-mobile">Product</div></div>
+        <div class="jp-step-label jp-hide-mobile">Product</div></div>
           <div class="jp-step-line"></div>
           <div class="jp-step"><div class="jp-step-num">2</div><div class="jp-step-label jp-hide-mobile">Details</div></div>
           <div class="jp-step-line"></div>
@@ -96,315 +83,502 @@
 
       <!-- Step 1: Product -->
       <div class="q-step active" id="step1">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-2);">What do you need?</h2>
-        <p class="jp-body" style="margin-bottom:var(--sp-5);color:var(--col-text-dim);">Pick a category, then choose the specific product.</p>
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-2);">Get a Free Quote</h2>
+        <p class="jp-body" style="margin-bottom:var(--sp-6);color:var(--col-text-dim);">Fill in the details below and we'll get back to you within 2 hours.</p>
 
-        <!-- Category pills -->
-        <div id="catBar" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--sp-5);">
-          <button class="filter-chip active" data-cat="all" onclick="filterCat('all',this)">All</button>
-          <button class="filter-chip" data-cat="jerseys" onclick="filterCat('jerseys',this)">⚽ Jerseys</button>
-          <button class="filter-chip" data-cat="apparel" onclick="filterCat('apparel',this)">👕 Apparel</button>
-          <button class="filter-chip" data-cat="large-format" onclick="filterCat('large-format',this)">🏳 Large Format</button>
-          <button class="filter-chip" data-cat="print" onclick="filterCat('print',this)">📄 Print</button>
-          <button class="filter-chip" data-cat="signage" onclick="filterCat('signage',this)">🪧 Signage</button>
-          <button class="filter-chip" data-cat="merchandise" onclick="filterCat('merchandise',this)">🎁 Merchandise</button>
-        </div>
-
-        <!-- Product grid -->
-        <div class="product-grid" id="productGrid" style="grid-template-columns:repeat(3,1fr);gap:10px;">
-
-          <!-- JERSEYS -->
-          <div class="product-card" data-cat="jerseys" onclick="selectProduct('football-jersey','Football Jersey',this,'jerseys')">
-            <div class="icon">⚽</div><div class="name">Football Jersey</div>
-            <div class="sub">Full sublimation · From KES 1,100</div>
-          </div>
-          <div class="product-card" data-cat="jerseys" onclick="selectProduct('rugby-jersey','Rugby Jersey',this,'jerseys')">
-            <div class="icon">🏉</div><div class="name">Rugby Jersey</div>
-            <div class="sub">Full sublimation · Squad pricing</div>
-          </div>
-          <div class="product-card" data-cat="jerseys" onclick="selectProduct('basketball-kit','Basketball Kit',this,'jerseys')">
-            <div class="icon">🏀</div><div class="name">Basketball Kit</div>
-            <div class="sub">Jersey + shorts set</div>
-          </div>
-          <div class="product-card" data-cat="jerseys" onclick="selectProduct('custom-sports-kit','Custom Sports Kit',this,'jerseys')">
-            <div class="icon">🏆</div><div class="name">Custom Sports Kit</div>
-            <div class="sub">Any sport · Your design</div>
-          </div>
-
-          <!-- APPAREL -->
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('tshirt','T-Shirt',this,'apparel')">
-            <div class="icon">👕</div><div class="name">T-Shirt</div>
-            <div class="sub">Screen print / DTF · From KES 650</div>
-          </div>
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('polo-shirt','Polo Shirt',this,'apparel')">
-            <div class="icon">👔</div><div class="name">Polo Shirt</div>
-            <div class="sub">Embroidery or print</div>
-          </div>
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('hoodie','Hoodie',this,'apparel')">
-            <div class="icon">🧥</div><div class="name">Hoodie</div>
-            <div class="sub">Screen print or transfer</div>
-          </div>
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('cap-hat','Cap / Hat',this,'apparel')">
-            <div class="icon">🧢</div><div class="name">Cap / Hat</div>
-            <div class="sub">Embroidery · From KES 800</div>
-          </div>
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('vest','Vest / Singlet',this,'apparel')">
-            <div class="icon">🎽</div><div class="name">Vest / Singlet</div>
-            <div class="sub">Events, sports, workwear</div>
-          </div>
-          <div class="product-card" data-cat="apparel" onclick="selectProduct('jacket','Jacket / Windbreaker',this,'apparel')">
-            <div class="icon">🥼</div><div class="name">Jacket / Windbreaker</div>
-            <div class="sub">Print or embroidery</div>
-          </div>
-
-          <!-- LARGE FORMAT -->
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('pullup-banner','Pull-up Banner',this,'large-format')">
-            <div class="icon">🏳</div><div class="name">Pull-up Banner</div>
-            <div class="sub">85×200cm with stand · From KES 3,500</div>
-          </div>
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('outdoor-banner','Outdoor Banner',this,'large-format')">
-            <div class="icon">🎌</div><div class="name">Outdoor Banner</div>
-            <div class="sub">Custom size · Mesh / vinyl</div>
-          </div>
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('backdrop','Event Backdrop',this,'large-format')">
-            <div class="icon">🖼</div><div class="name">Event Backdrop</div>
-            <div class="sub">Step & repeat, photo walls</div>
-          </div>
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('vehicle-wrap','Vehicle Wrap / Branding',this,'large-format')">
-            <div class="icon">🚗</div><div class="name">Vehicle Wrap</div>
-            <div class="sub">Full / partial · Car, matatu, truck</div>
-          </div>
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('billboard','Billboard / Hoarding',this,'large-format')">
-            <div class="icon">🏗</div><div class="name">Billboard / Hoarding</div>
-            <div class="sub">Large outdoor print</div>
-          </div>
-          <div class="product-card" data-cat="large-format" onclick="selectProduct('tent-branding','Branded Tent',this,'large-format')">
-            <div class="icon">⛺</div><div class="name">Branded Tent</div>
-            <div class="sub">3×3m or 6×3m events tent</div>
-          </div>
-
-          <!-- PRINT -->
-          <div class="product-card" data-cat="print" onclick="selectProduct('business-cards','Business Cards',this,'print')">
-            <div class="icon">🃏</div><div class="name">Business Cards</div>
-            <div class="sub">250 / 500 / 1000 · From KES 800</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('flyers','Flyers / Leaflets',this,'print')">
-            <div class="icon">📄</div><div class="name">Flyers / Leaflets</div>
-            <div class="sub">A5 / A4 / DL · From KES 4,500</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('brochure','Brochure',this,'print')">
-            <div class="icon">📑</div><div class="name">Brochure</div>
-            <div class="sub">Tri-fold, bi-fold, booklet</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('poster','Poster',this,'print')">
-            <div class="icon">🖼</div><div class="name">Poster</div>
-            <div class="sub">A3 / A2 / A1 · Gloss or matte</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('letterhead','Letterhead',this,'print')">
-            <div class="icon">📝</div><div class="name">Letterhead</div>
-            <div class="sub">A4 · 80gsm / 100gsm</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('stickers','Stickers / Labels',this,'print')">
-            <div class="icon">🔖</div><div class="name">Stickers / Labels</div>
-            <div class="sub">Custom shape, vinyl</div>
-          </div>
-          <div class="product-card" data-cat="print" onclick="selectProduct('school-badge','School Badge / Logo',this,'print')">
-            <div class="icon">🏫</div><div class="name">School Badge / Logo</div>
-            <div class="sub">Design + print ready file</div>
-          </div>
-
-          <!-- SIGNAGE -->
-          <div class="product-card" data-cat="signage" onclick="selectProduct('acrylic-sign','Acrylic Sign',this,'signage')">
-            <div class="icon">💎</div><div class="name">Acrylic Sign</div>
-            <div class="sub">Shop front, offices</div>
-          </div>
-          <div class="product-card" data-cat="signage" onclick="selectProduct('acp-sign','ACP / Dibond Sign',this,'signage')">
-            <div class="icon">🪟</div><div class="name">ACP / Dibond Sign</div>
-            <div class="sub">Durable outdoor panels</div>
-          </div>
-          <div class="product-card" data-cat="signage" onclick="selectProduct('kiosk-wrap','Kiosk / Stall Wrap',this,'signage')">
-            <div class="icon">🏪</div><div class="name">Kiosk / Stall Wrap</div>
-            <div class="sub">Full wrap branding</div>
-          </div>
-          <div class="product-card" data-cat="signage" onclick="selectProduct('wall-mural','Wall Mural / Decal',this,'signage')">
-            <div class="icon">🎨</div><div class="name">Wall Mural / Decal</div>
-            <div class="sub">Interior branding</div>
-          </div>
-          <div class="product-card" data-cat="signage" onclick="selectProduct('led-sign','LED / Illuminated Sign',this,'signage')">
-            <div class="icon">💡</div><div class="name">LED / Illuminated Sign</div>
-            <div class="sub">Lightbox, channel letters</div>
-          </div>
-
-          <!-- MERCHANDISE -->
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('mug','Mug',this,'merchandise')">
-            <div class="icon">☕</div><div class="name">Mug</div>
-            <div class="sub">White or black · Sublimation</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('water-bottle','Water Bottle',this,'merchandise')">
-            <div class="icon">🍶</div><div class="name">Water Bottle</div>
-            <div class="sub">Metal · Full wrap print</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('tote-bag','Tote Bag',this,'merchandise')">
-            <div class="icon">👜</div><div class="name">Tote Bag</div>
-            <div class="sub">Canvas · Screen print</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('phone-case','Phone Case',this,'merchandise')">
-            <div class="icon">📱</div><div class="name">Phone Case</div>
-            <div class="sub">Custom design · Most models</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('wristband','Wristband / Bracelet',this,'merchandise')">
-            <div class="icon">⌚</div><div class="name">Wristband</div>
-            <div class="sub">Silicone · Events / branding</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('drawstring-bag','Drawstring Bag',this,'merchandise')">
-            <div class="icon">🎒</div><div class="name">Drawstring Bag</div>
-            <div class="sub">Sports, school, events</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('cosmetic-pouch','Cosmetic Pouch',this,'merchandise')">
-            <div class="icon">👝</div><div class="name">Cosmetic Pouch</div>
-            <div class="sub">Custom print</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('notebook','Notebook',this,'merchandise')">
-            <div class="icon">📓</div><div class="name">Notebook / Diary</div>
-            <div class="sub">Branded cover</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('lanyards','Lanyards',this,'merchandise')">
-            <div class="icon">🏷</div><div class="name">Lanyards</div>
-            <div class="sub">Sublimation · Custom colour</div>
-          </div>
-          <div class="product-card" data-cat="merchandise" onclick="selectProduct('umbrella','Branded Umbrella',this,'merchandise')">
-            <div class="icon">☂️</div><div class="name">Branded Umbrella</div>
-            <div class="sub">Full panel print</div>
-          </div>
-
-          <!-- CUSTOM / OTHER -->
-          <div class="product-card" data-cat="all" onclick="selectProduct('custom','Something Else / Custom',this,'other')" style="border-style:dashed;">
-            <div class="icon">✏️</div><div class="name">Custom / Other</div>
-            <div class="sub">Not on the list? Tell us</div>
-          </div>
-
-        </div>
-
-        <div style="margin-top:var(--sp-7);text-align:right;">
-          <button class="jp-btn jp-btn--primary jp-btn--lg" id="step1Next" onclick="goStep(2)" disabled>Continue <span class="jp-btn-arrow">→</span></button>
-        </div>
-      </div>
-
-      <!-- Step 2: Details -->
-      <div class="q-step" id="step2">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Product Details</h2>
-        <div class="jp-field" style="margin-bottom:var(--sp-5);">
-          <label class="jp-label-text">Specific product / item</label>
-          <input class="jp-input" type="text" id="productSpec" placeholder="e.g. Roll-up banner 85×200cm, Football jersey, A5 flyers…">
-        </div>
-        <div style="margin-bottom:var(--sp-5);">
-          <label class="jp-label-text" style="display:block;margin-bottom:var(--sp-3);">Quantity</label>
-          <div class="qty-row">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
-            <div class="qty-display" id="qtyDisplay">1</div>
-            <button class="qty-btn" onclick="changeQty(1)">+</button>
-            <input type="number" class="jp-input" id="qtyInput" value="1" min="1" max="10000" style="max-width:100px;" oninput="syncQty()">
-          </div>
-        </div>
-        <div class="jp-field" style="margin-bottom:var(--sp-5);">
-          <label class="jp-label-text">Size / Dimensions</label>
-          <input class="jp-input" type="text" id="sizeSpec" placeholder="e.g. 85×200cm, A5, XL, custom…">
-        </div>
-        <div class="jp-field" style="margin-bottom:var(--sp-5);">
-          <label class="jp-label-text">Material / Finish (if known)</label>
-          <input class="jp-input" type="text" id="materialSpec" placeholder="e.g. Gloss, Matte, Vinyl, Sublimation, leave blank if unsure…">
-        </div>
-        <div class="jp-field" style="margin-bottom:var(--sp-5);">
-          <label class="jp-label-text">Turnaround needed</label>
-          <select class="jp-select" id="turnaround">
-            <option>No rush — standard delivery</option>
-            <option>Within 5 working days</option>
-            <option>Within 3 working days</option>
-            <option>Next day (rush fee applies)</option>
-            <option>Same day (rush fee applies, subject to availability)</option>
+        <!-- Category + Product dropdowns -->
+        <div class="jp-field" style="margin-bottom:var(--sp-4);">
+          <label class="jp-label-text">Category *</label>
+          <select class="jp-input" id="qCategory" onchange="onCategoryChange()" required>
+            <option value="">-- Select a category --</option>
+            <option value="jerseys">Jerseys &amp; Sports Kits</option>
+            <option value="apparel">Apparel</option>
+            <option value="large-format">Large Format &amp; Banners</option>
+            <option value="print">Print &amp; Stationery</option>
+            <option value="signage">Signage</option>
+            <option value="merchandise">Merchandise</option>
           </select>
         </div>
-        <div class="jp-field" style="margin-bottom:var(--sp-6);">
-          <label class="jp-label-text">Additional requirements</label>
-          <textarea class="jp-textarea" id="additionalNotes" placeholder="Player names, squad numbers, colours, design preferences, delivery address, special instructions…" rows="4"></textarea>
-        </div>
-        <div style="display:flex;gap:var(--sp-4);">
-          <button class="jp-btn jp-btn--secondary" onclick="goStep(1)">← Back</button>
-          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(3)" style="flex:1;">Continue <span class="jp-btn-arrow">→</span></button>
-        </div>
-      </div>
 
-      <!-- Step 3: Artwork -->
-      <div class="q-step" id="step3">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">Artwork & Design</h2>
-        <p class="jp-body" style="margin-bottom:var(--sp-6);">Upload your artwork or let us know if you need design help.</p>
-        <div style="border:1.5px dashed var(--col-border-2);border-radius:var(--r-lg);padding:var(--sp-8);text-align:center;margin-bottom:var(--sp-5);cursor:none;position:relative;transition:border-color .2s;" id="artDrop" ondragover="artDrop.style.borderColor='var(--col-accent)'" ondragleave="artDrop.style.borderColor=''" >
-          <input type="file" id="artFile" accept=".pdf,.ai,.eps,.png,.jpg,.jpeg,.svg" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="onArtFile(event)">
-          <div style="font-size:36px;margin-bottom:var(--sp-4);">📁</div>
-          <div class="jp-heading jp-heading--md" style="margin-bottom:var(--sp-2);">Drop artwork here or click to browse</div>
-          <div style="font-size:12px;color:var(--col-text-dim);">PDF, AI, EPS, PNG, JPG, SVG · Max 50MB</div>
-          <div id="artFileName" style="margin-top:var(--sp-4);font-size:13px;color:var(--col-accent);display:none;"></div>
-        </div>
-        <div style="margin-bottom:var(--sp-5);">
-          <div class="jp-label" style="margin-bottom:var(--sp-3);">Or choose an option:</div>
-          <div style="display:flex;flex-direction:column;gap:var(--sp-3);">
-            <label class="jp-checkbox"><input type="radio" name="artOption" value="upload" checked> I'm uploading artwork above</label>
-            <label class="jp-checkbox"><input type="radio" name="artOption" value="later"> I'll send artwork later (via WhatsApp or email)</label>
-            <label class="jp-checkbox"><input type="radio" name="artOption" value="design"> I need Janta Prints to design from scratch (design fee applies)</label>
-            <label class="jp-checkbox"><input type="radio" name="artOption" value="template"> I want to use your mockup tool first — <a href="studio.html#mockup" style="color:var(--col-accent);">Open Studio →</a></label>
-          </div>
-        </div>
-        <div style="background:color-mix(in srgb,var(--col-accent-2) 8%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-accent-2) 25%,transparent);border-radius:var(--r-md);padding:var(--sp-4);font-size:13px;color:var(--col-text-muted);margin-bottom:var(--sp-6);">
-          <strong style="color:var(--col-accent-2);">Artwork tip:</strong> Use our free <a href="studio.html" style="color:var(--col-accent-2);">Creative Studio</a> to remove backgrounds, resize to print dimensions, and check your file before uploading.
-        </div>
-        <div style="display:flex;gap:var(--sp-4);">
-          <button class="jp-btn jp-btn--secondary" onclick="goStep(2)">← Back</button>
-          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(4)" style="flex:1;">Continue <span class="jp-btn-arrow">→</span></button>
-        </div>
-      </div>
-
-      <!-- Step 4: Contact -->
-      <div class="q-step" id="step4">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Your Contact Details</h2>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
-          <div class="jp-field"><label class="jp-label-text">First name</label><input class="jp-input" type="text" id="qFname" required placeholder="Grace"></div>
-          <div class="jp-field"><label class="jp-label-text">Last name</label><input class="jp-input" type="text" id="qLname" placeholder="Akinyi"></div>
-        </div>
-        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Email</label><input class="jp-input" type="email" id="qEmail" placeholder="grace@company.co.ke"></div>
-        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Phone / WhatsApp *</label><input class="jp-input" type="tel" id="qPhone" required placeholder="+254 7xx xxx xxx"></div>
-        <div class="jp-field" style="margin-bottom:var(--sp-4);"><label class="jp-label-text">Company (optional)</label><input class="jp-input" type="text" id="qCompany" placeholder="Your organisation name"></div>
-        <div class="jp-field" style="margin-bottom:var(--sp-6);">
-          <label class="jp-label-text">Preferred contact method</label>
-          <select class="jp-select" id="qContact">
-            <option>WhatsApp (fastest)</option>
-            <option>Phone call</option>
-            <option>Email</option>
+        <div class="jp-field" id="productField" style="margin-bottom:var(--sp-4);display:none;">
+          <label class="jp-label-text">Product *</label>
+          <select class="jp-input" id="qProduct" onchange="onProductChange()" required>
+            <option value="">-- Select a product --</option>
           </select>
         </div>
-        <div style="display:flex;gap:var(--sp-4);">
-          <button class="jp-btn jp-btn--secondary" onclick="goStep(3)">← Back</button>
-          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="goStep(5)" style="flex:1;">Review Quote <span class="jp-btn-arrow">→</span></button>
+
+        <!-- Dynamic form — changes based on product -->
+        <div id="dynamicForm" style="display:none;">
+
+          <!-- ── JERSEYS ───────────────────────────────────────── -->
+          <div id="form-football-jersey" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Team / Club *</label>
+              <select class="jp-input" id="jTeam" required>
+                <option value="">-- Select team or Custom --</option>
+                <option>Real Madrid</option><option>Manchester United</option>
+                <option>Arsenal</option><option>Barcelona</option>
+                <option>Bayern Munich</option><option>Chelsea</option>
+                <option>Liverpool</option><option>PSG</option>
+                <option>Manchester City</option><option>Juventus</option>
+                <option>AC Milan</option><option>Inter Milan</option>
+                <option>Dortmund</option><option>Ajax</option>
+                <option>Gor Mahia</option><option>AFC Leopards</option>
+                <option value="custom">Custom / Own Design</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Number of Jerseys *</label>
+              <input class="jp-input" type="number" id="jQty" min="1" placeholder="e.g. 22" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes Breakdown</label>
+              <input class="jp-input" type="text" id="jSizes" placeholder="e.g. S×4 M×8 L×6 XL×4">
+              <div class="jp-field-hint">Leave blank if all same size</div>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Player Names on Back?</label>
+              <select class="jp-input" id="jNames">
+                <option value="no">No — numbers only</option>
+                <option value="yes">Yes — names + numbers</option>
+                <option value="numbers">Numbers only</option>
+              </select>
+            </div>
+            <div id="jNameListWrap" class="jp-field" style="display:none;">
+              <label class="jp-label-text">Player Names &amp; Numbers</label>
+              <textarea class="jp-input" id="jNameList" rows="5" placeholder="One per line, e.g:&#10;1 OKELLO&#10;7 ACHIENG&#10;10 OTIENO"></textarea>
+              <div class="jp-field-hint">You can also send us a spreadsheet after submitting</div>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Jersey Colour / Variant</label>
+              <input class="jp-input" type="text" id="jColour" placeholder="e.g. Home (white), Away (red), Third (black)">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Printing Method</label>
+              <select class="jp-input" id="jPrint">
+                <option value="sublimation">Full Sublimation (recommended)</option>
+                <option value="screen">Screen Print</option>
+                <option value="transfer">Heat Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-rugby-jersey" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Club / Team Name *</label>
+              <input class="jp-input" type="text" id="rugbyTeam" placeholder="e.g. Kisumu Rugby Club" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Number of Jerseys *</label>
+              <input class="jp-input" type="number" id="rugbyQty" min="1" placeholder="e.g. 20" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes Breakdown</label>
+              <input class="jp-input" type="text" id="rugbySizes" placeholder="e.g. M×5 L×10 XL×5">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Player Numbers on Back?</label>
+              <select class="jp-input" id="rugbyNumbers">
+                <option>Yes — sequential 1 to n</option>
+                <option>Yes — specific numbers (list below)</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Primary Colour(s)</label>
+              <input class="jp-input" type="text" id="rugbyColour" placeholder="e.g. Blue and white hoops">
+            </div>
+          </div>
+
+          <div id="form-basketball-kit" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Team Name *</label>
+              <input class="jp-input" type="text" id="bbTeam" placeholder="e.g. Kisumu Sharks" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Number of Kits (jersey + shorts) *</label>
+              <input class="jp-input" type="number" id="bbQty" min="1" placeholder="e.g. 15" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes</label>
+              <input class="jp-input" type="text" id="bbSizes" placeholder="e.g. S×3 M×7 L×5">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Player Names + Numbers?</label>
+              <select class="jp-input" id="bbNames">
+                <option>Yes — names + numbers</option>
+                <option>Numbers only</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Kit Colours</label>
+              <input class="jp-input" type="text" id="bbColour" placeholder="e.g. Red top, black shorts">
+            </div>
+          </div>
+
+          <!-- ── APPAREL ─────────────────────────────────────── -->
+          <div id="form-tshirt" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="tsQty" min="1" placeholder="e.g. 50" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes</label>
+              <input class="jp-input" type="text" id="tsSizes" placeholder="e.g. S×10 M×20 L×15 XL×5">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Colour *</label>
+              <input class="jp-input" type="text" id="tsColour" placeholder="e.g. White, Black, Navy" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Print Position</label>
+              <select class="jp-input" id="tsPrint">
+                <option>Front chest only</option>
+                <option>Back only</option>
+                <option>Front and back</option>
+                <option>Full front</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Printing Method</label>
+              <select class="jp-input" id="tsMethod">
+                <option>Screen Print</option>
+                <option>DTF (Direct to Film)</option>
+                <option>Sublimation</option>
+                <option>Heat Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-polo" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="poloQty" min="1" placeholder="e.g. 30" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes</label>
+              <input class="jp-input" type="text" id="poloSizes" placeholder="e.g. M×10 L×15 XL×5">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Colour *</label>
+              <input class="jp-input" type="text" id="poloColour" placeholder="e.g. Navy, White" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Branding Method</label>
+              <select class="jp-input" id="poloMethod">
+                <option>Embroidery (chest left)</option>
+                <option>Screen Print</option>
+                <option>Heat Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-hoodie" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="hdQty" min="1" placeholder="e.g. 20" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sizes</label>
+              <input class="jp-input" type="text" id="hdSizes" placeholder="e.g. M×5 L×10 XL×5">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Colour *</label>
+              <input class="jp-input" type="text" id="hdColour" placeholder="e.g. Black, White" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Print Position</label>
+              <select class="jp-input" id="hdPrint">
+                <option>Front chest</option>
+                <option>Front full</option>
+                <option>Back</option>
+                <option>Front + back</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-cap" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="capQty" min="1" placeholder="e.g. 50" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Colour *</label>
+              <input class="jp-input" type="text" id="capColour" placeholder="e.g. White, Black, Navy" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Branding Method</label>
+              <select class="jp-input" id="capMethod">
+                <option>Embroidery (front panel)</option>
+                <option>Screen Print</option>
+                <option>Heat Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── LARGE FORMAT ─────────────────────────────────── -->
+          <div id="form-pullup-banner" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="pubQty" min="1" placeholder="e.g. 2" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Size</label>
+              <select class="jp-input" id="pubSize">
+                <option>85×200cm (standard)</option>
+                <option>100×200cm</option>
+                <option>Custom size</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Include Stand?</label>
+              <select class="jp-input" id="pubStand">
+                <option>Yes — include aluminium stand</option>
+                <option>Print only — no stand</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-outdoor-banner" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="obQty" min="1" placeholder="e.g. 4" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Width (cm) *</label>
+              <input class="jp-input" type="number" id="obW" min="1" placeholder="e.g. 300" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Height (cm) *</label>
+              <input class="jp-input" type="number" id="obH" min="1" placeholder="e.g. 100" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Material</label>
+              <select class="jp-input" id="obMaterial">
+                <option>Vinyl (indoor / sheltered)</option>
+                <option>Mesh (outdoor / windy areas)</option>
+                <option>PVC Flex (heavy duty outdoor)</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Finishing</label>
+              <select class="jp-input" id="obFinish">
+                <option>Eyelets all around</option>
+                <option>Hemmed edges only</option>
+                <option>Eyelets + pole pockets</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-vehicle-wrap" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Vehicle Type *</label>
+              <select class="jp-input" id="vwType" required>
+                <option>Car (saloon)</option><option>SUV / Pickup</option>
+                <option>Matatu / Minibus</option><option>Bus</option>
+                <option>Truck</option><option>Tuk-tuk</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Wrap Coverage</label>
+              <select class="jp-input" id="vwCoverage">
+                <option>Full wrap (all panels)</option>
+                <option>Partial — both sides only</option>
+                <option>Rear only</option>
+                <option>Bonnet + sides</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Number of Vehicles *</label>
+              <input class="jp-input" type="number" id="vwQty" min="1" placeholder="e.g. 1" required>
+            </div>
+          </div>
+
+          <!-- ── PRINT ──────────────────────────────────────── -->
+          <div id="form-business-cards" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <select class="jp-input" id="bcQty" required>
+                <option>250</option><option>500</option>
+                <option>1000</option><option>2000</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Finish</label>
+              <select class="jp-input" id="bcFinish">
+                <option>Gloss laminate</option>
+                <option>Matte laminate</option>
+                <option>Spot UV</option>
+                <option>Uncoated</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sides</label>
+              <select class="jp-input" id="bcSides">
+                <option>Double-sided</option>
+                <option>Single-sided</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Paper Weight</label>
+              <select class="jp-input" id="bcPaper">
+                <option>350gsm (standard)</option>
+                <option>400gsm (premium)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-flyers" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <select class="jp-input" id="flyQty" required>
+                <option>250</option><option>500</option>
+                <option>1000</option><option>2000</option><option>5000</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Size</label>
+              <select class="jp-input" id="flySize">
+                <option>A5 (half A4)</option>
+                <option>A4</option>
+                <option>DL (one-third A4)</option>
+                <option>A6 (postcard)</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Finish</label>
+              <select class="jp-input" id="flyFinish">
+                <option>Gloss</option>
+                <option>Matte</option>
+                <option>Uncoated</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Sides</label>
+              <select class="jp-input" id="flySides">
+                <option>Double-sided</option>
+                <option>Single-sided</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-stickers" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="stkQty" min="1" placeholder="e.g. 100" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Size / Shape</label>
+              <select class="jp-input" id="stkShape">
+                <option>Round (specify diameter below)</option>
+                <option>Rectangle / square</option>
+                <option>Custom die-cut shape</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Dimensions</label>
+              <input class="jp-input" type="text" id="stkSize" placeholder="e.g. 5cm diameter, 10×5cm">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Material</label>
+              <select class="jp-input" id="stkMaterial">
+                <option>Vinyl (waterproof)</option>
+                <option>Paper (indoor)</option>
+                <option>Clear vinyl</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── SIGNAGE ──────────────────────────────────────── -->
+          <div id="form-kiosk-wrap" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Number of Kiosks / Stalls *</label>
+              <input class="jp-input" type="number" id="kwQty" min="1" placeholder="e.g. 1" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Kiosk Dimensions (approx)</label>
+              <input class="jp-input" type="text" id="kwDims" placeholder="e.g. 2m wide × 2m tall × 1m deep">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Panels to be wrapped</label>
+              <select class="jp-input" id="kwPanels">
+                <option>Front only</option>
+                <option>Front + sides</option>
+                <option>All panels</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-wall-mural" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Wall Width (cm) *</label>
+              <input class="jp-input" type="number" id="wmW" min="1" placeholder="e.g. 400" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Wall Height (cm) *</label>
+              <input class="jp-input" type="number" id="wmH" min="1" placeholder="e.g. 280" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Material</label>
+              <select class="jp-input" id="wmMaterial">
+                <option>Self-adhesive vinyl (removable)</option>
+                <option>Self-adhesive vinyl (permanent)</option>
+                <option>Direct wall paint print</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── MERCHANDISE ──────────────────────────────────── -->
+          <div id="form-mug" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="mugQty" min="1" placeholder="e.g. 24" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Mug Colour</label>
+              <select class="jp-input" id="mugColour">
+                <option>White</option>
+                <option>Black</option>
+                <option>Other (specify in notes)</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Print Type</label>
+              <select class="jp-input" id="mugPrint">
+                <option>Full wrap sublimation</option>
+                <option>One side only</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="form-tote-bag" class="product-form" style="display:none;">
+            <div class="jp-field"><label class="jp-label-text">Quantity *</label>
+              <input class="jp-input" type="number" id="toteQty" min="1" placeholder="e.g. 50" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Colour</label>
+              <select class="jp-input" id="toteColour">
+                <option>Natural / cream</option>
+                <option>Black</option>
+                <option>White</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Print Sides</label>
+              <select class="jp-input" id="toteSides">
+                <option>One side</option>
+                <option>Both sides</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ── OTHER ──────────────────────────────────────── -->
+          <div id="form-other" class="product-form" style="display:none;">
+            <div class="jp-field">
+              <label class="jp-label-text">Describe what you need *</label>
+              <textarea class="jp-input" id="otherDesc" rows="5" placeholder="Tell us what you need — include quantity, size, colour, any other details..." required></textarea>
+            </div>
+          </div>
+
+          <!-- ── SHARED: notes + contact ─────────────────────── -->
+          <div id="sharedFields" style="margin-top:var(--sp-5);">
+            <div class="jp-field"><label class="jp-label-text">Turnaround needed</label>
+              <select class="jp-input" id="qTurnaround">
+                <option>Standard (3–5 working days)</option>
+                <option>Express (1–2 working days, extra charge)</option>
+                <option>Same day (call us first)</option>
+                <option>Flexible — no rush</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Do you have artwork ready?</label>
+              <select class="jp-input" id="qArtwork">
+                <option>Yes — I'll send it after submitting</option>
+                <option>No — I need design help (add cost)</option>
+                <option>Partial — I have a logo but need layout help</option>
+              </select>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Additional notes</label>
+              <textarea class="jp-input" id="qNotes" rows="3" placeholder="Anything else we should know..."></textarea>
+            </div>
+
+            <hr style="border:none;border-top:1px solid var(--col-border);margin:var(--sp-6) 0;">
+
+            <h3 class="jp-heading jp-heading--sm" style="margin-bottom:var(--sp-4);">Your Contact Details</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+              <div class="jp-field"><label class="jp-label-text">First Name *</label>
+                <input class="jp-input" type="text" id="qFname" placeholder="Grace" required>
+              </div>
+              <div class="jp-field"><label class="jp-label-text">Last Name *</label>
+                <input class="jp-input" type="text" id="qLname" placeholder="Akinyi" required>
+              </div>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Phone / WhatsApp *</label>
+              <input class="jp-input" type="tel" id="qPhone" placeholder="+254 7XX XXX XXX" required>
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Email</label>
+              <input class="jp-input" type="email" id="qEmail" placeholder="grace@example.com">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Company / Organisation</label>
+              <input class="jp-input" type="text" id="qCompany" placeholder="Optional">
+            </div>
+            <div class="jp-field"><label class="jp-label-text">Preferred contact method</label>
+              <select class="jp-input" id="qContact">
+                <option>WhatsApp</option>
+                <option>Phone call</option>
+                <option>Email</option>
+              </select>
+            </div>
+
+            <div style="margin-top:var(--sp-6);">
+              <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="submitQuote()" id="quoteSubmitBtn" style="width:100%;">Submit Quote Request →</button>
+            </div>
+            <div id="quoteSuccess" style="display:none;text-align:center;padding:var(--sp-8);">
+              <div style="font-size:48px;margin-bottom:var(--sp-4);">✅</div>
+              <h3 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">Quote Submitted!</h3>
+              <p class="jp-body" style="color:var(--col-text-dim);margin-bottom:var(--sp-5);">We'll review your request and get back to you within 2 hours on your preferred contact method.</p>
+              <a href="https://wa.me/254704570799" class="jp-btn jp-btn--secondary">💬 Chat on WhatsApp</a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Step 5: Summary -->
-      <div class="q-step" id="step5">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-6);">Quote Summary</h2>
-        <div style="background:var(--col-surface);border:1px solid var(--col-border);border-radius:var(--r-lg);padding:var(--sp-6);margin-bottom:var(--sp-6);" id="quoteSummary"></div>
-        <div style="background:color-mix(in srgb,var(--col-accent) 6%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-accent) 20%,transparent);border-radius:var(--r-md);padding:var(--sp-5);margin-bottom:var(--sp-6);font-size:14px;color:var(--col-text-muted);">
-          Our team will review your requirements and send a detailed price within <strong style="color:var(--col-text);">2 hours</strong> on business days. You'll receive a PDF quote via email and WhatsApp.
-        </div>
-        <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;">
-          <button class="jp-btn jp-btn--secondary" onclick="goStep(4)">← Edit</button>
-          <button class="jp-btn jp-btn--primary jp-btn--lg" onclick="submitQuote()" style="flex:1;">Submit Quote Request →</button>
-        </div>
-        <div id="quoteSuccess" style="display:none;margin-top:var(--sp-6);padding:var(--sp-6);background:color-mix(in srgb,var(--col-success) 10%,var(--col-surface));border:1px solid color-mix(in srgb,var(--col-success) 30%,transparent);border-radius:var(--r-lg);text-align:center;">
-          <div style="font-size:40px;margin-bottom:var(--sp-4);">✅</div>
-          <div class="jp-heading jp-heading--lg" style="color:var(--col-success);margin-bottom:var(--sp-3);">Quote submitted!</div>
-          <p class="jp-body" style="margin-bottom:var(--sp-5);">We'll send your detailed quote within 2 hours. Check your WhatsApp and email.</p>
-          <a href="index.html" class="jp-btn jp-btn--secondary">← Back to Home</a>
-        </div>
-      </div>
+<!-- Step 3: Artwork -->
+</div>
 
     </div>
   </section>
@@ -444,8 +618,219 @@
 <script src="../js/main.js"></script>
 <script src="../js/api.js"></script>
 <script>
-var qData={product:'',productLabel:'',qty:1};
-var currentStep=1;
+// - PRODUCT CATALOGUE -
+var CATALOGUE = {
+  'jerseys': [
+    {value:'football-jersey', label:'Football Jersey'},
+    {value:'rugby-jersey',    label:'Rugby Jersey'},
+    {value:'basketball-kit',  label:'Basketball Kit'},
+    {value:'custom-kit',      label:'Custom Sports Kit'},
+    {value:'other',           label:'Other / Not listed'},
+  ],
+  'apparel': [
+    {value:'tshirt',  label:'T-Shirt'},
+    {value:'polo',    label:'Polo Shirt'},
+    {value:'hoodie',  label:'Hoodie'},
+    {value:'cap',     label:'Cap / Hat'},
+    {value:'vest',    label:'Vest / Singlet'},
+    {value:'jacket',  label:'Jacket / Windbreaker'},
+    {value:'other',   label:'Other / Not listed'},
+  ],
+  'large-format': [
+    {value:'pullup-banner',    label:'Pull-up Banner'},
+    {value:'outdoor-banner',   label:'Outdoor / Mesh Banner'},
+    {value:'vehicle-wrap',     label:'Vehicle Wrap'},
+    {value:'backdrop',         label:'Event Backdrop'},
+    {value:'billboard',        label:'Billboard / Hoarding'},
+    {value:'tent-branding',    label:'Branded Tent'},
+    {value:'other',            label:'Other / Not listed'},
+  ],
+  'print': [
+    {value:'business-cards', label:'Business Cards'},
+    {value:'flyers',         label:'Flyers / Leaflets'},
+    {value:'brochure',       label:'Brochure'},
+    {value:'poster',         label:'Poster'},
+    {value:'stickers',       label:'Stickers / Labels'},
+    {value:'letterhead',     label:'Letterhead'},
+    {value:'school-badge',   label:'School Badge / Logo Design'},
+    {value:'other',          label:'Other / Not listed'},
+  ],
+  'signage': [
+    {value:'kiosk-wrap',  label:'Kiosk / Stall Wrap'},
+    {value:'wall-mural',  label:'Wall Mural / Decal'},
+    {value:'acrylic-sign',label:'Acrylic Sign'},
+    {value:'acp-sign',    label:'ACP / Dibond Sign'},
+    {value:'led-sign',    label:'LED / Illuminated Sign'},
+    {value:'other',       label:'Other / Not listed'},
+  ],
+  'merchandise': [
+    {value:'mug',          label:'Mug'},
+    {value:'tote-bag',     label:'Tote Bag'},
+    {value:'water-bottle', label:'Water Bottle'},
+    {value:'phone-case',   label:'Phone Case'},
+    {value:'wristband',    label:'Wristband'},
+    {value:'drawstring-bag',label:'Drawstring Bag'},
+    {value:'notebook',     label:'Notebook / Diary'},
+    {value:'umbrella',     label:'Branded Umbrella'},
+    {value:'other',        label:'Other / Not listed'},
+  ],
+};
+
+// - CATEGORY CHANGE -
+function onCategoryChange() {
+  var cat = document.getElementById('qCategory').value;
+  var productField = document.getElementById('productField');
+  var productSel = document.getElementById('qProduct');
+  var dynamicForm = document.getElementById('dynamicForm');
+
+  // Hide dynamic form until product picked
+  dynamicForm.style.display = 'none';
+  hideAllForms();
+
+  if (!cat) { productField.style.display = 'none'; return; }
+
+  // Populate product dropdown
+  var products = CATALOGUE[cat] || [];
+  productSel.innerHTML = '<option value="">-- Select a product --</option>';
+  products.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.value; opt.textContent = p.label;
+    productSel.appendChild(opt);
+  });
+  productField.style.display = 'block';
+}
+
+// - PRODUCT CHANGE -
+function onProductChange() {
+  var product = document.getElementById('qProduct').value;
+  var dynamicForm = document.getElementById('dynamicForm');
+  hideAllForms();
+  if (!product) { dynamicForm.style.display = 'none'; return; }
+  dynamicForm.style.display = 'block';
+  var formId = 'form-' + product;
+  var formEl = document.getElementById(formId);
+  if (formEl) {
+    formEl.style.display = 'block';
+  } else {
+    // Fall back to other form
+    document.getElementById('form-other').style.display = 'block';
+  }
+  // Show jersey name list toggle
+  if (product === 'football-jersey') {
+    document.getElementById('jNames').addEventListener('change', toggleNameList);
+  }
+}
+
+function hideAllForms() {
+  document.querySelectorAll('.product-form').forEach(function(f) {
+    f.style.display = 'none';
+  });
+}
+
+function toggleNameList() {
+  var val = document.getElementById('jNames').value;
+  document.getElementById('jNameListWrap').style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// - VALIDATION -
+function validateQuote() {
+  var errors = [];
+  var cat = document.getElementById('qCategory').value;
+  var product = document.getElementById('qProduct').value;
+  var fname = document.getElementById('qFname').value.trim();
+  var phone = document.getElementById('qPhone').value.trim();
+
+  if (!cat)     errors.push('Please select a category');
+  if (!product) errors.push('Please select a product');
+  if (!fname)   errors.push('Please enter your first name');
+  if (!phone)   errors.push('Please enter your phone number');
+
+  // Product-specific required fields
+  var requiredMap = {
+    'football-jersey': ['jTeam','jQty'],
+    'rugby-jersey':    ['rugbyTeam','rugbyQty'],
+    'basketball-kit':  ['bbTeam','bbQty'],
+    'tshirt':  ['tsQty','tsColour'],
+    'polo':    ['poloQty','poloColour'],
+    'hoodie':  ['hdQty','hdColour'],
+    'cap':     ['capQty','capColour'],
+    'pullup-banner':  ['pubQty'],
+    'outdoor-banner': ['obQty','obW','obH'],
+    'vehicle-wrap':   ['vwQty'],
+    'business-cards': [],
+    'flyers':         [],
+    'stickers':       ['stkQty'],
+    'kiosk-wrap':     ['kwQty'],
+    'wall-mural':     ['wmW','wmH'],
+    'mug':     ['mugQty'],
+    'tote-bag':['toteQty'],
+    'other':   ['otherDesc'],
+  };
+  var req = requiredMap[product] || [];
+  req.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && !el.value.trim()) errors.push('Please fill in all required fields');
+  });
+
+  return errors;
+}
+
+// - COLLECT ALL FORM DATA -
+function collectFormData() {
+  var cat = document.getElementById('qCategory').value;
+  var product = document.getElementById('qProduct').value;
+  var data = { category: cat, product: product };
+
+  // Collect all visible inputs in the active product form
+  var formId = 'form-' + product;
+  var formEl = document.getElementById(formId) || document.getElementById('form-other');
+  if (formEl) {
+    formEl.querySelectorAll('input,select,textarea').forEach(function(el) {
+      if (el.id) data[el.id] = el.value;
+    });
+  }
+
+  // Shared fields
+  ['qTurnaround','qArtwork','qNotes','qFname','qLname','qPhone','qEmail','qCompany','qContact'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) data[id] = el.value;
+  });
+  data.submittedAt = new Date().toISOString();
+  return data;
+}
+
+// - SUBMIT -
+async function submitQuote() {
+  var errors = validateQuote();
+  if (errors.length) {
+    JP.toast(errors[0], 'error');
+    return;
+  }
+  var btn = document.getElementById('quoteSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  var FORMSPREE_ID = 'YOUR_FORM_ID';
+  var payload = collectFormData();
+
+  try {
+    if (FORMSPREE_ID === 'YOUR_FORM_ID') {
+      await new Promise(function(r){ setTimeout(r, 1200); }); // demo
+    } else {
+      var resp = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+      });
+      if (!resp.ok) throw new Error('Submit failed');
+    }
+    btn.style.display = 'none';
+    document.getElementById('quoteSuccess').style.display = 'block';
+    JP.toast("Quote submitted! We'll be in touch within 2 hours.", 'success');
+  } catch(err) {
+    btn.disabled = false; btn.textContent = 'Submit Quote Request →';
+    JP.toast('Submission failed — please WhatsApp us directly.', 'error');
+  }
+}
 function goStep(n){
   document.getElementById('step'+currentStep).classList.remove('active');
   document.getElementById('step'+n).classList.add('active');
@@ -546,7 +931,7 @@ async function submitQuote(){
     submittedAt:new Date().toISOString(),source:'website-quote-builder',
   };
   try{
-    // ─── Formspree: replace YOUR_FORM_ID with your quote form ID ───
+    // - Formspree: replace YOUR_FORM_ID with your quote form ID -
     var FORMSPREE_QUOTE_ID = 'YOUR_FORM_ID';
     var result;
     if (FORMSPREE_QUOTE_ID === 'YOUR_FORM_ID') {

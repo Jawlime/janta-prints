@@ -162,12 +162,12 @@ async function submitContact(e){
   var btn=document.getElementById('contactSubmit');
   btn.disabled=true; btn.textContent='Sending…';
 
-  // ─── Formspree integration ───────────────────────────────────
+  // - Formspree integration -
   // 1. Go to formspree.io → New Form → copy your Form ID
   // 2. Replace YOUR_FORM_ID below with it (e.g. "xpwzgkjv")
   // 3. That's it — submissions go straight to hello@jantaprints.co.ke
   var FORMSPREE_ID = 'YOUR_FORM_ID';
-  // ────────────────────────────────────────────────────────────
+  // -
 
   var data = new FormData(document.getElementById('contactForm'));
   data.append('_subject', 'New enquiry from Janta Prints website');

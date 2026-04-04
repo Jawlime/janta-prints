@@ -608,6 +608,23 @@ input[type=color] {
   .filter-grid { grid-template-columns: repeat(4, 1fr); }
   .mockup-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+.studio-select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--col-surface-2);
+  border: 1px solid var(--col-border);
+  border-radius: var(--r-sm);
+  color: var(--col-text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .18s;
+}
+.studio-select:focus { border-color: var(--col-accent); }
+.sample-logo-btn.active { border-color: var(--col-accent) !important; background: color-mix(in srgb, var(--col-accent) 8%, var(--col-surface-2)) !important; }
+.sample-logo-btn:hover { border-color: var(--col-border-2) !important; }
 </style>
 </head>
 <body>
@@ -1068,19 +1085,19 @@ convert: () => `
 
 mockup: () => {
   const products = [
-    ['tshirt-front','👕','T-Shirt Front'],
-    ['tshirt-back','👕','T-Shirt Back'],
-    ['hoodie','🧥','Hoodie'],
-    ['polo','👔','Polo Shirt'],
-    ['jersey-football','⚽','Football Jersey'],
-    ['cap','🧢','Cap / Hat'],
-    ['tote','👜','Tote Bag'],
-    ['mug','☕','Mug'],
-    ['phone-case','📱','Phone Case'],
-    ['banner-vertical','🏳','Pull-up Banner'],
-    ['banner-horizontal','🏳','Horizontal Banner'],
-    ['flyer-a4','📄','A4 Flyer'],
-    ['business-card','🃏','Business Card'],
+    ['tshirt-front','T-Shirt (Front)'],
+    ['tshirt-back','T-Shirt (Back)'],
+    ['hoodie','Hoodie'],
+    ['polo','Polo Shirt'],
+    ['jersey-football','Football Jersey'],
+    ['cap','Cap / Hat'],
+    ['tote','Tote Bag'],
+    ['mug','Mug'],
+    ['phone-case','Phone Case'],
+    ['banner-vertical','Pull-up Banner'],
+    ['banner-horizontal','Horizontal Banner'],
+    ['flyer-a4','A4 Flyer'],
+    ['business-card','Business Card'],
   ];
   const colors = [
     ['#ffffff','White'],['#111111','Black'],['#1a2a5e','Navy'],
@@ -1090,38 +1107,64 @@ mockup: () => {
   ];
   const cur = state.mockupTemplate || 'tshirt-front';
   const curColor = state.mockupColor || '#ffffff';
-  let html = `<div class="p-section">
-    <div class="panel-section-title">1. Pick a product</div>
-    <div class="mockup-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;">`;
-  products.forEach(([k,ic,lbl]) => {
-    html += `<div class="mockup-thumb${k===cur?' active':''}" onclick="setMockupTemplate('${k}',this)" style="padding:8px 4px;">
-      <div style="font-size:20px;margin-bottom:2px;">${ic}</div>
-      <span style="font-size:10px;line-height:1.3;">${lbl}</span>
-    </div>`;
-  });
-  html += `</div></div><div class="divider"></div>
+
+  let html = `
   <div class="p-section">
-    <div class="panel-section-title">2. Choose colour</div>
+    <div class="panel-section-title">Product</div>
+    <select class="studio-select" onchange="setMockupTemplate(this.value, null)">`;
+  products.forEach(([k, lbl]) => {
+    html += `<option value="${k}" ${k===cur?'selected':''}>${lbl}</option>`;
+  });
+  html += `</select>
+  </div>
+  <div class="divider"></div>
+  <div class="p-section">
+    <div class="panel-section-title">Colour</div>
     <div class="swatch-row" id="swatchRow">`;
-  colors.forEach(([hex,name],i) => {
+  colors.forEach(([hex, name]) => {
     const active = hex===curColor?' active':'';
     html += `<div class="swatch${active}" style="background:${hex};" title="${name}" onclick="setMockupColor('${hex}','${name}',this)"></div>`;
   });
-  html += `</div></div><div class="divider"></div>
-  <div class="p-section">
-    <div class="panel-section-title">3. Add your design <span style="font-weight:400;opacity:.6;">(optional)</span></div>
-    <p style="font-size:12px;color:var(--col-text-dim);margin:0 0 10px;">Upload your logo or artwork — it will be placed on the product. Or skip to preview a blank product in your chosen colour.</p>
-    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--col-accent);border:1px dashed var(--col-accent);border-radius:8px;padding:10px 12px;">
-      <input type="file" accept="image/*" style="display:none;" onchange="onMockupDesignUpload(event)">
-      📁 Upload logo / artwork
-    </label>
-    <div id="mockupDesignName" style="font-size:11px;color:var(--col-text-dim);margin-top:6px;"></div>
+  html += `</div>
   </div>
   <div class="divider"></div>
-  <button class="btn-primary" id="mockupRunBtn" onclick="generateMockupNow()">👕 Generate Mockup</button>
-  <button class="btn-secondary" onclick="downloadResult()" id="mockupDlBtn" style="display:none;">↓ Download PNG</button>
+  <div class="p-section">
+    <div class="panel-section-title">Sample Designs</div>
+    <p style="font-size:12px;color:var(--col-text-dim);margin:0 0 10px;">Click a sample to see it on the product, or upload your own below.</p>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <button class="sample-logo-btn" onclick="applySampleLogo(0)" style="padding:8px 12px;border:1px solid var(--col-border);border-radius:6px;background:var(--col-surface-2);color:var(--col-text);font-size:12px;cursor:pointer;text-align:left;transition:border-color .2s;">
+        🔤 Bold Text Logo
+      </button>
+      <button class="sample-logo-btn" onclick="applySampleLogo(1)" style="padding:8px 12px;border:1px solid var(--col-border);border-radius:6px;background:var(--col-surface-2);color:var(--col-text);font-size:12px;cursor:pointer;text-align:left;transition:border-color .2s;">
+        🔵 Circle Badge
+      </button>
+      <button class="sample-logo-btn" onclick="applySampleLogo(2)" style="padding:8px 12px;border:1px solid var(--col-border);border-radius:6px;background:var(--col-surface-2);color:var(--col-text);font-size:12px;cursor:pointer;text-align:left;transition:border-color .2s;">
+        🛡️ Shield Logo
+      </button>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="p-section">
+    <div class="panel-section-title">Upload Your Own</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:9px 12px;border:1px dashed var(--col-accent);border-radius:8px;color:var(--col-accent);">
+        <input type="file" accept="image/*" style="display:none;" onchange="onMockupDesignUpload(event)">
+        🎨 Upload your design / logo
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:9px 12px;border:1px dashed var(--col-border);border-radius:8px;color:var(--col-text-dim);">
+        <input type="file" accept="image/*" style="display:none;" onchange="onMockupProductUpload(event)">
+        📦 Upload your product photo
+      </label>
+    </div>
+    <div id="mockupDesignName" style="font-size:11px;color:var(--col-text-dim);margin-top:6px;"></div>
+    <div id="mockupProductName" style="font-size:11px;color:var(--col-text-dim);margin-top:2px;"></div>
+  </div>
+  <div class="divider"></div>
+  <button class="btn-secondary" onclick="downloadResult()" id="mockupDlBtn">↓ Download PNG</button>
   <button class="btn-accent2" onclick="shareMockup()">🔗 Share Link</button>
-  <div class="tip-box" style="margin-top:10px;"><strong>Tip:</strong> For best results, use a PNG with a transparent background. Run your logo through the <strong>Remove BG</strong> tool first.</div>`;
+  <div class="tip-box" style="margin-top:10px;font-size:11px;">
+    <strong>How it works:</strong> Pick a product and colour — it renders instantly. Click a sample design or upload your own logo to see it on the product. You can also upload a photo of your actual blank product as the base.
+  </div>`;
   return html;
 },
 };
@@ -1135,6 +1178,10 @@ function switchTool(tool, btn) {
   btn.classList.add('active');
   document.getElementById('sidePanel').innerHTML = panels[tool]();
   updateCanvasForTool();
+  // Auto-render mockup when tab is selected — no upload needed
+  if (tool === 'mockup') {
+    setTimeout(generateMockupNow, 50);
+  }
 }
 
 function updateCanvasForTool() {
@@ -1150,6 +1197,12 @@ function updateCanvasForTool() {
   }
   if (state.tool === 'filters') {
     if (state.originalFile) { filterArea.style.display = 'block'; buildFilterGrid(); }
+  }
+  if (state.tool === 'mockup') {
+    // Always show canvas area and render immediately - no upload needed
+    standardWrap.style.display = 'block';
+    document.getElementById('uploadZone').style.display = 'none';
+    return; // generateMockupNow is called by switchTool
   }
   if (state.originalFile) refreshCanvas();
   updateRunBtn();
@@ -1514,6 +1567,90 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
     return this;
   };
 }
+
+/* - DEFAULT SAMPLE DESIGNS -
+   3 simple SVG logos that load by default in the mockup tool.
+   Clients can click to apply them, or upload their own.
+   - */
+const SAMPLE_LOGOS = [
+  {
+    name: 'Bold Text Logo',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+      <rect width="400" height="200" fill="#e8622a" rx="12"/>
+      <text x="200" y="110" font-family="Impact,Arial Black,sans-serif" font-size="72" fill="white" text-anchor="middle" letter-spacing="4">BRAND</text>
+      <text x="200" y="155" font-family="Arial,sans-serif" font-size="22" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="8">YOUR NAME</text>
+    </svg>`
+  },
+  {
+    name: 'Circle Badge',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="140" fill="#1a2a5e" stroke="white" stroke-width="8"/>
+      <circle cx="150" cy="150" r="110" fill="none" stroke="white" stroke-width="2"/>
+      <text x="150" y="135" font-family="Impact,Arial Black,sans-serif" font-size="44" fill="white" text-anchor="middle">TEAM</text>
+      <text x="150" y="178" font-family="Impact,Arial Black,sans-serif" font-size="28" fill="#e8622a" text-anchor="middle">KISUMU</text>
+      <text x="150" y="205" font-family="Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="4">EST. 2024</text>
+    </svg>`
+  },
+  {
+    name: 'Shield Logo',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="280" height="320" viewBox="0 0 280 320">
+      <path d="M140 10 L270 60 L270 180 Q270 280 140 315 Q10 280 10 180 L10 60 Z" fill="#2e7d32" stroke="white" stroke-width="6"/>
+      <path d="M140 30 L250 72 L250 180 Q250 265 140 296 Q30 265 30 180 L30 72 Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <text x="140" y="155" font-family="Impact,Arial Black,sans-serif" font-size="52" fill="white" text-anchor="middle">JP</text>
+      <text x="140" y="210" font-family="Arial,sans-serif" font-size="16" fill="rgba(255,255,255,0.9)" text-anchor="middle" letter-spacing="3">JANTA PRINTS</text>
+    </svg>`
+  }
+];
+
+function svgToCanvas(svgStr) {
+  return new Promise(function(resolve) {
+    var blob = new Blob([svgStr], {type: 'image/svg+xml'});
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+    img.onload = function() {
+      var c = document.createElement('canvas');
+      c.width = img.width || 400; c.height = img.height || 400;
+      c.getContext('2d').drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      resolve(c);
+    };
+    img.src = url;
+  });
+}
+
+async function applySampleLogo(index) {
+  var logo = SAMPLE_LOGOS[index];
+  if (!logo) return;
+  var c = await svgToCanvas(logo.svg);
+  state.workingCanvas = c;
+  state.originalCanvas = c;
+  // Update active state on buttons
+  document.querySelectorAll('.sample-logo-btn').forEach(function(b,i) {
+    b.classList.toggle('active', i === index);
+  });
+  await generateMockupNow();
+}
+
+async function onMockupProductUpload(e) {
+  // Client uploads their own product photo as the base
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var img = new Image();
+    img.onload = function() {
+      var c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      c.getContext('2d').drawImage(img,0,0);
+      state.mockupCustomProduct = c; // Store separately from design
+      var name = document.getElementById('mockupProductName');
+      if (name) name.textContent = 'Product: ' + file.name;
+      generateMockupNow();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 const MOCKUP_PRODUCTS = {
   'tshirt-front': {
     label: 'T-Shirt (Front)',
@@ -1759,14 +1896,23 @@ async function drawMockup(ctx, w, h) {
   const color = state.mockupColor || '#ffffff';
 
   // Background
-  ctx.fillStyle = '#f5f5f5';
+  ctx.fillStyle = '#f0f0f0';
   ctx.fillRect(0, 0, w, h);
 
-  // Draw product shape
-  prod.draw(ctx, w, h, color);
+  // If client uploaded their own product photo, use it as the base instead
+  if (state.mockupCustomProduct) {
+    const cp = state.mockupCustomProduct;
+    const ratio = Math.min(w / cp.width, h / cp.height) * 0.92;
+    const dw = cp.width * ratio, dh = cp.height * ratio;
+    ctx.drawImage(cp, (w-dw)/2, (h-dh)/2, dw, dh);
+  } else {
+    // Draw SVG product shape
+    prod.draw(ctx, w, h, color);
+  }
 
   // Overlay the client's design into the print zone
-  if (state.workingCanvas) {
+  const designSrc = state.workingCanvas;
+  if (designSrc) {
     const z = prod.zone;
     const zx = w * z.x, zy = h * z.y, zw = w * z.w, zh = h * z.h;
 
@@ -1963,14 +2109,22 @@ function setFormat(fmt, btn) {
 
 function setMockupTemplate(t, el) {
   state.mockupTemplate = t;
+  // Update select dropdown to match
+  var sel = document.querySelector('.studio-select');
+  if (sel && sel.value !== t) sel.value = t;
+  // Update thumb active state if called from thumb click
   document.querySelectorAll('.mockup-thumb').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
+  if (el) el.classList.add('active');
+  // Clear custom product so SVG shape shows for new product
+  state.mockupCustomProduct = null;
+  generateMockupNow();
 }
 
 function setMockupColor(hex, name, el) {
   state.mockupColor = hex;
   document.querySelectorAll('.swatch').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
+  if (el) el.classList.add('active');
+  generateMockupNow();
 }
 
 /* ---
