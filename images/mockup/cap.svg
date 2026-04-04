@@ -1,17 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
-  <defs>
-    <filter id="sh"><feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#000" flood-opacity="0.18"/></filter>
-  </defs>
-  <g filter="url(#sh)">
-    <path id="product-body" d="M200 28 L118 164 L282 164 Z" fill="#f2f2f2" stroke="#ddd" stroke-width="1"/>
-    <path d="M200 28 L282 164 L320 152 L290 82 Z" id="product-sleeve-r" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
-    <path d="M200 28 L118 164 L80 152 L110 82 Z" id="product-sleeve-l" fill="#ebebeb" stroke="#ddd" stroke-width="1"/>
-    <ellipse cx="200" cy="164" rx="122" ry="16" id="product-collar" fill="#d8d8d8" stroke="#c4c4c4" stroke-width="1"/>
-    <path id="product-brim" d="M78 170 Q200 228 322 170 Q312 212 200 226 Q88 212 78 170 Z" fill="#e2e2e2" stroke="#ccc" stroke-width="1"/>
-    <path d="M80 175 Q200 226 320 175 Q312 208 200 220 Q88 208 80 175 Z" fill="#c8c8c8" opacity="0.45"/>
-    <circle cx="200" cy="28" r="9" fill="#ccc" stroke="#bbb" stroke-width="1"/>
-    <line x1="200" y1="28" x2="200" y2="164" stroke="rgba(0,0,0,0.07)" stroke-width="1.5" stroke-dasharray="4,4"/>
-    <line x1="110" y1="82" x2="118" y2="162" stroke="rgba(0,0,0,0.05)" stroke-width="1" stroke-dasharray="3,3"/>
-    <line x1="290" y1="82" x2="282" y2="162" stroke="rgba(0,0,0,0.05)" stroke-width="1" stroke-dasharray="3,3"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298.675 298.675">
+  <!-- Crown — main colourable area -->
+  <path id="product-body" fill="#ffffff" stroke="#d0d0d0" stroke-width="1"
+    d="M286.3,122.9C282.8,106.1,274.7,89.8,263.6,77
+       c-15.3,-19.6,-35,-35.6,-57.2,-46.2c-10.5,-4.9,-22.8,-8.4,-36,-10.2
+       C170.2,9.2,160.8,0,149.3,0c-11.4,0,-20.8,9.2,-21.1,20.6
+       c-13.1,1.8,-25.5,5.3,-36,10.3c-22.1,10.5,-41.9,26.5,-57.1,46.1
+       c-11.1,12.8,-19.1,29.1,-22.7,46c-5.5,22.9,-2.5,47.8,-0.1,67.9
+       c1.6,22.7,9.1,57,14.5,82.1l1.2,5.5l0.1,0.1
+       c2,8,6.8,14.2,13.6,17.6c3.4,1.7,7.2,2.5,11,2.5
+       c3.6,0,7.2,-0.7,10.7,-2.2c26.9,-11.5,63.6,-23.7,85.7,-23.7
+       c27,0,71.2,17.2,85.7,22.9c7.8,3.1,15.9,2.9,22.8,-0.5
+       c6.5,-3.3,11.2,-9.1,13.2,-16.5l0.1,-0.3
+       c0.8,-3.8,1.7,-7.9,2.6,-12.2c5.1,-24.3,11.6,-54.5,13.1,-75.3
+       C288.9,170.8,291.9,145.8,286.3,122.9Z"/>
+  <!-- Brim -->
+  <path id="product-brim" fill="#e8e8e8" stroke="#d0d0d0" stroke-width="1"
+    d="M149.4,272.3 c-37.5,0,-106,-22.1,-126.2,-29.3
+       c2.9,21.2,8.7,48,12.8,67l1.2,5.4
+       c1.3,5.1,4.3,9.1,8.5,11.2c4,2,8.8,2,13.5,0
+       c13.5,-5.7,59.8,-24.5,89.4,-24.5
+       c19.4,0,48.6,7.7,89.3,23.6c5.3,2.1,10.5,2,14.9,-0.2
+       c3.9,-2,6.8,-5.6,8.1,-10.2c0.8,-3.8,1.6,-7.8,2.5,-12.1
+       C243.5,295.3,186.7,272.3,149.4,272.3Z"/>
 </svg>

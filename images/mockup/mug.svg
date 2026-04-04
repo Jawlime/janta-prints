@@ -1,13 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380">
-  <defs>
-    <filter id="sh"><feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#000" flood-opacity="0.18"/></filter>
-  </defs>
-  <g filter="url(#sh)">
-    <path id="product-body" d="M58 58 L66 308 Q66 330 88 330 L272 330 Q294 330 294 308 L302 58 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
-    <ellipse id="product-collar" cx="180" cy="58" rx="122" ry="16" fill="#f0f0f0" stroke="#ddd" stroke-width="1.5"/>
-    <path id="product-sleeve-r" d="M294 128 Q366 128 366 204 Q366 278 294 278" fill="none" stroke="#e0e0e0" stroke-width="30" stroke-linecap="round"/>
-    <path d="M294 128 Q360 128 360 204 Q360 278 294 278" fill="none" stroke="#f4f4f4" stroke-width="20" stroke-linecap="round"/>
-    <path d="M58 58 L66 308" stroke="rgba(0,0,0,0.06)" stroke-width="14" stroke-linecap="round"/>
-    <ellipse cx="180" cy="322" rx="114" ry="10" fill="#e4e4e4" stroke="#d4d4d4" stroke-width="1"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41.992 41.992">
+  <path id="product-body" fill="#ffffff" stroke="#e0e0e0" stroke-width="0.5"
+    d="M40.84,11c-1.42,-2.2,-3.96,-2.92,-6.34,-3.36
+       c-0.29,-2.93,-0.8,-5.1,-1.21,-6.01c-0.13,-0.29,-0.52,-1.16,-1.37,-1.16
+       H2.82c-0.85,0,-1.24,0.87,-1.37,1.16c-1.53,3.4,-4.44,24,7.55,37.53
+       c1.33,1.5,3.23,2.37,5.2,2.37h6.34c1.97,0,3.86,-0.86,5.2,-2.37
+       c1.29,-1.46,2.4,-3,3.36,-4.59c0.31,0.04,0.62,0.06,0.92,0.06
+       c4.9,0,8.95,-4.57,11,-12.54C42.37,16.8,42.32,13.28,40.84,11Z
+       M39.08,21.59c-1.38,5.38,-4.4,10.83,-8.87,11.02
+       c4.08,-7.85,4.8,-16.62,4.45,-22.9c2.14,0.44,3.65,1.06,4.5,2.38
+       C40.3,13.84,40.27,16.95,39.08,21.59Z"/>
 </svg>

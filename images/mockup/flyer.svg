@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 510">
-  <defs>
-    <filter id="sh"><feDropShadow dx="3" dy="5" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/></filter>
-  </defs>
-  <g filter="url(#sh)">
-    <rect x="26" y="16" width="314" height="474" rx="3" fill="rgba(0,0,0,0.07)"/>
-    <rect id="product-body" x="18" y="8" width="314" height="474" rx="3" fill="#ffffff" stroke="#e8e8e8" stroke-width="1"/>
-    <path d="M332 482 Q320 476 316 466 Q326 470 332 480 Z" fill="rgba(0,0,0,0.07)"/>
-  </g>
+  <!-- Shadow -->
+  <rect x="26" y="16" width="314" height="474" rx="3" fill="rgba(0,0,0,0.08)"/>
+  <!-- Paper -->
+  <rect id="product-body" x="18" y="8" width="314" height="474" rx="3"
+    fill="#ffffff" stroke="#e8e8e8" stroke-width="1"/>
+  <!-- Page curl hint -->
+  <path d="M332 482 Q320 476 316 466 Q326 470 332 480 Z" fill="rgba(0,0,0,0.07)"/>
 </svg>

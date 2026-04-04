@@ -1,15 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480">
-  <defs>
-    <filter id="sh"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#000" flood-opacity="0.15"/></filter>
-  </defs>
-  <g filter="url(#sh)">
-    <path id="product-sleeve-l" d="M74 36 L12 102 L52 124 L96 64 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
-    <path id="product-sleeve-r" d="M326 36 L388 102 L348 124 L304 64 Z" fill="#ffffff" stroke="#ddd" stroke-width="1"/>
-    <path id="product-body" d="M132 54 L74 36 L12 102 L52 124 L52 422 L348 422 L348 124 L388 102 L326 36 L268 54 C250 66 228 72 200 72 C172 72 150 66 132 54 Z" fill="#ffffff" stroke="#ddd" stroke-width="1.5"/>
-    <path id="product-collar" d="M132 54 L200 108 L268 54 C250 42 228 38 200 38 C172 38 150 42 132 54 Z" fill="#e8e8e8" stroke="#ccc" stroke-width="1"/>
-    <path d="M138 57 L200 106 L262 57" fill="none" stroke="rgba(0,0,0,0.10)" stroke-width="2.5"/>
-    <rect x="52" y="410" width="296" height="12" rx="2" fill="rgba(0,0,0,0.055)"/>
-    <path d="M12 100 L52 122 L55 128 L13 106 Z" fill="rgba(0,0,0,0.07)"/>
-    <path d="M388 100 L348 122 L345 128 L387 106 Z" fill="rgba(0,0,0,0.07)"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 58">
+  <polygon id="product-body" fill="#ffffff" points="48,7.5 37,2.5 40.363,4.029 43,11.5 29,11.5 15,11.5
+    17.637,4.029 21,2.5 10,7.5 0,23.5 8,29.5 14,22.5 14,55.5 29,55.5 44,55.5 44,22.5 49,29.5 58,23.5"/>
+  <!-- collar / yoke detail - separate colourable zone -->
+  <path id="product-collar" fill="#dddddd" d="M15,11.5h14v-0.451c-0.295,0.037-0.48,0.044-0.48,0.044
+    s-1.131-0.017-2.538-0.748c-0.603-0.313-1.257-0.758-1.894-1.389c-0.425-0.42-0.842-0.924-1.232-1.526
+    c-0.585-0.903-1.109-2.029-1.505-3.432C21.218,3.53,21.101,3.031,21,2.5l-3.363,1.529L15,11.5z"/>
+  <path id="product-sleeve-r" fill="#dddddd" d="M29.481,11.093c0,0-0.186-0.006-0.481-0.044V11.5h14
+    l-2.637-7.471L37,2.5C35.389,11.003,29.481,11.093,29.481,11.093z"/>
+  <!-- number/name zone accent strip -->
+  <rect id="product-brim" x="14" y="47.5" fill="#cccccc" width="30" height="3"/>
 </svg>
