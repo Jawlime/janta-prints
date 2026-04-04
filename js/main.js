@@ -82,7 +82,8 @@
 
   /* ── Scroll reveal ─────────────────────────────────────────────── */
   function initReveal() {
-    var els = document.querySelectorAll('.jp-reveal, .jp-reveal-left, .jp-reveal-scale');
+    // Support both jp-reveal (inner pages) and reveal (homepage) class conventions
+    var els = document.querySelectorAll('.jp-reveal, .jp-reveal-left, .jp-reveal-scale, .reveal, .reveal-scale, .reveal-left');
     if (!els.length) return;
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
