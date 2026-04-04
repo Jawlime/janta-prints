@@ -762,9 +762,9 @@ input[type=color] {
 </div>
 
 <script>
-/* ═════════════════════════════════════════════════════════
+/* ---
    STATE
-   ═════════════════════════════════════════════════════════ */
+   --- */
 const state = {
   tool: 'bg',
   originalFile: null,
@@ -784,15 +784,15 @@ const state = {
   mockupTemplate:'tshirt-front', mockupColor:'white',
 };
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    PYTHON BACKEND BASE URL
    Change this to your deployed FastAPI URL in production
-   ═════════════════════════════════════════════════════════ */
+   --- */
 const API = window.API_BASE || 'http://localhost:8000';
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    TOOL PANELS HTML
-   ═════════════════════════════════════════════════════════ */
+   --- */
 const panels = {
 
 bg: () => `
@@ -1066,65 +1066,69 @@ convert: () => `
   <button class="btn-primary" id="convertRunBtn" onclick="runTool()" disabled>🔄 Convert</button>
   <button class="btn-accent2" onclick="batchConvert()">⬇ Batch Convert & Zip</button>`,
 
-mockup: () => `
-  <div class="p-section">
+mockup: () => {
+  const products = [
+    ['tshirt-front','👕','T-Shirt Front'],
+    ['tshirt-back','👕','T-Shirt Back'],
+    ['hoodie','🧥','Hoodie'],
+    ['polo','👔','Polo Shirt'],
+    ['jersey-football','⚽','Football Jersey'],
+    ['cap','🧢','Cap / Hat'],
+    ['tote','👜','Tote Bag'],
+    ['mug','☕','Mug'],
+    ['phone-case','📱','Phone Case'],
+    ['banner-vertical','🏳','Pull-up Banner'],
+    ['banner-horizontal','🏳','Horizontal Banner'],
+    ['flyer-a4','📄','A4 Flyer'],
+    ['business-card','🃏','Business Card'],
+  ];
+  const colors = [
+    ['#ffffff','White'],['#111111','Black'],['#1a2a5e','Navy'],
+    ['#c0392b','Red'],['#2e7d32','Forest Green'],['#2196f3','Sky Blue'],
+    ['#f39c12','Yellow'],['#7d3c98','Purple'],['#e8622a','Orange'],
+    ['#808080','Grey'],['#f5e6c8','Cream'],['#1a5e3a','Dark Green'],
+  ];
+  const cur = state.mockupTemplate || 'tshirt-front';
+  const curColor = state.mockupColor || '#ffffff';
+  let html = `<div class="p-section">
     <div class="panel-section-title">1. Pick a product</div>
-    <div class="mockup-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;">
-      ${[
-        ['tshirt-front','👕','T-Shirt','Front'],
-        ['tshirt-back','👕','T-Shirt','Back'],
-        ['hoodie','🧥','Hoodie',''],
-        ['polo','👔','Polo',''],
-        ['jersey-football','⚽','Football','Jersey'],
-        ['cap','🧢','Cap',''],
-        ['tote','👜','Tote Bag',''],
-        ['mug','☕','Mug',''],
-        ['phone-case','📱','Phone','Case'],
-        ['banner-vertical','🏳','Pull-up','Banner'],
-        ['banner-horizontal','🏳','Horizontal','Banner'],
-        ['flyer-a4','📄','A4 Flyer',''],
-        ['business-card','🃏','Business','Card'],
-      ].map(([k,ic,lbl,sub])=>\`
-        <div class="mockup-thumb\${k==='tshirt-front'?' active':''}" onclick="setMockupTemplate('\${k}',this)" style="padding:8px 4px;">
-          <div style="font-size:20px;margin-bottom:2px;">\${ic}</div>
-          <span style="font-size:10px;line-height:1.2;">\${lbl}\${sub?' ':'}\${sub}</span>
-        </div>\`).join('')}
-    </div>
-  </div>
-  <div class="divider"></div>
+    <div class="mockup-grid" style="grid-template-columns:repeat(3,1fr);gap:6px;">`;
+  products.forEach(([k,ic,lbl]) => {
+    html += `<div class="mockup-thumb${k===cur?' active':''}" onclick="setMockupTemplate('${k}',this)" style="padding:8px 4px;">
+      <div style="font-size:20px;margin-bottom:2px;">${ic}</div>
+      <span style="font-size:10px;line-height:1.3;">${lbl}</span>
+    </div>`;
+  });
+  html += `</div></div><div class="divider"></div>
   <div class="p-section">
     <div class="panel-section-title">2. Choose colour</div>
-    <div class="swatch-row" id="swatchRow">
-      ${[
-        ['#ffffff','White'],['#111111','Black'],['#1a2a5e','Navy'],
-        ['#c0392b','Red'],['#2e7d32','Forest Green'],['#2196f3','Sky Blue'],
-        ['#f39c12','Yellow'],['#7d3c98','Purple'],['#e8622a','Orange'],
-        ['#808080','Grey'],['#f5e6c8','Cream'],['#1a5e3a','Dark Green'],
-      ].map(([hex,name],i)=>\`
-        <div class="swatch\${i===0?' active':''}" style="background:\${hex};" title="\${name}"
-          onclick="setMockupColor('\${hex}','\${name}',this)"></div>\`).join('')}
-    </div>
-  </div>
-  <div class="divider"></div>
+    <div class="swatch-row" id="swatchRow">`;
+  colors.forEach(([hex,name],i) => {
+    const active = hex===curColor?' active':'';
+    html += `<div class="swatch${active}" style="background:${hex};" title="${name}" onclick="setMockupColor('${hex}','${name}',this)"></div>`;
+  });
+  html += `</div></div><div class="divider"></div>
   <div class="p-section">
     <div class="panel-section-title">3. Add your design <span style="font-weight:400;opacity:.6;">(optional)</span></div>
-    <p style="font-size:12px;color:var(--col-text-dim);margin:0 0 8px;">Upload a logo or artwork — it will be placed on the product. Skip this step to just preview the blank product.</p>
-    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--col-accent);">
+    <p style="font-size:12px;color:var(--col-text-dim);margin:0 0 10px;">Upload your logo or artwork — it will be placed on the product. Or skip to preview a blank product in your chosen colour.</p>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--col-accent);border:1px dashed var(--col-accent);border-radius:8px;padding:10px 12px;">
       <input type="file" accept="image/*" style="display:none;" onchange="onMockupDesignUpload(event)">
-      📁 Upload design / logo
+      📁 Upload logo / artwork
     </label>
-    <div id="mockupDesignName" style="font-size:11px;color:var(--col-text-dim);margin-top:4px;"></div>
+    <div id="mockupDesignName" style="font-size:11px;color:var(--col-text-dim);margin-top:6px;"></div>
   </div>
   <div class="divider"></div>
   <button class="btn-primary" id="mockupRunBtn" onclick="generateMockupNow()">👕 Generate Mockup</button>
   <button class="btn-secondary" onclick="downloadResult()" id="mockupDlBtn" style="display:none;">↓ Download PNG</button>
   <button class="btn-accent2" onclick="shareMockup()">🔗 Share Link</button>
-  <div class="tip-box" style="margin-top:8px;"><strong>Tip:</strong> For best results, use a PNG with transparent background. Run your logo through Remove BG first.</div>`,
+  <div class="tip-box" style="margin-top:10px;"><strong>Tip:</strong> For best results, use a PNG with a transparent background. Run your logo through the <strong>Remove BG</strong> tool first.</div>`;
+  return html;
+},
 };
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    TOOL SWITCHING
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function switchTool(tool, btn) {
   state.tool = tool;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1151,9 +1155,9 @@ function updateCanvasForTool() {
   updateRunBtn();
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    FILE HANDLING
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function onFileSelected(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -1197,7 +1201,7 @@ function resetImage() {
   document.getElementById('fileInput').value = '';
 }
 
-/* ─── Drag and drop on upload zone ─── */
+/* --- Drag and drop on upload zone --- */
 const uz = document.getElementById('uploadZone');
 uz.addEventListener('dragover', e => { e.preventDefault(); uz.classList.add('dragover'); });
 uz.addEventListener('dragleave', () => uz.classList.remove('dragover'));
@@ -1207,9 +1211,9 @@ uz.addEventListener('drop', e => {
   if (f && f.type.startsWith('image/')) loadFile(f);
 });
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    CANVAS REFRESH
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function refreshCanvas() {
   const out = document.getElementById('outputCanvas');
   if (!state.workingCanvas) return;
@@ -1219,18 +1223,18 @@ function refreshCanvas() {
   document.getElementById('canvasBadge').textContent = 'Working image';
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    RUN BUTTON STATE
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function updateRunBtn() {
   const ids = ['bgRunBtn','filtersRunBtn','cropRunBtn','adjustRunBtn','bwRunBtn','textRunBtn','convertRunBtn','mockupRunBtn'];
   ids.forEach(id => { const b = document.getElementById(id); if(b) b.disabled = !state.originalFile; });
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    MAIN runTool() — calls Python backend via fetch
    Falls back to client-side Canvas simulation if no backend
-   ═════════════════════════════════════════════════════════ */
+   --- */
 async function runTool() {
   if (!state.originalFile) return;
   showLoading(true);
@@ -1296,7 +1300,7 @@ async function runTool() {
       if (!resp.ok) throw new Error(await resp.text());
       blob = await resp.blob();
     } catch (fetchErr) {
-      /* ── DEMO FALLBACK: client-side simulation ── */
+      /* -- DEMO FALLBACK: client-side simulation -- */
       blob = await clientSideFallback();
     }
 
@@ -1327,11 +1331,11 @@ async function runTool() {
   }
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    CLIENT-SIDE FALLBACK (demo mode — no Python backend needed)
    Uses Canvas API to approximate effects so the UI is fully
    explorable. Production uses the Python backend instead.
-   ═════════════════════════════════════════════════════════ */
+   --- */
 async function clientSideFallback() {
   const c = document.createElement('canvas');
   c.width = state.workingCanvas.width;
@@ -1371,7 +1375,7 @@ function canvasToBlob(canvas, type, quality = 0.92) {
   return new Promise(resolve => canvas.toBlob(resolve, type, quality));
 }
 
-/* ─ Canvas filter simulation ─ */
+/* - Canvas filter simulation - */
 const FILTER_DEFS = {
   original:     { sat:1,   contrast:1,   bright:1,   hue:0 },
   vivid:        { sat:1.6, contrast:1.25, bright:1.05, hue:0 },
@@ -1492,10 +1496,24 @@ function drawTextOverlay(ctx, w, h) {
   ctx.restore();
 }
 
-/* ─── PRODUCT SHAPE DEFINITIONS ───────────────────────────────────────────
+/* --- PRODUCT SHAPE DEFINITIONS ---
    Each product has: bgColor function, drawShape, and printZone {x,y,w,h} as
    fractions of canvas size. The design image is placed inside printZone.
-   ─────────────────────────────────────────────────────────────────────── */
+   --- */
+/* --- roundRect polyfill (Safari <15.4, older Android) --- */
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+    if (w < 2*r) r = w/2; if (h < 2*r) r = h/2;
+    this.beginPath();
+    this.moveTo(x+r, y);
+    this.arcTo(x+w, y,   x+w, y+h, r);
+    this.arcTo(x+w, y+h, x,   y+h, r);
+    this.arcTo(x,   y+h, x,   y,   r);
+    this.arcTo(x,   y,   x+w, y,   r);
+    this.closePath();
+    return this;
+  };
+}
 const MOCKUP_PRODUCTS = {
   'tshirt-front': {
     label: 'T-Shirt (Front)',
@@ -1776,9 +1794,9 @@ async function drawMockup(ctx, w, h) {
   ctx.fillText(prod.label + ' · Janta Prints Mockup', w/2, h - 12);
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    LIVE PREVIEWS (client-side only — instant feedback)
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function applyFilterLive() {
   if (!state.workingCanvas) return;
   const c = document.createElement('canvas');
@@ -1823,9 +1841,9 @@ function applyTextLive() {
   out.getContext('2d').drawImage(c, 0, 0);
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    FILTER GRID
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function buildFilterGrid() {
   if (!state.workingCanvas) return;
   const grid = document.getElementById('filterGrid');
@@ -1861,9 +1879,9 @@ function selectFilter(name, el) {
   applyFilterLive();
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    CONTROL HANDLERS
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function setBgMode(mode) {
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   const el = document.getElementById('bgMode' + mode.charAt(0).toUpperCase() + mode.slice(1));
@@ -1955,9 +1973,9 @@ function setMockupColor(hex, name, el) {
   el.classList.add('active');
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    COMPARE SLIDER
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function initCompareSlider() {
   const handle = document.getElementById('compareHandle');
   const after = document.getElementById('compareAfter');
@@ -1978,9 +1996,9 @@ function initCompareSlider() {
   document.addEventListener('touchmove', e => { if (dragging) setPos(e.touches[0].clientX); }, {passive:true});
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    DOWNLOAD
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function downloadResult() {
   const ext = state.outFormat || (state.tool === 'bg' ? 'png' : 'jpg');
   let blob = state.resultBlob;
@@ -2003,9 +2021,9 @@ function downloadResult() {
   toast('Download started!', 'success');
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    BATCH CONVERT
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function onBatchSelected(e) {
   const files = Array.from(e.target.files).slice(0, 10);
   const list = document.getElementById('batchList');
@@ -2030,24 +2048,24 @@ async function batchConvert() {
   /* In production: send all to /api/studio/batch-convert and receive ZIP */
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    SHARE MOCKUP
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function shareMockup() {
   const url = window.location.href + '?tool=mockup&template=' + state.mockupTemplate;
   navigator.clipboard?.writeText(url).then(() => toast('Share link copied to clipboard!', 'success'));
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    QUOTE HANDOFF
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function startQuote() {
   toast('Saving artwork to quote… (connect to order system)', 'success');
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    LOADING STATE
-   ═════════════════════════════════════════════════════════ */
+   --- */
 function showLoading(show) {
   const isCompare = state.tool === 'bg';
   const overlayId = isCompare ? 'compareLoading' : 'standardLoading';
@@ -2055,9 +2073,9 @@ function showLoading(show) {
   if (overlay) overlay.classList.toggle('active', show);
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    TOAST
-   ═════════════════════════════════════════════════════════ */
+   --- */
 let toastTimer;
 function toast(msg, type = 'success') {
   const t = document.getElementById('toast');
@@ -2070,9 +2088,9 @@ function toast(msg, type = 'success') {
   toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-/* ═════════════════════════════════════════════════════════
+/* ---
    INIT
-   ═════════════════════════════════════════════════════════ */
+   --- */
 document.getElementById('sidePanel').innerHTML = panels.bg();
 </script>
 <script>
@@ -2085,7 +2103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script src="../js/main.js"></script>
 <script src="../js/api.js">
-/* ─── MOCKUP HELPERS ─────────────────────────────────────────────────────── */
+/* --- MOCKUP HELPERS --- */
 function onMockupDesignUpload(e) {
   var file = e.target.files[0]; if (!file) return;
   var reader = new FileReader();
@@ -2121,5 +2139,6 @@ async function generateMockupNow() {
 }
 
 </script>
+<a href="https://wa.me/254704570799?text=Hi%20Janta%20Prints%2C%20I%27d%20like%20a%20quote" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬</a>
 </body>
 </html>

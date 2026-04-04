@@ -450,9 +450,35 @@ function goStep(n){
   document.getElementById('step'+currentStep).classList.remove('active');
   document.getElementById('step'+n).classList.add('active');
   JP.setStep(document.getElementById('quoteSteps'),n-1);
-  if(n===5)buildSummary();
+  if(n===2) updateStep2Context();
+  if(n===5) buildSummary();
   currentStep=n;
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Update step2 label/placeholder based on selected product
+function updateStep2Context(){
+  var label = document.querySelector('label[for="productSpec"], label.jp-label-text');
+  var input = document.getElementById('productSpec');
+  var heading = document.querySelector('#step2 .jp-heading--lg');
+  if (heading) heading.textContent = qData.productLabel || 'Product Details';
+  // Product-specific placeholders
+  var placeholders = {
+    'football-jersey': 'e.g. Red & white, player names on back, sizes S×5 M×8 L×5 XL×4',
+    'tshirt': 'e.g. 50 white t-shirts, front chest print, sizes M×20 L×20 XL×10',
+    'hoodie': 'e.g. Black hoodies with logo, front + back print, sizes L×10 XL×5',
+    'pullup-banner': 'e.g. 85×200cm pull-up, standard stand, CMYK full colour',
+    'outdoor-banner': 'e.g. 3×1m outdoor mesh banner with eyelets',
+    'business-cards': 'e.g. 500 double-sided, gloss laminate, standard 90×55mm',
+    'mug': 'e.g. 24 white mugs, full wrap sublimation print',
+    'vehicle-wrap': 'e.g. Toyota Hilux full wrap, both sides + bonnet',
+    'backdrop': 'e.g. 3×2m step & repeat backdrop with stand',
+    'school-badge': 'e.g. Logo design for new school badge, provide name + motto',
+    'custom': 'Describe what you need — the more detail the better',
+  };
+  if (input) {
+    input.placeholder = placeholders[qData.product] || 'Describe your requirements — quantity, size, colour, material…';
+  }
 }
 function filterCat(cat, btn) {
   document.querySelectorAll('#catBar .filter-chip').forEach(b => b.classList.remove('active'));
@@ -543,5 +569,6 @@ async function submitQuote(){
   }
 }
 </script>
+<a href="https://wa.me/254704570799?text=Hi%20Janta%20Prints%2C%20I%27d%20like%20a%20quote" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">💬</a>
 </body>
 </html>
