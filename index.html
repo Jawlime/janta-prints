@@ -1026,12 +1026,12 @@ footer {
       <div class="nav-logo-dot"></div>
       JANTA <span>PRINTS</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="pages/services.html">Services</a></li>
-      <li><a href="pages/portfolio.html">Portfolio</a></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#services" data-section="services">Services</a></li>
+      <li><a href="#portfolio" data-section="portfolio">Portfolio</a></li>
       <li><a href="pages/studio.html">Studio</a></li>
-      <li><a href="pages/about.html">About</a></li>
-      <li><a href="pages/contact.html">Contact</a></li>
+      <li><a href="#about" data-section="about">About</a></li>
+      <li><a href="#contact" data-section="contact">Contact</a></li>
     </ul>
     <button class="nav-cta" onclick="location.href='pages/quote.html'">Get a Quote →</button>
   </div>
@@ -1461,5 +1461,44 @@ footer {
   </div>
 <script src="js/main.js"></script>
 <script src="js/api.js"></script>
+<script>
+// Scroll-tracking nav — highlights the active section as user scrolls
+(function() {
+  var sections = ['services','portfolio','about','contact'];
+  var links = document.querySelectorAll('#navLinks a[data-section]');
+  if (!links.length) return;
+
+  function getActive() {
+    var scrollY = window.scrollY + 100; // offset for nav height
+    var active = null;
+    sections.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) active = id;
+    });
+    return active;
+  }
+
+  function updateNav() {
+    var active = getActive();
+    links.forEach(function(a) {
+      a.classList.toggle('active', a.dataset.section === active);
+    });
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  // Smooth scroll for anchor links (supplements main.js)
+  links.forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.getElementById(a.dataset.section);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>
