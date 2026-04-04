@@ -31,7 +31,9 @@
 .q-step.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.product-card{background:var(--col-surface-2);border:1.5px solid var(--col-border);border-radius:var(--r-md);padding:var(--sp-5);cursor:none;transition:border-color .18s,background .18s;text-align:center;}
+.filter-chip{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;font-family:var(--font-heading);letter-spacing:.05em;border:1px solid var(--col-border);background:transparent;color:var(--col-text-dim);cursor:pointer;transition:all .18s;}
+.filter-chip:hover,.filter-chip.active{background:var(--col-accent);color:#fff;border-color:var(--col-accent);}
+.product-card{background:var(--col-surface-2);border:1.5px solid var(--col-border);border-radius:var(--r-md);padding:var(--sp-4) var(--sp-3);cursor:pointer;transition:border-color .18s,background .18s;text-align:center;}
 .product-card:hover{border-color:var(--col-border-2);}
 .product-card.selected{border-color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 6%,var(--col-surface-2));}
 .product-card .icon{font-size:32px;margin-bottom:var(--sp-3);}
@@ -94,16 +96,195 @@
 
       <!-- Step 1: Product -->
       <div class="q-step active" id="step1">
-        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-3);">What do you need?</h2>
-        <p class="jp-body" style="margin-bottom:var(--sp-6);">Select a product category to get started.</p>
-        <div class="product-grid" id="productGrid">
-          <div class="product-card" onclick="selectProduct('large-format','Large Format',this)"><div class="icon">🏟️</div><div class="name">Large Format</div><div class="sub">Banners, billboards, displays</div></div>
-          <div class="product-card" onclick="selectProduct('jerseys','Jerseys & Kits',this)"><div class="icon">⚽</div><div class="name">Jerseys & Kits</div><div class="sub">Football, rugby, custom</div></div>
-          <div class="product-card" onclick="selectProduct('apparel','Apparel',this)"><div class="icon">👕</div><div class="name">Apparel</div><div class="sub">T-shirts, polos, hoodies</div></div>
-          <div class="product-card" onclick="selectProduct('print','Print & Stationery',this)"><div class="icon">📄</div><div class="name">Print & Stationery</div><div class="sub">Cards, flyers, brochures</div></div>
-          <div class="product-card" onclick="selectProduct('signage','Signage',this)"><div class="icon">🪧</div><div class="name">Signage</div><div class="sub">Acrylic, ACP, LED, vehicle</div></div>
-          <div class="product-card" onclick="selectProduct('merchandise','Merchandise',this)"><div class="icon">🎁</div><div class="name">Merchandise</div><div class="sub">Mugs, bags, tech gifts</div></div>
+        <h2 class="jp-heading jp-heading--lg" style="margin-bottom:var(--sp-2);">What do you need?</h2>
+        <p class="jp-body" style="margin-bottom:var(--sp-5);color:var(--col-text-dim);">Pick a category, then choose the specific product.</p>
+
+        <!-- Category pills -->
+        <div id="catBar" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--sp-5);">
+          <button class="filter-chip active" data-cat="all" onclick="filterCat('all',this)">All</button>
+          <button class="filter-chip" data-cat="jerseys" onclick="filterCat('jerseys',this)">⚽ Jerseys</button>
+          <button class="filter-chip" data-cat="apparel" onclick="filterCat('apparel',this)">👕 Apparel</button>
+          <button class="filter-chip" data-cat="large-format" onclick="filterCat('large-format',this)">🏳 Large Format</button>
+          <button class="filter-chip" data-cat="print" onclick="filterCat('print',this)">📄 Print</button>
+          <button class="filter-chip" data-cat="signage" onclick="filterCat('signage',this)">🪧 Signage</button>
+          <button class="filter-chip" data-cat="merchandise" onclick="filterCat('merchandise',this)">🎁 Merchandise</button>
         </div>
+
+        <!-- Product grid -->
+        <div class="product-grid" id="productGrid" style="grid-template-columns:repeat(3,1fr);gap:10px;">
+
+          <!-- JERSEYS -->
+          <div class="product-card" data-cat="jerseys" onclick="selectProduct('football-jersey','Football Jersey',this,'jerseys')">
+            <div class="icon">⚽</div><div class="name">Football Jersey</div>
+            <div class="sub">Full sublimation · From KES 1,100</div>
+          </div>
+          <div class="product-card" data-cat="jerseys" onclick="selectProduct('rugby-jersey','Rugby Jersey',this,'jerseys')">
+            <div class="icon">🏉</div><div class="name">Rugby Jersey</div>
+            <div class="sub">Full sublimation · Squad pricing</div>
+          </div>
+          <div class="product-card" data-cat="jerseys" onclick="selectProduct('basketball-kit','Basketball Kit',this,'jerseys')">
+            <div class="icon">🏀</div><div class="name">Basketball Kit</div>
+            <div class="sub">Jersey + shorts set</div>
+          </div>
+          <div class="product-card" data-cat="jerseys" onclick="selectProduct('custom-sports-kit','Custom Sports Kit',this,'jerseys')">
+            <div class="icon">🏆</div><div class="name">Custom Sports Kit</div>
+            <div class="sub">Any sport · Your design</div>
+          </div>
+
+          <!-- APPAREL -->
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('tshirt','T-Shirt',this,'apparel')">
+            <div class="icon">👕</div><div class="name">T-Shirt</div>
+            <div class="sub">Screen print / DTF · From KES 650</div>
+          </div>
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('polo-shirt','Polo Shirt',this,'apparel')">
+            <div class="icon">👔</div><div class="name">Polo Shirt</div>
+            <div class="sub">Embroidery or print</div>
+          </div>
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('hoodie','Hoodie',this,'apparel')">
+            <div class="icon">🧥</div><div class="name">Hoodie</div>
+            <div class="sub">Screen print or transfer</div>
+          </div>
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('cap-hat','Cap / Hat',this,'apparel')">
+            <div class="icon">🧢</div><div class="name">Cap / Hat</div>
+            <div class="sub">Embroidery · From KES 800</div>
+          </div>
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('vest','Vest / Singlet',this,'apparel')">
+            <div class="icon">🎽</div><div class="name">Vest / Singlet</div>
+            <div class="sub">Events, sports, workwear</div>
+          </div>
+          <div class="product-card" data-cat="apparel" onclick="selectProduct('jacket','Jacket / Windbreaker',this,'apparel')">
+            <div class="icon">🥼</div><div class="name">Jacket / Windbreaker</div>
+            <div class="sub">Print or embroidery</div>
+          </div>
+
+          <!-- LARGE FORMAT -->
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('pullup-banner','Pull-up Banner',this,'large-format')">
+            <div class="icon">🏳</div><div class="name">Pull-up Banner</div>
+            <div class="sub">85×200cm with stand · From KES 3,500</div>
+          </div>
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('outdoor-banner','Outdoor Banner',this,'large-format')">
+            <div class="icon">🎌</div><div class="name">Outdoor Banner</div>
+            <div class="sub">Custom size · Mesh / vinyl</div>
+          </div>
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('backdrop','Event Backdrop',this,'large-format')">
+            <div class="icon">🖼</div><div class="name">Event Backdrop</div>
+            <div class="sub">Step & repeat, photo walls</div>
+          </div>
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('vehicle-wrap','Vehicle Wrap / Branding',this,'large-format')">
+            <div class="icon">🚗</div><div class="name">Vehicle Wrap</div>
+            <div class="sub">Full / partial · Car, matatu, truck</div>
+          </div>
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('billboard','Billboard / Hoarding',this,'large-format')">
+            <div class="icon">🏗</div><div class="name">Billboard / Hoarding</div>
+            <div class="sub">Large outdoor print</div>
+          </div>
+          <div class="product-card" data-cat="large-format" onclick="selectProduct('tent-branding','Branded Tent',this,'large-format')">
+            <div class="icon">⛺</div><div class="name">Branded Tent</div>
+            <div class="sub">3×3m or 6×3m events tent</div>
+          </div>
+
+          <!-- PRINT -->
+          <div class="product-card" data-cat="print" onclick="selectProduct('business-cards','Business Cards',this,'print')">
+            <div class="icon">🃏</div><div class="name">Business Cards</div>
+            <div class="sub">250 / 500 / 1000 · From KES 800</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('flyers','Flyers / Leaflets',this,'print')">
+            <div class="icon">📄</div><div class="name">Flyers / Leaflets</div>
+            <div class="sub">A5 / A4 / DL · From KES 4,500</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('brochure','Brochure',this,'print')">
+            <div class="icon">📑</div><div class="name">Brochure</div>
+            <div class="sub">Tri-fold, bi-fold, booklet</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('poster','Poster',this,'print')">
+            <div class="icon">🖼</div><div class="name">Poster</div>
+            <div class="sub">A3 / A2 / A1 · Gloss or matte</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('letterhead','Letterhead',this,'print')">
+            <div class="icon">📝</div><div class="name">Letterhead</div>
+            <div class="sub">A4 · 80gsm / 100gsm</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('stickers','Stickers / Labels',this,'print')">
+            <div class="icon">🔖</div><div class="name">Stickers / Labels</div>
+            <div class="sub">Custom shape, vinyl</div>
+          </div>
+          <div class="product-card" data-cat="print" onclick="selectProduct('school-badge','School Badge / Logo',this,'print')">
+            <div class="icon">🏫</div><div class="name">School Badge / Logo</div>
+            <div class="sub">Design + print ready file</div>
+          </div>
+
+          <!-- SIGNAGE -->
+          <div class="product-card" data-cat="signage" onclick="selectProduct('acrylic-sign','Acrylic Sign',this,'signage')">
+            <div class="icon">💎</div><div class="name">Acrylic Sign</div>
+            <div class="sub">Shop front, offices</div>
+          </div>
+          <div class="product-card" data-cat="signage" onclick="selectProduct('acp-sign','ACP / Dibond Sign',this,'signage')">
+            <div class="icon">🪟</div><div class="name">ACP / Dibond Sign</div>
+            <div class="sub">Durable outdoor panels</div>
+          </div>
+          <div class="product-card" data-cat="signage" onclick="selectProduct('kiosk-wrap','Kiosk / Stall Wrap',this,'signage')">
+            <div class="icon">🏪</div><div class="name">Kiosk / Stall Wrap</div>
+            <div class="sub">Full wrap branding</div>
+          </div>
+          <div class="product-card" data-cat="signage" onclick="selectProduct('wall-mural','Wall Mural / Decal',this,'signage')">
+            <div class="icon">🎨</div><div class="name">Wall Mural / Decal</div>
+            <div class="sub">Interior branding</div>
+          </div>
+          <div class="product-card" data-cat="signage" onclick="selectProduct('led-sign','LED / Illuminated Sign',this,'signage')">
+            <div class="icon">💡</div><div class="name">LED / Illuminated Sign</div>
+            <div class="sub">Lightbox, channel letters</div>
+          </div>
+
+          <!-- MERCHANDISE -->
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('mug','Mug',this,'merchandise')">
+            <div class="icon">☕</div><div class="name">Mug</div>
+            <div class="sub">White or black · Sublimation</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('water-bottle','Water Bottle',this,'merchandise')">
+            <div class="icon">🍶</div><div class="name">Water Bottle</div>
+            <div class="sub">Metal · Full wrap print</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('tote-bag','Tote Bag',this,'merchandise')">
+            <div class="icon">👜</div><div class="name">Tote Bag</div>
+            <div class="sub">Canvas · Screen print</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('phone-case','Phone Case',this,'merchandise')">
+            <div class="icon">📱</div><div class="name">Phone Case</div>
+            <div class="sub">Custom design · Most models</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('wristband','Wristband / Bracelet',this,'merchandise')">
+            <div class="icon">⌚</div><div class="name">Wristband</div>
+            <div class="sub">Silicone · Events / branding</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('drawstring-bag','Drawstring Bag',this,'merchandise')">
+            <div class="icon">🎒</div><div class="name">Drawstring Bag</div>
+            <div class="sub">Sports, school, events</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('cosmetic-pouch','Cosmetic Pouch',this,'merchandise')">
+            <div class="icon">👝</div><div class="name">Cosmetic Pouch</div>
+            <div class="sub">Custom print</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('notebook','Notebook',this,'merchandise')">
+            <div class="icon">📓</div><div class="name">Notebook / Diary</div>
+            <div class="sub">Branded cover</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('lanyards','Lanyards',this,'merchandise')">
+            <div class="icon">🏷</div><div class="name">Lanyards</div>
+            <div class="sub">Sublimation · Custom colour</div>
+          </div>
+          <div class="product-card" data-cat="merchandise" onclick="selectProduct('umbrella','Branded Umbrella',this,'merchandise')">
+            <div class="icon">☂️</div><div class="name">Branded Umbrella</div>
+            <div class="sub">Full panel print</div>
+          </div>
+
+          <!-- CUSTOM / OTHER -->
+          <div class="product-card" data-cat="all" onclick="selectProduct('custom','Something Else / Custom',this,'other')" style="border-style:dashed;">
+            <div class="icon">✏️</div><div class="name">Custom / Other</div>
+            <div class="sub">Not on the list? Tell us</div>
+          </div>
+
+        </div>
+
         <div style="margin-top:var(--sp-7);text-align:right;">
           <button class="jp-btn jp-btn--primary jp-btn--lg" id="step1Next" onclick="goStep(2)" disabled>Continue <span class="jp-btn-arrow">→</span></button>
         </div>
@@ -273,8 +454,16 @@ function goStep(n){
   currentStep=n;
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function selectProduct(id,label,el){
-  qData.product=id;qData.productLabel=label;
+function filterCat(cat, btn) {
+  document.querySelectorAll('#catBar .filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#productGrid .product-card').forEach(card => {
+    var cardCat = card.dataset.cat;
+    card.style.display = (cat === 'all' || cardCat === cat) ? '' : 'none';
+  });
+}
+function selectProduct(id,label,el,cat){
+  qData.product=id;qData.productLabel=label;qData.productCat=cat||id;
   document.querySelectorAll('.product-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('step1Next').disabled=false;
