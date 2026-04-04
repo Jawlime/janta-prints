@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 510" width="360" height="510">
+  <defs>
+    <filter id="flyer-shadow">
+      <feDropShadow dx="3" dy="5" stdDeviation="10" flood-color="#000" flood-opacity="0.20"/>
+    </filter>
+  </defs>
+  <g filter="url(#flyer-shadow)">
+    <!-- Shadow paper -->
+    <rect x="28" y="18" width="310" height="470" rx="3" fill="rgba(0,0,0,0.08)"/>
+    <!-- Main paper -->
+    <rect class="product-fill" x="20" y="10" width="310" height="470" rx="3"
+      fill="#ffffff" stroke="#e8e8e8" stroke-width="1"/>
+    <!-- Subtle page curl hint bottom right -->
+    <path d="M 330 480 Q 320 475 316 466 Q 325 468 330 478 Z"
+      fill="rgba(0,0,0,0.08)"/>
+  </g>
+</svg>

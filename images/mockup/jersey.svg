@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+  <defs>
+    <filter id="jr-shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#jr-shadow)">
+    <!-- Body -->
+    <path class="product-fill" d="
+      M 135 55
+      L 75 35
+      L 15 100
+      L 55 122
+      L 55 420
+      L 345 420
+      L 345 122
+      L 385 100
+      L 325 35
+      L 265 55
+      C 250 68 230 76 200 76
+      C 170 76 150 68 135 55 Z
+    " fill="#ffffff" stroke="#ddd" stroke-width="1.5"/>
+    <!-- V-collar -->
+    <path d="M 135 55 L 200 110 L 265 55
+             C 250 44 230 40 200 40
+             C 170 40 150 44 135 55 Z"
+      fill="#e8e8e8" stroke="#ccc" stroke-width="1"/>
+    <!-- Collar trim line -->
+    <path d="M 140 58 L 200 107 L 260 58" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="2"/>
+    <!-- Sleeve L -->
+    <path class="product-fill" d="M 75 35 L 15 100 L 55 122 L 95 62 Z"
+      fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+    <!-- Sleeve R -->
+    <path class="product-fill" d="M 325 35 L 385 100 L 345 122 L 305 62 Z"
+      fill="#f0f0f0" stroke="#ddd" stroke-width="1"/>
+    <!-- Sleeve cuffs -->
+    <path d="M 15 98 L 55 120 L 58 126 L 16 104 Z" fill="rgba(0,0,0,0.08)"/>
+    <path d="M 385 98 L 345 120 L 342 126 L 384 104 Z" fill="rgba(0,0,0,0.08)"/>
+    <!-- Bottom hem -->
+    <rect x="55" y="408" width="290" height="12" rx="2" fill="rgba(0,0,0,0.06)"/>
+  </g>
+</svg>

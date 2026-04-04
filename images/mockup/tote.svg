@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" width="400" height="460">
+  <defs>
+    <filter id="tote-shadow">
+      <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#tote-shadow)">
+    <!-- Bag body -->
+    <rect class="product-fill" x="60" y="120" width="280" height="300" rx="6"
+      fill="#f5f0e8" stroke="#d8d0c0" stroke-width="2"/>
+    <!-- Bag fold at top -->
+    <rect x="60" y="120" width="280" height="20" rx="6" fill="#e8e0d0" stroke="#d0c8b8" stroke-width="1"/>
+    <!-- Left handle -->
+    <path d="M 110 120 Q 110 40 160 40 Q 195 40 195 70 Q 195 90 185 100 Q 175 108 165 108 Q 155 108 150 95 Q 145 82 150 70 Q 158 52 160 45"
+      fill="none" stroke="#c0b8a8" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 110 120 Q 110 40 160 40 Q 195 40 195 70 Q 195 90 185 100 Q 175 108 165 108 Q 155 108 150 95 Q 145 82 150 70 Q 158 52 160 45"
+      fill="none" stroke="#d8d0c0" stroke-width="8" stroke-linecap="round"/>
+    <!-- Right handle -->
+    <path d="M 290 120 Q 290 40 240 40 Q 205 40 205 70 Q 205 90 215 100 Q 225 108 235 108 Q 245 108 250 95 Q 255 82 250 70 Q 242 52 240 45"
+      fill="none" stroke="#c0b8a8" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 290 120 Q 290 40 240 40 Q 205 40 205 70 Q 205 90 215 100 Q 225 108 235 108 Q 245 108 250 95 Q 255 82 250 70 Q 242 52 240 45"
+      fill="none" stroke="#d8d0c0" stroke-width="8" stroke-linecap="round"/>
+    <!-- Bottom fold shadow -->
+    <rect x="60" y="390" width="280" height="30" rx="6" fill="rgba(0,0,0,0.06)"/>
+    <!-- Subtle fabric texture lines -->
+    <line x1="200" y1="120" x2="200" y2="420" stroke="rgba(0,0,0,0.04)" stroke-width="1.5"/>
+  </g>
+</svg>

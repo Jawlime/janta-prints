@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+  <defs>
+    <filter id="po-shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#po-shadow)">
+    <!-- Body -->
+    <path class="product-fill" d="
+      M 132 58 L 78 38 L 18 102 L 58 122 L 58 428 L 342 428 L 342 122 L 382 102 L 322 38 L 268 58
+      C 255 68 238 74 200 74 C 162 74 145 68 132 58 Z
+    " fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+    <!-- Collar flat -->
+    <path d="M 155 58 C 155 40 245 40 245 58 L 245 75 C 220 85 180 85 155 75 Z"
+      fill="#e8e8e8" stroke="#ccc" stroke-width="1"/>
+    <!-- Collar fold left -->
+    <path d="M 155 58 L 200 105 L 155 75 Z" fill="#d8d8d8" stroke="#ccc" stroke-width="0.5"/>
+    <!-- Collar fold right -->
+    <path d="M 245 58 L 200 105 L 245 75 Z" fill="#e0e0e0" stroke="#ccc" stroke-width="0.5"/>
+    <!-- Placket / buttons -->
+    <rect x="196" y="78" width="8" height="60" rx="2" fill="rgba(0,0,0,0.08)"/>
+    <circle cx="200" cy="88" r="3" fill="#ccc"/>
+    <circle cx="200" cy="102" r="3" fill="#ccc"/>
+    <circle cx="200" cy="116" r="3" fill="#ccc"/>
+    <!-- Sleeve L -->
+    <path class="product-fill" d="M 78 38 L 18 102 L 58 122 L 98 65 Z"
+      fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
+    <!-- Sleeve R -->
+    <path class="product-fill" d="M 322 38 L 382 102 L 342 122 L 302 65 Z"
+      fill="#f0f0f0" stroke="#e0e0e0" stroke-width="1"/>
+  </g>
+</svg>
